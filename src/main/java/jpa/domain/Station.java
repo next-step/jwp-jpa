@@ -39,4 +39,8 @@ public class Station extends BaseEntity {
 		this.name = name;
 	}
 
+	public Station updateName(String name) {
+		this.name = name;
+		return this;
+	}
 }
