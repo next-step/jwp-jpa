@@ -47,4 +47,8 @@ public class Line extends BaseEntity {
 		this.name = name;
 	}
 
+	public Line updateName(String name) {
+		this.name = name;
+		return this;
+	}
 }
