@@ -20,4 +20,15 @@ public class Line {
 
     protected Line() {
     }
+
+    public Line(LocalDateTime createdDate, LocalDateTime modifiedDate, String color, String name) {
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+        this.color = color;
+        this.name = name;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
 }
