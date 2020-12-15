@@ -19,14 +19,11 @@ class LineRepositoryTest {
     @Autowired
     private LineRepository lineRepository;
 
-    private Line getLineEntity() {
-        return new Line("name", "yellow");
-    }
 
     @Test
     @DisplayName("Line 이름으로 찾기 Test")
     void findByNameTest() {
-        Line yellowLine = lineRepository.save(getLineEntity());
+        Line yellowLine = lineRepository.save(createLineEntity());
 
         Line savedLine = lineRepository.findByName(yellowLine.getName());
 
@@ -36,11 +33,15 @@ class LineRepositoryTest {
     @Test
     @DisplayName("Line 색상으로 찾기 Test")
     void findByColorTest() {
-        Line yellowLine = lineRepository.save(getLineEntity());
+        Line yellowLine = lineRepository.save(createLineEntity());
 
         Line savedLine = lineRepository.findByColor(yellowLine.getColor());
 
         assertThat(savedLine.getId()).isEqualTo(yellowLine.getId());
+    }
+
+    private Line createLineEntity() {
+        return new Line("name", "yellow");
     }
 
 }

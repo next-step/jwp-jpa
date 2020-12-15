@@ -19,7 +19,6 @@ class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-
     @Test
     @DisplayName("Member 저장하기 Test")
     void memberSaveTest() {

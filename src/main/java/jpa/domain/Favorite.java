@@ -22,4 +22,7 @@ public class Favorite extends BaseEntity {
     public Long getId() {
         return id;
     }
+
+    protected Favorite() {
+    }
 }
