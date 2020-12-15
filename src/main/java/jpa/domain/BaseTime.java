@@ -17,4 +17,12 @@ public abstract class BaseTime implements Serializable {
 
 	@LastModifiedDate
 	private LocalDateTime modifiedDate;
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public LocalDateTime getModifiedDate() {
+		return modifiedDate;
+	}
 }
