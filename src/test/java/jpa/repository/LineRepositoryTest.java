@@ -18,6 +18,7 @@ class LineRepositoryTest {
 	@Autowired
 	LineRepository lines;
 
+	@DisplayName("라인 저장 테스트")
 	@Test
 	void save() {
 		Line expected = new Line("신분당선", "red");
@@ -29,6 +30,7 @@ class LineRepositoryTest {
 		);
 	}
 
+	@DisplayName("라인 조회 테스트")
 	@Test
 	void findByName() {
 		String expected = "신분당선";
@@ -37,6 +39,7 @@ class LineRepositoryTest {
 		assertThat(actualName).isEqualTo(expected);
 	}
 
+	@DisplayName("같은 색 라인 조회 테스트")
 	@Test
 	void findByColor() {
 		lines.save(new Line("신분당선", "red"));

@@ -15,6 +15,7 @@ class StationRepositoryTest {
 	@Autowired
 	private StationRepository stations;
 
+	@DisplayName("역 저장 테스트")
 	@Test
 	void save() {
 		Station expected = new Station("잠실역");
@@ -25,6 +26,7 @@ class StationRepositoryTest {
 		);
 	}
 
+	@DisplayName("역 조회 테스트")
 	@Test
 	void findByName() {
 		String expected = "잠실역";

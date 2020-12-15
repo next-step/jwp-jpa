@@ -17,6 +17,7 @@ class MemberRepositoryTest {
 	@Autowired
 	private MemberRepository members;
 
+	@DisplayName("사용자 저장 테스트")
 	@Test
 	void save() {
 		Member member = new Member(20, "hglee@gmail.com", "12345");
@@ -31,6 +32,7 @@ class MemberRepositoryTest {
 		);
 	}
 
+	@DisplayName("사용자 조회 테스트")
 	@Test
 	void findByEmail() {
 		String expectedEmail = "hglee@gmail.com";
