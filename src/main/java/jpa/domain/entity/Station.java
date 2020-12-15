@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
