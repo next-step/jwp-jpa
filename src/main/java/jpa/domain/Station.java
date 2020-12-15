@@ -14,4 +14,20 @@ public class Station extends BaseTime{
 
 	@Column(unique = true)
 	private String name;
+
+	public Station(String name) {
+		this.name = name;
+	}
+
+	public Station() {
+
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
 }
