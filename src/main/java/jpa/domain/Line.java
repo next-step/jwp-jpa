@@ -31,4 +31,12 @@ public class Line {
     public Long getId() {
         return this.id;
     }
+
+    public void changeColor(final String color) {
+        this.color = color;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
 }
