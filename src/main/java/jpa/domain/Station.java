@@ -1,6 +1,7 @@
 package jpa.domain;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,7 +10,10 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -18,7 +22,7 @@ public class Station {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "station_id")
     private Long id;
 
     @Column(name = "name", unique = true)
@@ -32,6 +36,9 @@ public class Station {
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 
+    @OneToMany(mappedBy = "station")
+    private Set<StationLine> stationLines = new HashSet<>();
+
     public Station(final String name) {
         this.name = name;
     }
@@ -42,5 +49,11 @@ public class Station {
         }
         this.name = name;
         return this;
+    }
+
+    public List<Line> lines() {
+        return stationLines.stream()
+                .map(StationLine::getLine)
+                .collect(Collectors.toList());
     }
 }
