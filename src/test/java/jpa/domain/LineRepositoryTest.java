@@ -5,14 +5,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 class LineRepositoryTest {
     private static final LocalDateTime TODAY = LocalDateTime.now();
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
     private LineRepository lineRepository;
@@ -58,5 +63,20 @@ class LineRepositoryTest {
 
         assertThat(foundLine.getColor()).isEqualTo(testColor);
         assertThat(foundLine.getName()).isEqualTo(testName);
+    }
+
+    @DisplayName("JPA 어노테이션을 통한 name 칼럼 unique 제약 조건이 정상 동작한다.")
+    @Test
+    void uniqueConstraintTest() {
+        String testName = "sameName";
+        Line line = new Line(TODAY, TODAY, "red", testName);
+
+        lineRepository.save(line);
+        entityManager.flush();
+
+        assertThatThrownBy(() -> {
+            lineRepository.save(new Line(TODAY, TODAY, "blue", line.getName()));
+            entityManager.flush();
+        }).isInstanceOf(PersistenceException.class);
     }
 }
