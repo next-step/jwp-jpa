@@ -72,11 +72,11 @@ class LineRepositoryTest {
         Line line = new Line(TODAY, TODAY, "red", testName);
 
         lineRepository.save(line);
-        entityManager.flush();
+        entityManager.flush();      // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
 
         assertThatThrownBy(() -> {
             lineRepository.save(new Line(TODAY, TODAY, "blue", line.getName()));
-            entityManager.flush();
+            entityManager.flush();  // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
         }).isInstanceOf(PersistenceException.class);
     }
 }
