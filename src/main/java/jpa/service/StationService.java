@@ -5,6 +5,9 @@ import jpa.repository.StationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class StationService {
 
@@ -13,5 +16,11 @@ public class StationService {
 
 	public Station getStationByName(String stationName) {
 		return stationRepository.findByName(stationName);
+	}
+
+	public void saveStations(List<String> stationNames) {
+		stationRepository.saveAll(stationNames.stream()
+			.map(Station::new)
+			.collect(Collectors.toList()));
 	}
 }

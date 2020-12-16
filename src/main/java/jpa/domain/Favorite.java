@@ -28,12 +28,4 @@ public class Favorite extends BaseTime {
 	public void setArrival(Station arrival) {
 		this.arrival = arrival;
 	}
-
-	public String getDepartureName() {
-		return departure.getName();
-	}
-
-	public String getArrivalName() {
-		return arrival.getName();
-	}
 }
