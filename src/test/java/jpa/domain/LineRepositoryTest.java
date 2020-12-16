@@ -3,9 +3,11 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import jpa.domain.entity.Line;
+import jpa.domain.entity.LineStation;
+import jpa.domain.entity.Station;
 import jpa.domain.repository.LineRepository;
+import jpa.domain.repository.StationRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -24,14 +29,24 @@ class LineRepositoryTest {
 	public static final String EXAMPLE_LINE_2 = "2호선";
 	public static final String EXAMPLE_RED = "RED";
 	public static final String EXAMPLE_GREEN = "GREEN";
+	public static final String STATION_NAME1 = "신길역";
+	public static final String STATION_NAME2 = "신도림역";
+	public static final String STATION_NAME3 = "잠실역";
 
 	@Autowired
 	private LineRepository lineRepository;
 
+	@Autowired
+	private StationRepository stationRepository;
+
 	@BeforeEach
 	void setup() {
-		lineRepository.save(Line.create(EXAMPLE_GREEN, EXAMPLE_LINE_1));
-		lineRepository.save(Line.create(EXAMPLE_RED, EXAMPLE_LINE_2));
+		Station station1 = stationRepository.save(Station.create(STATION_NAME1));
+		Station station2 = stationRepository.save(Station.create(STATION_NAME2));
+		Station station3 = stationRepository.save(Station.create(STATION_NAME3));
+
+		lineRepository.save(Line.create(EXAMPLE_GREEN, EXAMPLE_LINE_1, Arrays.asList(station1, station2)));
+		lineRepository.save(Line.create(EXAMPLE_RED, EXAMPLE_LINE_2, Arrays.asList(station2, station3)));
 	}
 
 	@DisplayName("단일 조회 테스트")
@@ -107,5 +122,24 @@ class LineRepositoryTest {
 		Line check = lineRepository.findByName(EXAMPLE_LINE_1);
 
 		assertThat(check).isNull();
+	}
+
+	@Test
+	@DisplayName("노선 조회 시 속한 지하철역을 볼 수 있다.")
+	void lineStation() {
+
+		Line line = lineRepository.findByName(EXAMPLE_LINE_1);
+		List<LineStation> lineStations = line.getLineStations();
+		List<Station> stations = CollectionUtils.emptyIfNull(lineStations).stream()
+			.map(LineStation::getStation)
+			.collect(Collectors.toList());
+		List<String> stationNames = CollectionUtils.emptyIfNull(stations).stream()
+			.map(Station::getName)
+			.collect(Collectors.toList());
+
+		assertAll(
+			() -> assertThat(stations).hasSize(2),
+			() -> assertThat(stationNames).contains(STATION_NAME1, STATION_NAME2)
+		);
 	}
 }

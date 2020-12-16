@@ -84,4 +84,19 @@ class FavoriteRepositoryTest {
 
 		assertThat(actualAll).hasSize(expectedLength);
 	}
+
+	@Test
+	@DisplayName("즐겨찾기에는 출발역과 도착역이 포함되어 있다.")
+	void favorite() {
+
+		Favorite favorite = favoriteRepository.findById(1L).get();
+		Station departure = favorite.getDepartureStation();
+		Station arrival = favorite.getArrivalStation();
+
+		assertAll(
+			() -> assertThat(departure).isNotNull(),
+			() -> assertThat(arrival).isNotNull()
+		);
+
+	}
 }
