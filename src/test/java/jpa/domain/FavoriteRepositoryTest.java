@@ -60,6 +60,7 @@ class FavoriteRepositoryTest {
         // then
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getCreatedDate()).isNotNull(),
                 () -> assertThat(actual).isEqualTo(expected),
                 () -> assertThat(actual).isSameAs(expected)
         );

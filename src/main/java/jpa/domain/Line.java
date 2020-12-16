@@ -3,6 +3,8 @@ package jpa.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.util.StringUtils;
@@ -32,11 +34,11 @@ public class Line {
     @Column(name = "color")
     private Color color;
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 
