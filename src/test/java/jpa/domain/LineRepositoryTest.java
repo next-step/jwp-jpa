@@ -54,11 +54,9 @@ class LineRepositoryTest {
         Line line = new Line(TODAY, TODAY, testColor, testName);
         lineRepository.save(line);
 
-        Optional<Line> foundLine = lineRepository.findByColor(testColor);
+        Line foundLine = lineRepository.findByColor(testColor).orElse(null);
 
-        if (foundLine.isPresent()) {
-            assertThat(foundLine.get().getColor()).isEqualTo(testColor);
-            assertThat(foundLine.get().getName()).isEqualTo(testName);
-        }
+        assertThat(foundLine.getColor()).isEqualTo(testColor);
+        assertThat(foundLine.getName()).isEqualTo(testName);
     }
 }
