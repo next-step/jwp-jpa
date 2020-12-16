@@ -38,4 +38,8 @@ public class Station extends BaseTime {
 	public void setLine(Line line) {
 		this.line = line;
 	}
+
+	public String getLineName() {
+		return this.line.getName();
+	}
 }
