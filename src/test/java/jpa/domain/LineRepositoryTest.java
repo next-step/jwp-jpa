@@ -30,8 +30,8 @@ class LineRepositoryTest {
 
 	@BeforeEach
 	void setup() {
-		lineRepository.save(new Line(EXAMPLE_GREEN, EXAMPLE_LINE_1));
-		lineRepository.save(new Line(EXAMPLE_RED, EXAMPLE_LINE_2));
+		lineRepository.save(Line.create(EXAMPLE_GREEN, EXAMPLE_LINE_1));
+		lineRepository.save(Line.create(EXAMPLE_RED, EXAMPLE_LINE_2));
 	}
 
 	@DisplayName("단일 조회 테스트")
@@ -62,7 +62,7 @@ class LineRepositoryTest {
 	@Test
 	@DisplayName("insert 테스트")
 	void insert() {
-		Line expected = new Line("CYAN", "3호선");
+		Line expected = Line.create("CYAN", "3호선");
 
 		Line actual = lineRepository.save(expected);
 		assertAll(
@@ -75,7 +75,7 @@ class LineRepositoryTest {
 	@Test
 	@DisplayName("동일한 이름이 insert 되면 DataIntegrityViolationException이 발생한다.")
 	void insertDuplicateName() {
-		Line newLine = new Line("CYAN", EXAMPLE_LINE_1);
+		Line newLine = Line.create("CYAN", EXAMPLE_LINE_1);
 
 		assertThatExceptionOfType(DataIntegrityViolationException.class)
 			.isThrownBy(() -> {

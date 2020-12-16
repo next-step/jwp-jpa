@@ -28,8 +28,8 @@ class StationRepositoryTest {
 
 	@BeforeEach
 	void setup() {
-		stationRepository.save(new Station(EXAMPLE_STATION_NAME1));
-		stationRepository.save(new Station(EXAMPLE_STATION_NAME2));
+		stationRepository.save(Station.create(EXAMPLE_STATION_NAME1));
+		stationRepository.save(Station.create(EXAMPLE_STATION_NAME2));
 	}
 
 	@DisplayName("단일 조회 테스트")
@@ -60,7 +60,7 @@ class StationRepositoryTest {
 	@Test
 	@DisplayName("insert 테스트")
 	void insert() {
-		Station expected = new Station("왕십리역");
+		Station expected = Station.create("왕십리역");
 
 		Station actual = stationRepository.save(expected);
 
@@ -73,7 +73,7 @@ class StationRepositoryTest {
 	@Test
 	@DisplayName("동일한 이름이 insert 되면 DataIntegrityViolationException이 발생한다.")
 	void insertDuplicateName() {
-		Station newStation = new Station(EXAMPLE_STATION_NAME1);
+		Station newStation = Station.create(EXAMPLE_STATION_NAME1);
 
 		assertThatExceptionOfType(DataIntegrityViolationException.class)
 			.isThrownBy(() -> {

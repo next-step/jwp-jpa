@@ -26,8 +26,8 @@ class MemberRepositoryTest {
 
 	@BeforeEach
 	void setup() {
-		memberRepository.save(new Member(20, "test1@test.com", "12345"));
-		memberRepository.save(new Member(30, "test2@test.com", "abcdef"));
+		memberRepository.save(Member.create(20, "test1@test.com", "12345"));
+		memberRepository.save(Member.create(30, "test2@test.com", "abcdef"));
 	}
 
 	@DisplayName("단일 조회 테스트")
@@ -55,7 +55,7 @@ class MemberRepositoryTest {
 	void insert() {
 		int expectedLength = 3;
 
-		Member newMember = new Member(15, "test3@test.com", "15155");
+		Member newMember = Member.create(15, "test3@test.com", "15155");
 		memberRepository.save(newMember);
 		List<Member> actualAll = memberRepository.findAll();
 

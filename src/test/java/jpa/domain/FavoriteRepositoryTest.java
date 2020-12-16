@@ -14,7 +14,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import jpa.domain.entity.Favorite;
+import jpa.domain.entity.Station;
 import jpa.domain.repository.FavoriteRepository;
+import jpa.domain.repository.StationRepository;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DataJpaTest
@@ -24,10 +26,17 @@ class FavoriteRepositoryTest {
 	@Autowired
 	private FavoriteRepository favoriteRepository;
 
+	@Autowired
+	private StationRepository stationRepository;
+
 	@BeforeEach
 	void setup() {
-		favoriteRepository.save(new Favorite());
-		favoriteRepository.save(new Favorite());
+		Station station1 = stationRepository.save(Station.create("사당역"));
+		Station station2 = stationRepository.save(Station.create("서울숲역"));
+		Station station3 = stationRepository.save(Station.create("광화문역"));
+
+		favoriteRepository.save(Favorite.create(station1, station2));
+		favoriteRepository.save(Favorite.create(station2, station3));
 	}
 
 	@DisplayName("단일 조회 테스트")
@@ -55,7 +64,9 @@ class FavoriteRepositoryTest {
 	void insert() {
 		int expectedLength = 3;
 
-		Favorite newFavorite = new Favorite();
+		Station station1 = stationRepository.save(Station.create("김포공항역"));
+		Station station2 = stationRepository.save(Station.create("인천공항역"));
+		Favorite newFavorite = Favorite.create(station1, station2);
 		favoriteRepository.save(newFavorite);
 		List<Favorite> actualAll = favoriteRepository.findAll();
 

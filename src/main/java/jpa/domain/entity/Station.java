@@ -1,12 +1,21 @@
 package jpa.domain.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.util.CollectionUtils;
 
 import jpa.domain.common.BaseEntity;
 import lombok.AccessLevel;
@@ -29,8 +38,22 @@ public class Station extends BaseEntity {
 	@Column(name = "name", length = 255)
 	private String name;
 
-	public Station(String name) {
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<LineStation> lineStations = new ArrayList<>();
+
+	private Station(String name, List<Line> lines) {
 		this.name = name;
+		this.lineStations = CollectionUtils.isEmpty(lines) ? null : lines.stream()
+			.map(line -> LineStation.create(line, this))
+			.collect(Collectors.toList());
+	}
+
+	public static Station create(String name) {
+		return new Station(name, null);
+	}
+
+	public static Station create(String name, List<Line> lines) {
+		return new Station(name, lines);
 	}
 
 	public Station updateName(String name) {
