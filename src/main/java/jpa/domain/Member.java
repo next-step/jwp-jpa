@@ -38,10 +38,6 @@ public class Member {
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 
-    public Member(final Integer age, final String email) {
-        this(age, email, "0000");
-    }
-
     public Member(final Integer age, final String email, final String password) {
         this.age = age;
         this.email = email;
