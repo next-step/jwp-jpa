@@ -21,7 +21,7 @@ public class Station {
     @Column(unique = true)
     private String name;
 
-    public Station() {
+    protected Station() {
     }
 
     Station(final LocalDateTime createdDate, final LocalDateTime modifiedDate, final String name) {
