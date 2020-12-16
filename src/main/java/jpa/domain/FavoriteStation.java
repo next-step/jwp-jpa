@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class FavoriteStation {
 
     public enum Type {
-        START, EMD
+        START, END
     }
 
     @Id
@@ -31,4 +31,19 @@ public class FavoriteStation {
     @ManyToOne
     @JoinColumn(name = "station_id")
     private Station station;
+
+    public FavoriteStation(final Type type, final Favorite favorite, final Station station) {
+        this.type = type;
+        this.favorite = favorite;
+        this.favorite.getFavoriteStations().add(this);
+        this.station = station;
+    }
+
+    public boolean isStart() {
+        return Type.START == this.type;
+    }
+
+    public boolean isEnd() {
+        return Type.END == this.type;
+    }
 }

@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,4 +33,18 @@ public class Favorite {
 
     @OneToMany(mappedBy = "favorite")
     Set<FavoriteStation> favoriteStations = new HashSet<>();
+
+    public Optional<Station> startStation() {
+        return favoriteStations.stream()
+                .filter(FavoriteStation::isStart)
+                .map(FavoriteStation::getStation)
+                .findFirst();
+    }
+
+    public Optional<Station> endStation() {
+        return favoriteStations.stream()
+                .filter(FavoriteStation::isEnd)
+                .map(FavoriteStation::getStation)
+                .findFirst();
+    }
 }
