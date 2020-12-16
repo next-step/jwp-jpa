@@ -4,11 +4,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Rollback;
 
+import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -20,6 +21,9 @@ class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository members;
+
+    @Autowired
+    private EntityManager em;
 
     @DisplayName("단건 조회를 확인합니다.")
     @Test
@@ -101,5 +105,28 @@ class MemberRepositoryTest {
                 () -> assertThat(actual.getModifiedDate()).isNotNull(),
                 () -> assertThat(actual).isEqualTo(expected)
         );
+    }
+
+    @DisplayName("사용자는 여러 즐겨찾기를 가질 수 있다.")
+    @Test
+    void favorites() {
+        // given
+        String email = "good_1411@naver.com";
+        Member yohan = new Member(28, email, DEFAULT_PASSWORD);
+        Favorite favorite1 = new Favorite();
+        Favorite favorite2 = new Favorite();
+        favorite1.setMember(yohan);
+        favorite2.setMember(yohan);
+
+        em.persist(yohan);
+        em.persist(favorite1);
+        em.persist(favorite2);
+
+        // when
+        Member member = members.findFirstByEmail(email).get();
+        Set<Favorite> favorites = member.getFavorites();
+
+        // then
+        assertThat(favorites).contains(favorite1, favorite2);
     }
 }

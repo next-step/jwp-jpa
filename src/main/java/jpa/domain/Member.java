@@ -5,12 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -20,7 +20,7 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "member_id")
     private Long id;
 
     @Column(name = "age")
@@ -39,6 +39,9 @@ public class Member {
     @UpdateTimestamp
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
+
+    @OneToMany(mappedBy = "member")
+    private Set<Favorite> favorites = new HashSet<>();
 
     public Member(final Integer age, final String email, final String password) {
         this.age = age;

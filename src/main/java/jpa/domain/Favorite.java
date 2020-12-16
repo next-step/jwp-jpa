@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,6 +34,18 @@ public class Favorite {
 
     @OneToMany(mappedBy = "favorite")
     Set<FavoriteStation> favoriteStations = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    public void setMember(final Member member) {
+        if (Objects.nonNull(this.member)) {
+            this.member.getFavorites().remove(this);
+        }
+        this.member = member;
+        this.member.getFavorites().add(this);
+    }
 
     public Optional<Station> startStation() {
         return favoriteStations.stream()
