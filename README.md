@@ -59,4 +59,4 @@ create table favorite (
     - [X] Favorite
     - [X] Station
     - [X] Member
-- [ ] 좀 더 안전한 객체 생성을 위해 인자가 없는 생성자의 접근 제어 레벨 바꾸기
+- [X] 좀 더 안전한 객체 생성을 위해 인자가 없는 생성자의 접근 제어 레벨 바꾸기
