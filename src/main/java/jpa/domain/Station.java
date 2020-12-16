@@ -19,7 +19,7 @@ public class Station extends BaseTime {
 		this.name = name;
 	}
 
-	public Station() {
+	protected Station() {
 
 	}
 

@@ -27,7 +27,7 @@ public class Member extends BaseTime {
 		this.password = password;
 	}
 
-	public Member() {
+	protected Member() {
 	}
 
 	public Long getId() {

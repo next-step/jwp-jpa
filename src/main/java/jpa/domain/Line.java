@@ -22,7 +22,7 @@ public class Line extends BaseTime {
 		this.color = color;
 	}
 
-	public Line() {
+	protected Line() {
 	}
 
 	public Long getId() {
