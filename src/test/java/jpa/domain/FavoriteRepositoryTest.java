@@ -12,24 +12,45 @@ public class FavoriteRepositoryTest {
     @Autowired
     private FavoriteRepository favoriteRepository;
 
-    @DisplayName("Member 엔티티 관련 기본 CRUD 테스트")
+    @DisplayName("엔티티 저장 후 ID 부여 확인")
     @Test
-    void simpleTest() {
-        // 새로운 엔티티 생성 및 영속화
+    void saveTest() {
         Favorite favorite = new Favorite();
         favoriteRepository.save(favorite);
 
-        // 영속화 시 자동으로 ID 부여
         assertThat(favorite.getId()).isNotNull();
+    }
 
-        // 영속화 된 엔티티의 더티 체킹
+    @DisplayName("더티 체킹을 통한 업데이트 확인")
+    @Test
+    void updateTest() {
+        Favorite favorite = new Favorite();
+
         assertThat(favorite.getModifiedDate()).isNull();
         Favorite changedFavorite = new Favorite();
         favorite.updateFavorite(changedFavorite);
         assertThat(favorite.getModifiedDate()).isNotNull();
+    }
 
-        // 대상 삭제 후 조회 불가능
-        favoriteRepository.deleteById(favorite.getId());
-        assertThat(favoriteRepository.findById(favorite.getId()).isPresent()).isFalse();
+    @DisplayName("쿼리 메서드를 통한 조회 기능 확인")
+    @Test
+    void getTest() {
+        int expectedSize = 1;
+        Favorite favorite = new Favorite();
+        favoriteRepository.save(favorite);
+
+        assertThat(favoriteRepository.findAll()).hasSize(expectedSize);
+    }
+
+    @DisplayName("삭제 기능 확인")
+    @Test
+    void deleteTest() {
+        Favorite favorite = new Favorite();
+        Favorite saved = favoriteRepository.save(favorite);
+        Long savedId = saved.getId();
+
+        favoriteRepository.deleteById(savedId);
+
+        assertThat(favoriteRepository.findById(savedId).isPresent()).isFalse();
     }
 }
