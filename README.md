@@ -56,7 +56,7 @@ create table favorite (
 
 ## Step1 리뷰 반영기
 - [ ] CRUD로 뭉뚱그려진 단위 테스트를 메서드 단위로 세분화 시키기
-    - [ ] Favorite
+    - [X] Favorite
     - [ ] Station
     - [ ] Member
 - [ ] 좀 더 안전한 객체 생성을 위해 인자가 없는 생성자의 접근 제어 레벨 바꾸

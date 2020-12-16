@@ -12,28 +12,42 @@ public class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @DisplayName("Member 엔티티 관련 기본 CRUD 테스트")
+    private final Member testMember = new Member(3, "test@test.com", "test");
+
+    @DisplayName("엔티티 저장 후 ID 부여 확인")
     @Test
-    void simpleTest() {
-        Integer memberAge = 10;
-        String memberEmail = "test@test.com";
-        String memberPassword = "password";
+    void saveTest() {
+        memberRepository.save(testMember);
 
-        // 새로운 엔티티 생성 및 영속화
-        Member member = new Member(memberAge, memberEmail, memberPassword);
-        memberRepository.save(member);
+        assertThat(testMember.getId()).isNotNull();
+    }
 
-        // 영속화 시 자동으로 ID 부여
-        assertThat(member.getId()).isNotNull();
+    @DisplayName("더티 체킹을 통한 업데이트 확인")
+    @Test
+    void updateTest() {
+        assertThat(testMember.getModifiedDate()).isNull();
+        Member changedMember = new Member(100, "modified", "modified");
+        testMember.updateMember(changedMember);
+        assertThat(testMember.getModifiedDate()).isNotNull();
+    }
 
-        // 영속화 된 엔티티의 더티 체킹
-        assertThat(member.getModifiedDate()).isNull();
-        Member changedMember = new Member(1000, memberEmail, memberPassword);
-        member.updateMember(changedMember);
-        assertThat(member.getModifiedDate()).isNotNull();
+    @DisplayName("쿼리 메서드를 통한 조회 기능 확인")
+    @Test
+    void getTest() {
+        int expectedSize = 1;
+        memberRepository.save(testMember);
 
-        // 대상 삭제 후 조회 불가능
-        memberRepository.deleteById(member.getId());
-        assertThat(memberRepository.findById(member.getId()).isPresent()).isFalse();
+        assertThat(memberRepository.findAll()).hasSize(expectedSize);
+    }
+
+    @DisplayName("삭제 기능 확인")
+    @Test
+    void deleteTest() {
+        Member saved = memberRepository.save(testMember);
+        Long savedId = saved.getId();
+
+        memberRepository.deleteById(savedId);
+
+        assertThat(memberRepository.findById(savedId).isPresent()).isFalse();
     }
 }
