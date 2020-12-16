@@ -55,7 +55,7 @@ class MemberRepositoryTest {
 	void insert() {
 		int expectedLength = 3;
 
-		Member newMember = new Member();
+		Member newMember = new Member(15, "test3@test.com", "15155");
 		memberRepository.save(newMember);
 		List<Member> actualAll = memberRepository.findAll();
 

@@ -8,7 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import jpa.domain.common.BaseEntity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 @Table(name = "member")
 public class Member extends BaseEntity {
@@ -26,25 +31,6 @@ public class Member extends BaseEntity {
 
 	@Column(name = "password", length = 255)
 	private String password;
-
-	public Long getId() {
-		return id;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public Member() {
-	}
 
 	public Member(int age, String email, String password) {
 		this.age = age;

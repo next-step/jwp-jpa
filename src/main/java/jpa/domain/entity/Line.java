@@ -9,7 +9,12 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 
 import jpa.domain.common.BaseEntity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 @Table(name = "line", indexes = {
 	@Index(name = "UK_line_name", columnList = "name", unique = true),
@@ -26,21 +31,6 @@ public class Line extends BaseEntity {
 
 	@Column(name = "name", length = 255)
 	private String name;
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getColor() {
-		return color;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Line() {
-	}
 
 	public Line(String color, String name) {
 		this.color = color;

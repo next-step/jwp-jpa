@@ -8,7 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import jpa.domain.common.BaseEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@Getter
 @Entity
 @Table(name = "favorite")
 public class Favorite extends BaseEntity {
@@ -17,12 +21,5 @@ public class Favorite extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-
-	public Long getId() {
-		return id;
-	}
-
-	public Favorite() {
-	}
 
 }
