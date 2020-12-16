@@ -12,27 +12,42 @@ public class StationRepositoryTest {
     @Autowired
     private StationRepository stationRepository;
 
-    @DisplayName("Station 엔티티 관련 기본 CRUD 테스트")
+    private final Station testStation = new Station("비 내리는 호남선");
+
+    @DisplayName("엔티티 저장 후 ID 부여 확인")
     @Test
-    void simpleTest() {
-        String stationName = "testStation";
-        String modifiedName = "modified";
+    void saveTest() {
+        stationRepository.save(testStation);
 
-        // 새로운 엔티티 생성 및 영속화
-        Station station = new Station(stationName);
-        stationRepository.save(station);
+        assertThat(testStation.getId()).isNotNull();
+    }
 
-        // 영속화 시 자동으로 ID 부여
-        assertThat(station.getId()).isNotNull();
+    @DisplayName("더티 체킹을 통한 업데이트 확인")
+    @Test
+    void updateTest() {
+        assertThat(testStation.getModifiedDate()).isNull();
+        Station changedStation = new Station("갱남역");
+        testStation.updateStation(changedStation);
+        assertThat(testStation.getModifiedDate()).isNotNull();
+    }
 
-        // 영속화 된 엔티티의 더티 체킹
-        assertThat(station.getModifiedDate()).isNull();
-        Station changeStation = new Station(modifiedName);
-        station.updateStation(changeStation);
-        assertThat(station.getModifiedDate()).isNotNull();
+    @DisplayName("쿼리 메서드를 통한 조회 기능 확인")
+    @Test
+    void getTest() {
+        int expectedSize = 1;
+        stationRepository.save(testStation);
 
-        // 대상 삭제 후 조회 불가능
-        stationRepository.deleteById(station.getId());
-        assertThat(stationRepository.findById(station.getId()).isPresent()).isFalse();
+        assertThat(stationRepository.findAll()).hasSize(expectedSize);
+    }
+
+    @DisplayName("삭제 기능 확인")
+    @Test
+    void deleteTest() {
+        Station saved = stationRepository.save(testStation);
+        Long savedId = saved.getId();
+
+        stationRepository.deleteById(savedId);
+
+        assertThat(stationRepository.findById(savedId).isPresent()).isFalse();
     }
 }
