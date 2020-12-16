@@ -20,11 +20,11 @@ alter table line
 - Station
 ```sql
 create table station (
-                         id bigint not null auto_increment,
-                         created_date datetime(6),
-                         modified_date datetime(6),
-                         name varchar(255),
-                         primary key (id)
+     id bigint not null auto_increment,
+     created_date datetime(6),
+     modified_date datetime(6),
+     name varchar(255),
+     primary key (id)
 ) engine=InnoDB
 
 alter table station
@@ -33,22 +33,22 @@ alter table station
 - Member
 ```sql
 create table member (
-                        id bigint not null auto_increment,
-                        created_date datetime(6),
-                        modified_date datetime(6),
-                        age integer,
-                        email varchar(255),
-                        password varchar(255),
-                        primary key (id)
+    id bigint not null auto_increment,
+    created_date datetime(6),
+    modified_date datetime(6),
+    age integer,
+    email varchar(255),
+    password varchar(255),
+    primary key (id)
 ) engine=InnoDB
 ```
 - favorite
 ```sql
 create table favorite (
-                          id bigint not null auto_increment,
-                          created_date datetime(6),
-                          modified_date datetime(6),
-                          primary key (id)
+    id bigint not null auto_increment,
+    created_date datetime(6),
+    modified_date datetime(6),
+    primary key (id)
 ) engine=InnoDB
 ```
 - [ ] 각 엔티티별로 기본적인 CRUD 테스트를 진행한다.

@@ -39,4 +39,8 @@ public class Line {
     public String getColor() {
         return this.color;
     }
+
+    public String getName() {
+        return this.name;
+    }
 }
