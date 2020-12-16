@@ -15,7 +15,7 @@ import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import jpa.domain.common.BaseEntity;
 import lombok.AccessLevel;
@@ -41,13 +41,14 @@ public class Line extends BaseEntity {
 	@Column(name = "name", length = 255)
 	private String name;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "line", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "line", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<LineStation> lineStations = new ArrayList<>();
 
 	private Line(String color, String name, List<Station> stations) {
 		this.color = color;
 		this.name = name;
-		this.lineStations = CollectionUtils.isEmpty(stations) ? null : stations.stream()
+		this.lineStations = CollectionUtils.emptyIfNull(stations)
+			.stream()
 			.map(station -> LineStation.create(this, station))
 			.collect(Collectors.toList());
 	}

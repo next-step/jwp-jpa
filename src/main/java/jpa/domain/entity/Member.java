@@ -14,7 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import jpa.domain.common.BaseEntity;
 import lombok.AccessLevel;
@@ -48,7 +48,7 @@ public class Member extends BaseEntity {
 		this.age = age;
 		this.email = email;
 		this.password = password;
-		this.memberFavorites = CollectionUtils.isEmpty(favorites) ? null : favorites.stream()
+		this.memberFavorites = CollectionUtils.emptyIfNull(favorites).stream()
 			.map(favorite -> MemberFavorite.create(this, favorite))
 			.collect(Collectors.toList());
 	}

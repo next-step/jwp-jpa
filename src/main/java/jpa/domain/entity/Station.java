@@ -15,7 +15,7 @@ import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import jpa.domain.common.BaseEntity;
 import lombok.AccessLevel;
@@ -43,7 +43,7 @@ public class Station extends BaseEntity {
 
 	private Station(String name, List<Line> lines) {
 		this.name = name;
-		this.lineStations = CollectionUtils.isEmpty(lines) ? null : lines.stream()
+		this.lineStations = CollectionUtils.emptyIfNull(lines).stream()
 			.map(line -> LineStation.create(line, this))
 			.collect(Collectors.toList());
 	}
