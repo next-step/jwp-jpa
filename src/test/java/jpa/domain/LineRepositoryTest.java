@@ -26,12 +26,12 @@ class LineRepositoryTest {
 	public static final String EXAMPLE_GREEN = "GREEN";
 
 	@Autowired
-	private LineRepository lines;
+	private LineRepository lineRepository;
 
 	@BeforeEach
 	void setup() {
-		lines.save(new Line(EXAMPLE_GREEN, EXAMPLE_LINE_1));
-		lines.save(new Line(EXAMPLE_RED, EXAMPLE_LINE_2));
+		lineRepository.save(new Line(EXAMPLE_GREEN, EXAMPLE_LINE_1));
+		lineRepository.save(new Line(EXAMPLE_RED, EXAMPLE_LINE_2));
 	}
 
 	@DisplayName("단일 조회 테스트")
@@ -39,7 +39,7 @@ class LineRepositoryTest {
 	void findByName() {
 		String expected = EXAMPLE_LINE_1;
 
-		String actual = lines.findByName(expected).getName();
+		String actual = lineRepository.findByName(expected).getName();
 
 		assertThat(actual).isEqualTo(expected);
 	}
@@ -49,7 +49,7 @@ class LineRepositoryTest {
 	void findAll() {
 		int expectedLength = 2;
 
-		List<Line> actualAll = lines.findAll();
+		List<Line> actualAll = lineRepository.findAll();
 		List<String> nameAll = actualAll.stream().map(Line::getName).collect(Collectors.toList());
 
 		assertAll(
@@ -64,7 +64,7 @@ class LineRepositoryTest {
 	void insert() {
 		Line expected = new Line("CYAN", "3호선");
 
-		Line actual = lines.save(expected);
+		Line actual = lineRepository.save(expected);
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
 			() -> assertThat(actual.getName()).isEqualTo(expected.getName()),
@@ -79,7 +79,7 @@ class LineRepositoryTest {
 
 		assertThatExceptionOfType(DataIntegrityViolationException.class)
 			.isThrownBy(() -> {
-				lines.save(newLine);
+				lineRepository.save(newLine);
 			});
 	}
 
@@ -88,10 +88,10 @@ class LineRepositoryTest {
 	void update() {
 		String expected = EXAMPLE_LINE_1;
 
-		Line line = lines.findByName(EXAMPLE_LINE_1);
+		Line line = lineRepository.findByName(EXAMPLE_LINE_1);
 		line.updateName(expected);
-		lines.flush();
-		Line check = lines.findByName(expected);
+		lineRepository.flush();
+		Line check = lineRepository.findByName(expected);
 
 		assertAll(
 			() -> assertThat(check.getId()).isEqualTo(line.getId()),
@@ -102,9 +102,9 @@ class LineRepositoryTest {
 	@Test
 	@DisplayName("delete 테스트")
 	void delete() {
-		Line line = lines.findByName(EXAMPLE_LINE_1);
-		lines.delete(line);
-		Line check = lines.findByName(EXAMPLE_LINE_1);
+		Line line = lineRepository.findByName(EXAMPLE_LINE_1);
+		lineRepository.delete(line);
+		Line check = lineRepository.findByName(EXAMPLE_LINE_1);
 
 		assertThat(check).isNull();
 	}

@@ -22,18 +22,18 @@ import jpa.domain.repository.FavoriteRepository;
 class FavoriteRepositoryTest {
 
 	@Autowired
-	private FavoriteRepository favorites;
+	private FavoriteRepository favoriteRepository;
 
 	@BeforeEach
 	void setup() {
-		favorites.save(new Favorite());
-		favorites.save(new Favorite());
+		favoriteRepository.save(new Favorite());
+		favoriteRepository.save(new Favorite());
 	}
 
 	@DisplayName("단일 조회 테스트")
 	@Test
 	void findById() {
-		Favorite actual = favorites.findById(1L).get();
+		Favorite actual = favoriteRepository.findById(1L).get();
 		assertAll(
 			() -> assertThat(actual).isNotNull(),
 			() -> assertThat(actual.getId()).isNotNull()
@@ -45,7 +45,7 @@ class FavoriteRepositoryTest {
 	void findAll() {
 		int expectedLength = 2;
 
-		List<Favorite> actualAll = favorites.findAll();
+		List<Favorite> actualAll = favoriteRepository.findAll();
 
 		assertThat(actualAll).hasSize(expectedLength);
 	}
@@ -56,8 +56,8 @@ class FavoriteRepositoryTest {
 		int expectedLength = 3;
 
 		Favorite newFavorite = new Favorite();
-		favorites.save(newFavorite);
-		List<Favorite> actualAll = favorites.findAll();
+		favoriteRepository.save(newFavorite);
+		List<Favorite> actualAll = favoriteRepository.findAll();
 
 		assertThat(actualAll).hasSize(expectedLength);
 	}
@@ -67,9 +67,9 @@ class FavoriteRepositoryTest {
 	void delete() {
 		int expectedLength = 1;
 
-		Favorite station = favorites.getOne(1L);
-		favorites.delete(station);
-		List<Favorite> actualAll = favorites.findAll();
+		Favorite station = favoriteRepository.getOne(1L);
+		favoriteRepository.delete(station);
+		List<Favorite> actualAll = favoriteRepository.findAll();
 
 		assertThat(actualAll).hasSize(expectedLength);
 	}

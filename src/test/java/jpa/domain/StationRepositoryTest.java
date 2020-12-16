@@ -24,12 +24,12 @@ class StationRepositoryTest {
 	public static final String EXAMPLE_STATION_NAME2 = "역삼역";
 
 	@Autowired
-	private StationRepository stations;
+	private StationRepository stationRepository;
 
 	@BeforeEach
 	void setup() {
-		stations.save(new Station(EXAMPLE_STATION_NAME1));
-		stations.save(new Station(EXAMPLE_STATION_NAME2));
+		stationRepository.save(new Station(EXAMPLE_STATION_NAME1));
+		stationRepository.save(new Station(EXAMPLE_STATION_NAME2));
 	}
 
 	@DisplayName("단일 조회 테스트")
@@ -37,7 +37,7 @@ class StationRepositoryTest {
 	void findByName() {
 		String expected = EXAMPLE_STATION_NAME1;
 
-		String actual = stations.findByName(expected).getName();
+		String actual = stationRepository.findByName(expected).getName();
 
 		assertThat(actual).isEqualTo(expected);
 	}
@@ -47,7 +47,7 @@ class StationRepositoryTest {
 	void findAll() {
 		int expectedLength = 2;
 
-		List<Station> actualAll = stations.findAll();
+		List<Station> actualAll = stationRepository.findAll();
 		List<String> nameAll = actualAll.stream().map(Station::getName).collect(Collectors.toList());
 
 		assertAll(
@@ -62,7 +62,7 @@ class StationRepositoryTest {
 	void insert() {
 		Station expected = new Station("왕십리역");
 
-		Station actual = stations.save(expected);
+		Station actual = stationRepository.save(expected);
 
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
@@ -77,7 +77,7 @@ class StationRepositoryTest {
 
 		assertThatExceptionOfType(DataIntegrityViolationException.class)
 			.isThrownBy(() -> {
-				stations.save(newStation);
+				stationRepository.save(newStation);
 			});
 	}
 
@@ -87,10 +87,10 @@ class StationRepositoryTest {
 
 		String newName = "사당역";
 
-		Station beforeStation = stations.findByName(EXAMPLE_STATION_NAME1);
+		Station beforeStation = stationRepository.findByName(EXAMPLE_STATION_NAME1);
 		beforeStation.updateName(newName);
-		stations.flush();
-		Station afterStation = stations.findByName(newName);
+		stationRepository.flush();
+		Station afterStation = stationRepository.findByName(newName);
 
 		assertAll(
 			() -> assertThat(afterStation.getId()).isEqualTo(beforeStation.getId()),
@@ -101,9 +101,9 @@ class StationRepositoryTest {
 	@Test
 	@DisplayName("delete 테스트")
 	void delete() {
-		Station station = stations.findByName(EXAMPLE_STATION_NAME1);
-		stations.delete(station);
-		Station check = stations.findByName(EXAMPLE_STATION_NAME1);
+		Station station = stationRepository.findByName(EXAMPLE_STATION_NAME1);
+		stationRepository.delete(station);
+		Station check = stationRepository.findByName(EXAMPLE_STATION_NAME1);
 
 		assertThat(check).isNull();
 	}

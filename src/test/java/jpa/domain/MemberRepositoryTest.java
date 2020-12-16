@@ -22,18 +22,18 @@ import jpa.domain.repository.MemberRepository;
 class MemberRepositoryTest {
 
 	@Autowired
-	private MemberRepository members;
+	private MemberRepository memberRepository;
 
 	@BeforeEach
 	void setup() {
-		members.save(new Member(20, "test1@test.com", "12345"));
-		members.save(new Member(30, "test2@test.com", "abcdef"));
+		memberRepository.save(new Member(20, "test1@test.com", "12345"));
+		memberRepository.save(new Member(30, "test2@test.com", "abcdef"));
 	}
 
 	@DisplayName("단일 조회 테스트")
 	@Test
 	void findById() {
-		Member actual = members.findById(1L).get();
+		Member actual = memberRepository.findById(1L).get();
 		assertAll(
 			() -> assertThat(actual).isNotNull(),
 			() -> assertThat(actual.getId()).isNotNull()
@@ -45,7 +45,7 @@ class MemberRepositoryTest {
 	void findAll() {
 		int expectedLength = 2;
 
-		List<Member> actualAll = members.findAll();
+		List<Member> actualAll = memberRepository.findAll();
 
 		assertThat(actualAll).hasSize(expectedLength);
 	}
@@ -56,8 +56,8 @@ class MemberRepositoryTest {
 		int expectedLength = 3;
 
 		Member newMember = new Member();
-		members.save(newMember);
-		List<Member> actualAll = members.findAll();
+		memberRepository.save(newMember);
+		List<Member> actualAll = memberRepository.findAll();
 
 		assertThat(actualAll).hasSize(expectedLength);
 	}
@@ -68,10 +68,10 @@ class MemberRepositoryTest {
 		String newEmail = "test3@test.com";
 		Long findId = 1L;
 
-		Member beforeMember = members.getOne(findId);
+		Member beforeMember = memberRepository.getOne(findId);
 		beforeMember.updateEmail(newEmail);
-		members.flush();
-		Member afterMember = members.getOne(findId);
+		memberRepository.flush();
+		Member afterMember = memberRepository.getOne(findId);
 
 		assertAll(
 			() -> assertThat(afterMember.getId()).isEqualTo(beforeMember.getId()),
@@ -84,9 +84,9 @@ class MemberRepositoryTest {
 	void delete() {
 		int expectedLength = 1;
 
-		Member member = members.getOne(1L);
-		members.delete(member);
-		List<Member> actualAll = members.findAll();
+		Member member = memberRepository.getOne(1L);
+		memberRepository.delete(member);
+		List<Member> actualAll = memberRepository.findAll();
 
 		assertThat(actualAll).hasSize(expectedLength);
 	}
