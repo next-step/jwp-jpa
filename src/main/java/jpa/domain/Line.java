@@ -21,11 +21,15 @@ public class Line {
     protected Line() {
     }
 
-    public Line(LocalDateTime createdDate, LocalDateTime modifiedDate, String color, String name) {
+    Line(final LocalDateTime createdDate, final LocalDateTime modifiedDate, final String color, final String name) {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.color = color;
         this.name = name;
+    }
+
+    public Line(final String color, final String name) {
+        this(LocalDateTime.now(), null, color, name);
     }
 
     public Long getId() {

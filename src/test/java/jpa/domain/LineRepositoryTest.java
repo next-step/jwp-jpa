@@ -14,8 +14,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 class LineRepositoryTest {
-    private static final LocalDateTime TODAY = LocalDateTime.now();
-
     @Autowired
     private EntityManager entityManager;
 
@@ -25,11 +23,10 @@ class LineRepositoryTest {
     @DisplayName("저장된 엔티티는 자동으로 id를 부여받는다.")
     @Test
     void getIdByAutoAfterSaving() {
-        LocalDateTime today = LocalDateTime.now();
         String testColor = "red";
         String testName = "test";
 
-        Line line = new Line(today, today, testColor, testName);
+        Line line = new Line(testColor, testName);
         lineRepository.save(line);
 
         assertThat(line.getId()).isNotNull();
@@ -42,11 +39,11 @@ class LineRepositoryTest {
         String testName = "test";
         String changeColor = "blue";
 
-        Line line = new Line(TODAY, TODAY, testColor, testName);
+        Line line = new Line(testColor, testName);
         lineRepository.save(line);
         assertThat(line.getColor()).isEqualTo(testColor);
 
-        line.updateLine(new Line(TODAY, TODAY, changeColor, testName));
+        line.updateLine(new Line(changeColor, testName));
         Line foundLine = lineRepository.findById(line.getId()).orElse(null);
         assertThat(foundLine.getColor()).isEqualTo(changeColor);
     }
@@ -56,7 +53,7 @@ class LineRepositoryTest {
     void queryMethodTest() {
         String testColor = "red";
         String testName = "test";
-        Line line = new Line(TODAY, TODAY, testColor, testName);
+        Line line = new Line(testColor, testName);
         lineRepository.save(line);
 
         Line foundLine = lineRepository.findByColor(testColor).orElse(null);
@@ -69,13 +66,13 @@ class LineRepositoryTest {
     @Test
     void uniqueConstraintTest() {
         String testName = "sameName";
-        Line line = new Line(TODAY, TODAY, "red", testName);
+        Line line = new Line("red", testName);
 
         lineRepository.save(line);
         entityManager.flush();      // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
 
         assertThatThrownBy(() -> {
-            lineRepository.save(new Line(TODAY, TODAY, "blue", line.getName()));
+            lineRepository.save(new Line("blue", line.getName()));
             entityManager.flush();  // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
         }).isInstanceOf(PersistenceException.class);
     }
