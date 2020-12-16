@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -42,7 +41,7 @@ class LineRepositoryTest {
         lineRepository.save(line);
         assertThat(line.getColor()).isEqualTo(testColor);
 
-        line.changeColor(changeColor);
+        line.updateLine(new Line(TODAY, TODAY, changeColor, testName));
         Line foundLine = lineRepository.findById(line.getId()).orElse(null);
         assertThat(foundLine.getColor()).isEqualTo(changeColor);
     }

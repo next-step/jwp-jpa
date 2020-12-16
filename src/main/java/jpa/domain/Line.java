@@ -32,8 +32,11 @@ public class Line {
         return this.id;
     }
 
-    public void changeColor(final String color) {
-        this.color = color;
+    public void updateLine(final Line line) {
+        this.createdDate = line.createdDate;
+        this.modifiedDate = line.modifiedDate;
+        this.name = line.name;
+        this.color = line.color;
     }
 
     public String getColor() {
