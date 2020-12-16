@@ -1,10 +1,15 @@
 package jpa.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import jpa.infrastructure.jpa.BaseEntity;
 
 /**
@@ -25,12 +30,19 @@ public class Line extends BaseEntity {
 
     private String color;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "line")
+    private List<LineStation> lineStations = new ArrayList<>();
+
     protected Line() {
     }
 
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public void addLineStation(LineStation lineStation) {
+        this.lineStations.add(lineStation);
     }
 
     public Long getId() {
@@ -43,5 +55,26 @@ public class Line extends BaseEntity {
 
     public String getColor() {
         return color;
+    }
+
+    public List<LineStation> getLineStations() {
+        return lineStations;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Line line = (Line) o;
+        return Objects.equals(id, line.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
