@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Station extends BaseTime {
@@ -14,6 +15,9 @@ public class Station extends BaseTime {
 
 	@Column(unique = true)
 	private String name;
+
+	@ManyToOne
+	private Line line;
 
 	public Station(String name) {
 		this.name = name;
@@ -29,5 +33,9 @@ public class Station extends BaseTime {
 
 	public String getName() {
 		return name;
+	}
+
+	public void setLine(Line line) {
+		this.line = line;
 	}
 }
