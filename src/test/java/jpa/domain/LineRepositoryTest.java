@@ -71,7 +71,6 @@ class LineRepositoryTest {
 
     @DisplayName("정상적으로 저장되는지 확인합니다.")
     @Test
-    @Rollback(value = false)
     void save() {
         // given
         Line expected = new Line("1호선", Color.BLUE);

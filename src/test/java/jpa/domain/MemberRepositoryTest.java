@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 class MemberRepositoryTest {
+
+    private static final String DEFAULT_PASSWORD = "0000";
 
     @Autowired
     private MemberRepository members;
@@ -24,7 +26,7 @@ class MemberRepositoryTest {
     void findOne() {
         // given
         String email = "good_1411@naver.com";
-        Member expected = members.save(new Member(28, email));
+        Member expected = members.save(new Member(28, email, DEFAULT_PASSWORD));
 
         // when
         Member actual = members.findFirstByEmail(email).get();
@@ -50,9 +52,9 @@ class MemberRepositoryTest {
     @Test
     void findAll() {
         // given
-        Member member1 = new Member(28, "good_1411@naver.com");
-        Member member3 = new Member(29, "next@gmail.com");
-        Member member2 = new Member(30, "step@gmail.com");
+        Member member1 = new Member(28, "good_1411@naver.com", DEFAULT_PASSWORD);
+        Member member3 = new Member(29, "next@gmail.com", DEFAULT_PASSWORD);
+        Member member2 = new Member(30, "step@gmail.com", DEFAULT_PASSWORD);
         members.saveAll(Arrays.asList(member1, member2, member3));
 
         // when
@@ -67,10 +69,9 @@ class MemberRepositoryTest {
 
     @DisplayName("정상적으로 저장되는지 확인합니다.")
     @Test
-    @Rollback(value = false)
     void save() {
         // given
-        Member expected = new Member(28, "good_1411@naver.com");
+        Member expected = new Member(28, "good_1411@naver.com", DEFAULT_PASSWORD);
 
         // when
         Member actual = members.save(expected);
@@ -87,7 +88,7 @@ class MemberRepositoryTest {
     @Test
     void update() {
         // given
-        Member savedMember = members.save(new Member(28, "good_1411@naver.com"));
+        Member savedMember = members.save(new Member(28, "good_1411@naver.com", DEFAULT_PASSWORD));
 
         // when
         Member expected = savedMember.changeEmail("nextstep@gmail.com");

@@ -50,7 +50,6 @@ class FavoriteRepositoryTest {
 
     @DisplayName("정상적으로 저장되는지 확인합니다.")
     @Test
-    @Rollback(value = false)
     void save() {
         // given
         Favorite expected = new Favorite();
