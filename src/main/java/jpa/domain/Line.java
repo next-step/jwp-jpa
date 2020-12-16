@@ -11,7 +11,9 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -58,6 +60,12 @@ public class Line {
         }
         this.name = name;
         return this;
+    }
+
+    public List<Station> stations() {
+        return stationLines.stream()
+                .map(StationLine::getStation)
+                .collect(Collectors.toList());
     }
 }
 

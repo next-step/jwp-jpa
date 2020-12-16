@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.Commit;
 
+import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,9 @@ class LineRepositoryTest {
 
     @Autowired
     private LineRepository lines;
+
+    @Autowired
+    EntityManager em;
 
     @DisplayName("단건 조회를 확인합니다.")
     @Test
@@ -113,5 +118,36 @@ class LineRepositoryTest {
 
         // when / then
         assertThrows(DataIntegrityViolationException.class, () -> lines.save(new Line(lineName, Color.RED)));
+    }
+
+    @DisplayName("노선 조회 시 속한 지하철역을 볼 수 있다.")
+    @Test
+    @Commit
+    void checkStations() {
+        // given
+        // 지하철 노선 저장
+        String lineName = "2호선";
+        Line line1 = new Line(lineName, Color.GREEN);
+        em.persist(line1);
+
+        // 지하철역 저장
+        Station gangnam = new Station("강남역");
+        Station hapjeong = new Station("합정역");
+        em.persist(gangnam);
+        em.persist(hapjeong);
+
+        // 지하철역 노선 저장
+        em.persist(new StationLine(gangnam, line1));
+        em.persist(new StationLine(hapjeong, line1));
+
+        // when
+        Line line = lines.findByName(lineName).get();
+        List<Station> stations = line.stations();
+
+        // then
+        assertAll(
+                () -> assertThat(stations).isNotNull(),
+                () -> assertThat(stations).contains(gangnam, hapjeong)
+        );
     }
 }
