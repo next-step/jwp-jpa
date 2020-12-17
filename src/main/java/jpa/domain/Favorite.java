@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -24,8 +21,13 @@ public class Favorite extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "favorite")
-    Set<FavoriteStation> favoriteStations = new HashSet<>();
+    @OneToOne
+    @JoinColumn(name = "start_station_id")
+    private Station startStation;
+
+    @OneToOne
+    @JoinColumn(name = "end_station_id")
+    private Station endStation;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -43,17 +45,11 @@ public class Favorite extends BaseEntity {
         this.member.getFavorites().add(this);
     }
 
-    public Optional<Station> startStation() {
-        return favoriteStations.stream()
-                .filter(FavoriteStation::isStart)
-                .map(FavoriteStation::getStation)
-                .findFirst();
+    public void addStartStation(final Station station) {
+        this.startStation = station;
     }
 
-    public Optional<Station> endStation() {
-        return favoriteStations.stream()
-                .filter(FavoriteStation::isEnd)
-                .map(FavoriteStation::getStation)
-                .findFirst();
+    public void addEndStation(final Station station) {
+        this.endStation = station;
     }
 }

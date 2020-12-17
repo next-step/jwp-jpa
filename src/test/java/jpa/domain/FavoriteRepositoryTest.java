@@ -1,6 +1,5 @@
 package jpa.domain;
 
-import jpa.domain.FavoriteStation.Type;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,21 +82,17 @@ class FavoriteRepositoryTest {
         // 즐겨찾기 저장
         String name = "1";
         Favorite favorite = new Favorite(name);
+        favorite.addStartStation(station1);
+        favorite.addEndStation(station2);
         em.persist(favorite);
-
-        // 즐겨찾는 지하철역 저장
-        em.persist(new FavoriteStation(Type.START, favorite, station1));
-        em.persist(new FavoriteStation(Type.END, favorite, station2));
 
         // when
         Favorite expected = favorites.findByName(name).get();
-        Station start = expected.startStation().get();
-        Station end = expected.endStation().get();
 
         // then
         assertAll(
-                () -> assertThat(start).isEqualTo(station1),
-                () -> assertThat(end).isEqualTo(station2)
+                () -> assertThat(expected.getStartStation()).isEqualTo(station1),
+                () -> assertThat(expected.getEndStation()).isEqualTo(station2)
         );
     }
 }
