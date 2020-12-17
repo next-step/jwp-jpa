@@ -1,5 +1,6 @@
 package jpa.service;
 
+import jpa.domain.Station;
 import jpa.dto.FavoriteDto;
 import jpa.domain.Favorite;
 import jpa.repository.FavoriteRepository;
@@ -21,10 +22,9 @@ public class FavoriteService {
 	public List<Favorite> createFavoriteByStation(List<FavoriteDto> favoritesDto) {
 		return favoriteRepository.saveAll(favoritesDto.stream()
 			.map(favoriteDto -> {
-				Favorite favorite = new Favorite();
-				favorite.setDeparture(stationService.getStationByName(favoriteDto.getDepartureName()));
-				favorite.setArrival(stationService.getStationByName(favoriteDto.getArrivalName()));
-				return favorite;
+				Station departure = stationService.getStationByName(favoriteDto.getDepartureName());
+				Station arrival = stationService.getStationByName(favoriteDto.getArrivalName());
+				return new Favorite(departure, arrival);
 			}).collect(Collectors.toList()));
 	}
 }

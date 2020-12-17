@@ -4,7 +4,6 @@ import jpa.domain.Favorite;
 import jpa.domain.Member;
 import jpa.dto.FavoriteDto;
 import jpa.service.FavoriteService;
-import jpa.service.MemberService;
 import jpa.service.StationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
@@ -33,15 +33,40 @@ class FavoriteTest {
 	private FavoriteService favoriteService;
 
 	@Autowired
-	private MemberService memberService;
+	private FavoriteRepository favoriteRepository;
 
 	@Transactional
-	@DisplayName("여러개의 즐겨찾기를 사용자에게 저장하는 기능 테스트")
+	@DisplayName("여러개의 즐겨찾기를 사용자에게 저장하는 테스트")
 	@Test
 	void 여러개_즐겨찾기_사용자_저장_TEST() {
 		//given
+		given();
+
+		//when
+		Member memberByEmail = memberRepository.findByEmail("goodna17@gmail.com");
+
+		//then
+		assertThat(memberByEmail.getFavorite()).hasSize(4);
+	}
+
+	@Transactional
+	@DisplayName("사용자가 삭제된다면 저장된 즐겨찾기를 모두 삭제하는 테스트")
+	@Test
+	void 사용자_삭제_테스트() {
+		//given
+		given();
+
+		//when
+		Member memberByEmail = memberRepository.findByEmail("goodna17@gmail.com");
+		memberRepository.delete(memberByEmail);
+
+		//then
+		assertThat(favoriteRepository.findByMember(memberByEmail)).isEmpty();
+	}
+
+	private void given() {
 		stationService.saveStations(Arrays.asList("강남역", "판교역", "양재역", "정자역"));
-		memberRepository.save(new Member(30, "goodna17@gmail.com", "password"));
+		Member member = memberRepository.save(new Member(30, "goodna17@gmail.com", "password"));
 
 		List<Favorite> favoriteByStation = favoriteService.createFavoriteByStation(
 			Arrays.asList(
@@ -49,13 +74,7 @@ class FavoriteTest {
 				new FavoriteDto("양재역", "판교역"),
 				new FavoriteDto("강남역", "양재역"),
 				new FavoriteDto("강남역", "정자역")));
-		String memberEmail = "goodna17@gmail.com";
-		memberService.addFavoritesToMember(memberEmail, favoriteByStation);
-
-		//when
-		Member memberByEmail = memberRepository.findByEmail(memberEmail);
-		//then
-		assertThat(memberByEmail.getFavorite()).hasSize(4);
+		favoriteByStation.forEach(member::addFavorite);
 	}
 
 	@DisplayName("같은 역은 즐겨찾기 추가하지 못하는 기능 테스트")

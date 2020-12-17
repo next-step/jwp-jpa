@@ -1,10 +1,13 @@
 package jpa.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -21,11 +24,15 @@ public class Favorite extends BaseTime {
 	@OneToOne
 	private Station arrival;
 
-	public void setDeparture(Station departure) {
-		this.departure = departure;
+	@JoinColumn(name = "memberId")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Member member;
+
+	protected Favorite() {
 	}
 
-	public void setArrival(Station arrival) {
+	public Favorite(Station departure, Station arrival) {
+		this.departure = departure;
 		this.arrival = arrival;
 	}
 }

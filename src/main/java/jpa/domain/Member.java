@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +24,7 @@ public class Member extends BaseTime {
 	@Column
 	private String password;
 
-	@JoinColumn(name = "memberId")
-	@OneToMany
+	@OneToMany(mappedBy = "member" , orphanRemoval = true)
 	private List<Favorite> favorite = new ArrayList<>();
 
 	public Member(int age, String email, String password) {
@@ -51,6 +49,6 @@ public class Member extends BaseTime {
 	}
 
 	public List<Favorite> getFavorite() {
-		return favorite;
+		return this.favorite;
 	}
 }
