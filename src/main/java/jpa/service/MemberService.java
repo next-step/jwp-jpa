@@ -15,12 +15,8 @@ public class MemberService {
 	private MemberRepository memberRepository;
 
 	public void addFavoritesToMember(String memberEmail, List<Favorite> favorites) {
-		Member byEmail = this.findMemberByEmail(memberEmail);
+		Member byEmail = memberRepository.findByEmail(memberEmail);
 		favorites.forEach(byEmail::addFavorite);
-	}
-
-	public Member findMemberByEmail(String email) {
-		return memberRepository.findByEmail(email);
 	}
 
 }

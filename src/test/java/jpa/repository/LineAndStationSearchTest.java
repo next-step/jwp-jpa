@@ -11,16 +11,21 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 class LineAndStationSearchTest {
 
 	@Autowired
-	LineRepository lines;
+	LineRepository lineRepository;
 
 	@Autowired
 	StationRepository stationRepository;
+
+	@Autowired
+	LineStationRepository lineStationRepository;
 
 	@Autowired
 	EntityManager entityManager;
@@ -32,34 +37,43 @@ class LineAndStationSearchTest {
 		entityManager.persist(line);
 		entityManager.persist(line2);
 
-		Station 강남역 = new Station("강남역");
-		Station 판교역 = new Station("판교역");
-		entityManager.persist(강남역);
-		entityManager.persist(판교역);
+		Station station1 = new Station("강남역");
+		Station station2 = new Station("판교역");
+		entityManager.persist(station1);
+		entityManager.persist(station2);
 
-		entityManager.persist(new LineStation(line, 강남역));
-		entityManager.persist(new LineStation(line2, 강남역));
-		entityManager.persist(new LineStation(line, 판교역));
-
-		entityManager.flush();
-		entityManager.clear();
+		entityManager.persist(new LineStation(line, station1));
+		entityManager.persist(new LineStation(line2, station1));
+		entityManager.persist(new LineStation(line, station2));
 	}
 
 	@DisplayName("노선 조회 시 속한 지하철역을 볼 수 있는 테스트")
 	@Test
 	void 노선으로_역_이름을_가져오는_TEST() {
-		assertThat(lines.findByName("신분당선").getLineStations().size()).isEqualTo(2);
-		assertThat(lines.findByName("2호선").getLineStations().size()).isEqualTo(1);
-		assertThat(stationRepository.findByName("강남역").getLineStation().size()).isEqualTo(2);
+		assertThat(lineRepository.findByName("신분당선").isEqualsContainsStationSize(2)).isTrue();
+		assertThat(lineRepository.findByName("2호선").isEqualsContainsStationSize(1)).isTrue();
+		assertThat(stationRepository.findByName("강남역").isEqualsContainsLineSize(2)).isTrue();
 	}
 
-	@DisplayName("역을 삭제하면 라인과의 관계가 끊어지는지 테스트")
+	@DisplayName("역을 삭제하면 연결 엔티티 데이터가 삭제되는지 테스트")
 	@Test
-	void 삭제_테스트() {
-		stationRepository.deleteByNameEquals("강남역");
-		entityManager.flush();
+	void 역_삭제_테스트() {
+		Station findStation = stationRepository.findByName("강남역");
+		entityManager.remove(findStation);
+		List<LineStation> byStationEquals = lineStationRepository.findByStationEquals(findStation);
 
-		assertThat(lines.findByName("신분당선").getLineStations().size()).isEqualTo(1);
-		assertThat(lines.findByName("2호선").getLineStations().size()).isZero();
+		assertThat(byStationEquals).isEmpty();
+		assertThat(stationRepository.findByName("강남역")).isNull();
+	}
+
+	@DisplayName("라인을 삭제하면 연결 엔티티 데이터가 삭제되는지 테스트")
+	@Test
+	void 라인_삭제_테스트() {
+		Line findLine = lineRepository.findByName("2호선");
+		entityManager.remove(findLine);
+		List<LineStation> byLineEquals = lineStationRepository.findByLineEquals(findLine);
+
+		assertThat(byLineEquals).isEmpty();
+		assertThat(lineRepository.findByName("2호선")).isNull();
 	}
 }

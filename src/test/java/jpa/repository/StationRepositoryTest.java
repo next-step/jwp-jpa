@@ -21,7 +21,7 @@ class StationRepositoryTest {
 		Station expected = new Station("잠실역");
 		Station actual = stations.save(expected);
 		assertAll(
-			() -> assertThat(actual.getId()).isNotNull(),
+			() -> assertThat(actual).isNotNull(),
 			() -> assertThat(actual.getName()).isEqualTo(expected.getName())
 		);
 	}

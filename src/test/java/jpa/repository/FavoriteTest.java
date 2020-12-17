@@ -9,6 +9,7 @@ import jpa.service.StationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class FavoriteTest {
 
 	@Autowired
@@ -51,10 +53,9 @@ class FavoriteTest {
 		memberService.addFavoritesToMember(memberEmail, favoriteByStation);
 
 		//when
-		Member memberByEmail = memberService.findMemberByEmail(memberEmail);
-
+		Member memberByEmail = memberRepository.findByEmail(memberEmail);
 		//then
-		assertThat(memberByEmail.getFavorite().size()).isEqualTo(4);
+		assertThat(memberByEmail.getFavorite()).hasSize(4);
 	}
 
 	@DisplayName("같은 역은 즐겨찾기 추가하지 못하는 기능 테스트")

@@ -21,7 +21,7 @@ public class Line extends BaseTime {
 
 	private String color;
 
-	@OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "line", orphanRemoval = true)
 	private final List<LineStation> lineStations = new ArrayList<>();
 
 	public Line(String name, String color) {
@@ -48,7 +48,7 @@ public class Line extends BaseTime {
 		lineStations.add(lineStation);
 	}
 
-	public List<LineStation> getLineStations() {
-		return lineStations;
+	public boolean isEqualsContainsStationSize(int size) {
+		return lineStations.size() == size;
 	}
 }

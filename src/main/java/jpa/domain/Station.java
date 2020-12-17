@@ -1,6 +1,5 @@
 package jpa.domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,8 +18,8 @@ public class Station extends BaseTime {
 	@Column(unique = true)
 	private String name;
 
-	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
-	private final List<LineStation> lineStation = new ArrayList<>();
+	@OneToMany(mappedBy = "station", orphanRemoval = true)
+	private final List<LineStation> lineStations = new ArrayList<>();
 
 	public Station(String name) {
 		this.name = name;
@@ -39,10 +38,10 @@ public class Station extends BaseTime {
 	}
 
 	public void addLineStation(LineStation lineStation) {
-		this.lineStation.add(lineStation);
+		this.lineStations.add(lineStation);
 	}
 
-	public List<LineStation> getLineStation() {
-		return lineStation;
+	public boolean isEqualsContainsLineSize(int size) {
+		return lineStations.size() == size;
 	}
 }

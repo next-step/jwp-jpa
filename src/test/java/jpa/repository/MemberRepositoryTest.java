@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
@@ -25,10 +23,7 @@ class MemberRepositoryTest {
 		Member saveMember = members.save(member);
 
 		assertAll(
-			() -> assertThat(saveMember.getId()).isNotNull(),
-			() -> assertThat(saveMember.getAge()).isEqualTo(member.getAge()),
-			() -> assertThat(saveMember.getEmail()).isEqualTo(member.getEmail()),
-			() -> assertThat(saveMember.getPassword()).isEqualTo(member.getPassword())
+			() -> assertThat(member).isEqualTo(saveMember)
 		);
 	}
 
@@ -39,10 +34,6 @@ class MemberRepositoryTest {
 		members.save(new Member(20, expectedEmail, "12345"));
 
 		Member findMember = members.findByEmail(expectedEmail);
-		assertThat(findMember.getEmail()).isEqualTo(expectedEmail);
-		assertThat(findMember.getAge()).isEqualTo(20);
-		assertThat(findMember.getPassword()).isEqualTo("12345");
-		assertThat(findMember.getCreatedDate()).isBefore(LocalDateTime.now());
-		assertThat(findMember.getModifiedDate()).isBefore(LocalDateTime.now());
+		assertThat(findMember.isEqualsEmail(expectedEmail)).isTrue();
 	}
 }

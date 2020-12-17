@@ -25,8 +25,8 @@ public class Member extends BaseTime {
 	@Column
 	private String password;
 
-	@OneToMany
 	@JoinColumn(name = "memberId")
+	@OneToMany
 	private List<Favorite> favorite = new ArrayList<>();
 
 	public Member(int age, String email, String password) {
@@ -42,20 +42,12 @@ public class Member extends BaseTime {
 		this.favorite.add(favorite);
 	}
 
-	public Long getId() {
-		return id;
+	public boolean isEqualsFavoriteSize(int size) {
+		return this.favorite.size() == size;
 	}
 
-	public int getAge() {
-		return age;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public String getPassword() {
-		return password;
+	public boolean isEqualsEmail(String email) {
+		return email.equals(this.email);
 	}
 
 	public List<Favorite> getFavorite() {
