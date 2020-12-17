@@ -121,7 +121,6 @@ class StationRepositoryTest {
 
     @DisplayName("지하철역 조회 시 어느 노선에 속한지 볼 수 있다.")
     @Test
-    @Commit
     void checkLines() {
         // given
         // 지하철 노선 저장
