@@ -1,6 +1,6 @@
 package jpa.repository;
 
-import jpa.entity.Member;
+import jpa.domain.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

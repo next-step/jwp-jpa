@@ -1,6 +1,6 @@
 package jpa.repository;
 
-import jpa.entity.Member;
+import jpa.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

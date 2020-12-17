@@ -1,6 +1,6 @@
 package jpa.repository;
 
-import jpa.entity.Favorite;
+import jpa.domain.Favorite;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

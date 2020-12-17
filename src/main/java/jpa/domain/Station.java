@@ -1,4 +1,4 @@
-package jpa.entity;
+package jpa.domain;
 
 import javax.persistence.*;
 
