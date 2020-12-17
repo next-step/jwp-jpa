@@ -14,6 +14,9 @@ public interface LineRepository extends JpaRepository<Line, Long> {
 
     Line findByColor(String color);
 
-    @Query("select l from Line l join fetch l.lineStations where l.name = :name")
+    @Query("select l " +
+            "from Line l " +
+            "join fetch l.lineStations " +
+            "where l.name = :name")
     Line findByNameWithLineStation(String name);
 }

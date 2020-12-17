@@ -12,7 +12,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Member findByEmail(String email);
 
-    @Query("select m from Member m join fetch m.favorites where m.email = :email")
+    @Query("select m " +
+            "from Member m " +
+            "join fetch m.favorites " +
+            "where m.email = :email")
     Member findByEmailWithFavorites(String email);
 
 }
