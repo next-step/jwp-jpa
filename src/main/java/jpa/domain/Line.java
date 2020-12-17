@@ -4,12 +4,9 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @Entity
 @Table(name = "line")
-public class Line {
+public class Line extends BaseEntity {
 
     public enum Color {
         RED, BLUE, GREEN
@@ -37,14 +34,6 @@ public class Line {
     @Enumerated(EnumType.STRING)
     @Column(name = "color")
     private Color color;
-
-    @CreationTimestamp
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @UpdateTimestamp
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy = "line")
     private Set<StationLine> stationLines = new HashSet<>();

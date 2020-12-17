@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "favorite_station")
-public class FavoriteStation {
+public class FavoriteStation extends BaseEntity {
 
     public enum Type {
         START, END

@@ -3,12 +3,9 @@ package jpa.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +13,7 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +28,6 @@ public class Member {
 
     @Column(name = "password")
     private String password;
-
-    @CreationTimestamp
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @UpdateTimestamp
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy = "member")
     private Set<Favorite> favorites = new HashSet<>();

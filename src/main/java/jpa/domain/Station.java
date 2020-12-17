@@ -10,7 +10,9 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode(of = "id")
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 @Getter
 @Entity
 @Table(name = "station")
-public class Station {
+public class Station extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +29,6 @@ public class Station {
 
     @Column(name = "name", unique = true)
     private String name;
-
-    @CreationTimestamp
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @UpdateTimestamp
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy = "station")
     private Set<StationLine> stationLines = new HashSet<>();
