@@ -16,4 +16,9 @@ import javax.persistence.*;
 public class Line extends BaseEntity {
     private String color;
     private String name;
+
+    public Line(String color, String name) {
+        this.color = color;
+        this.name = name;
+    }
 }
