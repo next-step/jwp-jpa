@@ -63,9 +63,15 @@ create table favorite (
 
 ## Step2. 연관 관계 매핑
 - 다양한 연관 관계를 맺어보고 실습하기
+- [VO 컬렉션 참고자료](http://redutan.github.io/2018/05/29/ddd-values-on-jpa)
 
 ### Todo-list
-- [ ] 식별자 생성 방식을 Identity로 변경
+- [X] 식별자 생성 방식을 Identity로 변경
+  - 식별자 생성 방식을 기본으로 지정할 경우 키 생성에 대한 DB 의존성이 존재하지 않음.
+  - 이 때문에 Spring Data JPA를 통해 save를 하더라도 트랜잭션이 끝날 때까지 insert 쿼리가 동작하지 않음.
+  - 하지만 Identity로 생성방식을 지정하면, DB 의존성이 생기기 때문에 Spring Data JPA로 save를 하는 즉시 insert 쿼리가 동작함.
+    - 영속성 컨텍스트를 통해 관리하려면 ID 식별자가 필수이기 때문
+  - Unique Constrain이 걸린 대상을 중복해서 저장할 때 어디에서 예외가 발생하는지를 보고 확인할 수 있다.
 - [ ] Auditing을 기능을 이용해보기
 - [ ] 지하쳘역, 노선의 다대다 관계 매핑하기 (환승역 고려 때문에 다대다 관계)
   - [ ] ManyToMany 매핑을 진행하고 문제점 경험하기

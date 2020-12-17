@@ -4,10 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -69,11 +68,11 @@ class LineRepositoryTest {
         Line line = new Line("red", testName);
 
         lineRepository.save(line);
-        entityManager.flush();      // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
+        // entityManager.flush();      // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
 
         assertThatThrownBy(() -> {
             lineRepository.save(new Line("blue", line.getName()));
-            entityManager.flush();  // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
-        }).isInstanceOf(PersistenceException.class);
+            // entityManager.flush();  // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
+        }).isInstanceOf(DataIntegrityViolationException.class);
     }
 }
