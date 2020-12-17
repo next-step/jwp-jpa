@@ -105,7 +105,6 @@ class LineRepositoryTest {
 
 		Line line = lineRepository.findByName(EXAMPLE_LINE_1);
 		line.updateName(expected);
-		lineRepository.flush();
 		Line check = lineRepository.findByName(expected);
 
 		assertAll(
