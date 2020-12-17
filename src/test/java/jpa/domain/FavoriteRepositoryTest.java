@@ -77,9 +77,12 @@ class FavoriteRepositoryTest {
         // 지하철 역 저장
         Station station1 = new Station("잠실역");
         Station station2 = new Station("합정역");
+        em.persist(station1);
+        em.persist(station2);
 
         // 즐겨찾기 저장
-        Favorite favorite = new Favorite();
+        String name = "1";
+        Favorite favorite = new Favorite(name);
         em.persist(favorite);
 
         // 즐겨찾는 지하철역 저장
@@ -87,7 +90,7 @@ class FavoriteRepositoryTest {
         em.persist(new FavoriteStation(Type.END, favorite, station2));
 
         // when
-        Favorite expected = favorites.findById(1L).get();
+        Favorite expected = favorites.findByName(name).get();
         Station start = expected.startStation().get();
         Station end = expected.endStation().get();
 

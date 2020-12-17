@@ -24,6 +24,9 @@ public class Favorite {
     @Column(name = "favorite_id")
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createdDate;
@@ -38,6 +41,10 @@ public class Favorite {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public Favorite(final String name) {
+        this.name = name;
+    }
 
     public void setMember(final Member member) {
         if (Objects.nonNull(this.member)) {
