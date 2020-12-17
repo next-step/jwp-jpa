@@ -1,20 +1,19 @@
 package jpa.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.DirtiesContext;
 
 /**
  * @author : leesangbae
  * @project : jpa
  * @since : 2020-12-17
  */
-@DirtiesContext
 @DataJpaTest
 @DisplayName("LineStation Repository Test Class")
 class LineStationRepositoryTest {
@@ -60,10 +59,18 @@ class LineStationRepositoryTest {
 
     @Test
     @DisplayName("Line에 포함된 역 Test")
-    void lineStation() {
+    void lineStationSelectLineTest() {
         Line savedLineNumber3 = lineRepository.findByNameWithLineStation("4호선");
 
         assertThat(savedLineNumber3.getLineStations().size()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("Line에 포함된 역 Test")
+    void shouldBeExceptionCreateFavoriteTest() {
+        assertThatThrownBy(() -> new Line(null, null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Line의 name, color는 필수 값 입니다.");
     }
 
 }

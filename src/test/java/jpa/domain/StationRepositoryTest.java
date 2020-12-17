@@ -1,6 +1,7 @@
 package jpa.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -41,4 +42,13 @@ class StationRepositoryTest {
 
         assertThat(savedStation).isEqualTo(station);
     }
+
+    @Test
+    @DisplayName("Station 생성시 에러 Test")
+    void shouldBeExceptionCreateStationTest() {
+        assertThatThrownBy(() -> new Station(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Station의 name은 필수 값 입니다.");
+    }
+
 }
