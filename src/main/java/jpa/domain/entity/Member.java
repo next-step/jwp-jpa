@@ -41,7 +41,7 @@ public class Member extends BaseEntity {
 	@Column(name = "password", length = 255)
 	private String password;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MemberFavorite> memberFavorites = new ArrayList<>();
 
 	private Member(int age, String email, String password, List<Favorite> favorites) {
