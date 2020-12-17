@@ -9,12 +9,12 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name = "station_line")
-public class StationLine extends BaseEntity {
+@Table(name = "line_station")
+public class LineStation extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "station_line_id")
+    @Column(name = "line_station_id")
     private Long id;
 
     @ManyToOne
@@ -25,10 +25,10 @@ public class StationLine extends BaseEntity {
     @JoinColumn(name = "line_id")
     private Line line;
 
-    public StationLine(final Station station, final Line line) {
+    public LineStation(final Station station, final Line line) {
         this.station = station;
-        station.getStationLines().add(this);
+        station.getLineStations().add(this);
         this.line = line;
-        line.getStationLines().add(this);
+        line.getLineStations().add(this);
     }
 }

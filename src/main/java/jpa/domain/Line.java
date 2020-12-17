@@ -36,7 +36,7 @@ public class Line extends BaseEntity {
     private Color color;
 
     @OneToMany(mappedBy = "line")
-    private Set<StationLine> stationLines = new HashSet<>();
+    private Set<LineStation> lineStations = new HashSet<>();
 
     public Line(final String name, final Color color) {
         this.name = name;
@@ -52,8 +52,8 @@ public class Line extends BaseEntity {
     }
 
     public List<Station> stations() {
-        return stationLines.stream()
-                .map(StationLine::getStation)
+        return lineStations.stream()
+                .map(LineStation::getStation)
                 .collect(Collectors.toList());
     }
 }

@@ -4,12 +4,9 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +28,7 @@ public class Station extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "station")
-    private Set<StationLine> stationLines = new HashSet<>();
+    private Set<LineStation> lineStations = new HashSet<>();
 
     public Station(final String name) {
         this.name = name;
@@ -46,8 +43,8 @@ public class Station extends BaseEntity {
     }
 
     public List<Line> lines() {
-        return stationLines.stream()
-                .map(StationLine::getLine)
+        return lineStations.stream()
+                .map(LineStation::getLine)
                 .collect(Collectors.toList());
     }
 }

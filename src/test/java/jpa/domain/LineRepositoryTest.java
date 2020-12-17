@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Commit;
 
 import javax.persistence.EntityManager;
 import java.util.Arrays;
@@ -136,8 +135,8 @@ class LineRepositoryTest {
         em.persist(hapjeong);
 
         // 지하철역 노선 저장
-        em.persist(new StationLine(gangnam, line1));
-        em.persist(new StationLine(hapjeong, line1));
+        em.persist(new LineStation(gangnam, line1));
+        em.persist(new LineStation(hapjeong, line1));
 
         // when
         Line line = lines.findByName(lineName).get();
