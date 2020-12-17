@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import jpa.infrastructure.jpa.BaseEntity;
+import org.springframework.util.StringUtils;
 
 /**
  * @author : leesangbae
@@ -24,7 +25,7 @@ public class Station extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "station")
@@ -34,10 +35,11 @@ public class Station extends BaseEntity {
     }
 
     public Station(String name) {
+        validation(name);
         this.name = name;
     }
 
-    public void addLineStation(LineStation lineStation) {
+    public void add(LineStation lineStation) {
         this.lineStations.add(lineStation);
     }
 
@@ -51,6 +53,12 @@ public class Station extends BaseEntity {
 
     public List<LineStation> getLineStations() {
         return lineStations;
+    }
+
+    private void validation(String name) {
+        if (!StringUtils.hasText(name)) {
+            throw new IllegalArgumentException("Station의 name은 필수 값 입니다.");
+        }
     }
 
     @Override

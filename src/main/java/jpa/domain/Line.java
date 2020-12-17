@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import jpa.infrastructure.jpa.BaseEntity;
+import org.springframework.util.StringUtils;
 
 /**
  * @author : leesangbae
@@ -25,9 +26,10 @@ public class Line extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String color;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "line")
@@ -37,11 +39,12 @@ public class Line extends BaseEntity {
     }
 
     public Line(String name, String color) {
+        validation(name, color);
         this.name = name;
         this.color = color;
     }
 
-    public void addLineStation(LineStation lineStation) {
+    public void add(LineStation lineStation) {
         this.lineStations.add(lineStation);
     }
 
@@ -59,6 +62,12 @@ public class Line extends BaseEntity {
 
     public List<LineStation> getLineStations() {
         return lineStations;
+    }
+
+    private void validation(String name, String color) {
+        if (!StringUtils.hasText(name) || !StringUtils.hasText(color)) {
+            throw new IllegalArgumentException("Line의 name, color는 필수 값 입니다.");
+        }
     }
 
     @Override
