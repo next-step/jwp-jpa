@@ -14,12 +14,13 @@ public class FavoriteRepositoryTest {
 
     private final Favorite testFavorite = new Favorite();
 
-    @DisplayName("엔티티 저장 후 ID 부여 확인")
+    @DisplayName("엔티티 저장 후 ID 부여 및 생성 일자 확인")
     @Test
     void saveTest() {
-        favoriteRepository.save(testFavorite);
+        Favorite saved = favoriteRepository.save(testFavorite);
 
-        assertThat(testFavorite.getId()).isNotNull();
+        assertThat(saved.getId()).isNotNull();
+        assertThat(saved.getCreatedDate()).isNotNull();
     }
 
     @DisplayName("더티 체킹을 통한 업데이트 확인")

@@ -14,21 +14,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 class LineRepositoryTest {
     @Autowired
-    private EntityManager entityManager;
-
-    @Autowired
     private LineRepository lineRepository;
 
-    @DisplayName("저장된 엔티티는 자동으로 id를 부여받는다.")
+    @DisplayName("저장된 엔티티는 자동으로 id와 생성일을 부여받는다.")
     @Test
     void getIdByAutoAfterSaving() {
         String testColor = "red";
         String testName = "test";
 
         Line line = new Line(testColor, testName);
-        lineRepository.save(line);
+        Line saved = lineRepository.save(line);
 
-        assertThat(line.getId()).isNotNull();
+        assertThat(saved.getId()).isNotNull();
+        assertThat(saved.getCreatedDate()).isNotNull();
     }
 
     @DisplayName("영속성 컨텍스트에서 관리되는 엔티티는 더티 체킹을 통해 변경 내용이 자동으로 업데이트 된다.")

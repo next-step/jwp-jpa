@@ -14,12 +14,13 @@ public class MemberRepositoryTest {
 
     private final Member testMember = new Member(3, "test@test.com", "test");
 
-    @DisplayName("엔티티 저장 후 ID 부여 확인")
+    @DisplayName("엔티티 저장 후 ID, 생성일 부여 확인")
     @Test
     void saveTest() {
-        memberRepository.save(testMember);
+        Member saved = memberRepository.save(testMember);
 
-        assertThat(testMember.getId()).isNotNull();
+        assertThat(saved.getId()).isNotNull();
+        assertThat(saved.getCreatedDate()).isNotNull();
     }
 
     @DisplayName("더티 체킹을 통한 업데이트 확인")

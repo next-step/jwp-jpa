@@ -1,10 +1,12 @@
 package jpa.domain;
 
+import jpa.utils.BaseEntity;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Station {
+public class Station extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,5 +46,9 @@ public class Station {
 
     public String getName() {
         return name;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return this.createdDate;
     }
 }
