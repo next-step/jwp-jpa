@@ -4,8 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ class FavoriteRepositoryTest {
     private FavoriteRepository favorites;
 
     @Autowired
-    private EntityManager em;
+    private TestEntityManager em;
 
     @DisplayName("조회 시 값이 없을 경우 null 이 반환됩니다.")
     @Test
