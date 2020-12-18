@@ -4,17 +4,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.convert.DataSizeUnit;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import javax.persistence.EntityManager;
+import javax.swing.text.html.parser.Entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 public class LineStationLearningTest {
+    @Autowired
+    private EntityManager entityManager;
+
     @Autowired
     private LineRepository lineRepository;
 
@@ -65,6 +69,51 @@ public class LineStationLearningTest {
         LineStation foundLineStation = lineStationRepository.findByLine(foundLine).orElse(null);
         assertThat(foundLineStation).isNotNull();
         assertThat(foundLineStation.getLine()).isEqualTo(foundLine);
+    }
+
+    @DisplayName("더티 체킹을 통해 Entity의 변화를 자동으로 DB에 반영할 수 있다.")
+    @Test
+    void dirtyCheckTest() {
+        String lineNumberTwoColor = "green";
+        String lineNumberTwoName = "lineNumberTwo";
+        String bundangLineColor = "yellow";
+        String bundangLineName = "bundangLine";
+
+        createNewLine(lineNumberTwoColor, lineNumberTwoName, gangnam, seocho, 10L);
+        createNewLine(bundangLineColor, bundangLineName, seocho, bundang, 7L);
+
+        Line lineNumberTwo = lineRepository.findByName(lineNumberTwoName).orElse(null);
+        Line bundangLine = lineRepository.findByName(bundangLineName).orElse(null);
+        assertThat(lineNumberTwo).isNotNull();
+        assertThat(bundangLine).isNotNull();
+
+        // 업데이트
+        LineStation lineStation = bundangLine.getLineStations().get(0);
+        assertThat(lineStation.getLine().getId()).isNotEqualTo(lineNumberTwo.getId());
+        lineStation.updateLine(lineNumberTwo);
+
+        // 업데이트 이후 (update 구문 실행 확인)
+        LineStation foundLineStation = lineStationRepository.findByDistance(lineStation.getDistance())
+                .orElse(null);
+        assertThat(foundLineStation).isNotNull();
+        assertThat(foundLineStation.getLine().getId()).isEqualTo(lineNumberTwo.getId());
+    }
+
+    @DisplayName("연관관계가 존재하는 상태로 Line을 삭제할 수 없다.")
+    @Test
+    void deleteTest() {
+        String lineColor = "green";
+        String lineName = "lineNumberTwo";
+
+        Line newLine = createNewLine(lineColor, lineName, seocho, gangnam, 10L);
+        LineStation lineStation = newLine.getLineStations().get(0);
+
+        LineStation foundLineStation = lineStationRepository.findById(lineStation.getId()).orElse(null);
+        assertThat(foundLineStation).isNotNull();
+
+        lineRepository.deleteById(newLine.getId());
+        assertThatThrownBy(() -> lineStationRepository.findByDistance(lineStation.getDistance()).orElse(null))
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 
     private Line createNewLine(

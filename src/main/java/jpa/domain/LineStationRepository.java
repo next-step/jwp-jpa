@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface LineStationRepository extends JpaRepository<LineStation, Long> {
     Optional<LineStation> findByLine(Line line);
+    Optional<LineStation> findByDistance(Long distance);
 }
