@@ -98,4 +98,24 @@ public class ManyToManyLearningTest {
         // 혹은 CASCADE 옵션을 잘 조정해야 한다.
         assertThat(foundLine.getStations().size()).isNotEqualTo(expectedSize);
     }
+
+    @DisplayName("노선을 삭제해도 지하철 역은 유지된다.")
+    @Test
+    void deleteLineIncludedStationTest() {
+        final ManyToManyLine testLine = line1;
+        final ManyToManyStation testStation = station1;
+        final int expectedSize = 0;
+
+        final ManyToManyStation foundStation = stationRepository.findById(testStation.getId()).orElse(null);
+        assertThat(foundStation).isNotNull();
+        assertThat(foundStation.getLines().get(0).getId()).isEqualTo(testLine.getId());
+
+        lineRepository.delete(testLine);
+        final ManyToManyStation foundStation2 = stationRepository.findById(testStation.getId()).orElse(null);
+        assertThat(foundStation2).isNotNull();
+
+        // 마찬가지로 자동으로 Station에 연관된 객체 관계를 삭제해주진 않는다.
+        // 주의해서 잘 삭제해주거나 CASCADE 설정해야 한다.
+        assertThat(foundStation2.getLines().size()).isNotEqualTo(expectedSize);
+    }
 }
