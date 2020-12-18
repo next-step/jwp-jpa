@@ -14,7 +14,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import jpa.domain.entity.Favorite;
+import jpa.domain.entity.Station;
 import jpa.domain.repository.FavoriteRepository;
+import jpa.domain.repository.StationRepository;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @DataJpaTest
@@ -22,18 +24,25 @@ import jpa.domain.repository.FavoriteRepository;
 class FavoriteRepositoryTest {
 
 	@Autowired
-	private FavoriteRepository favorites;
+	private FavoriteRepository favoriteRepository;
+
+	@Autowired
+	private StationRepository stationRepository;
 
 	@BeforeEach
 	void setup() {
-		favorites.save(new Favorite());
-		favorites.save(new Favorite());
+		Station station1 = stationRepository.save(Station.create("사당역"));
+		Station station2 = stationRepository.save(Station.create("서울숲역"));
+		Station station3 = stationRepository.save(Station.create("광화문역"));
+
+		favoriteRepository.save(Favorite.create(station1, station2));
+		favoriteRepository.save(Favorite.create(station2, station3));
 	}
 
 	@DisplayName("단일 조회 테스트")
 	@Test
 	void findById() {
-		Favorite actual = favorites.findById(1L).get();
+		Favorite actual = favoriteRepository.findById(1L).get();
 		assertAll(
 			() -> assertThat(actual).isNotNull(),
 			() -> assertThat(actual.getId()).isNotNull()
@@ -45,7 +54,7 @@ class FavoriteRepositoryTest {
 	void findAll() {
 		int expectedLength = 2;
 
-		List<Favorite> actualAll = favorites.findAll();
+		List<Favorite> actualAll = favoriteRepository.findAll();
 
 		assertThat(actualAll).hasSize(expectedLength);
 	}
@@ -55,9 +64,11 @@ class FavoriteRepositoryTest {
 	void insert() {
 		int expectedLength = 3;
 
-		Favorite newFavorite = new Favorite();
-		favorites.save(newFavorite);
-		List<Favorite> actualAll = favorites.findAll();
+		Station station1 = stationRepository.save(Station.create("김포공항역"));
+		Station station2 = stationRepository.save(Station.create("인천공항역"));
+		Favorite newFavorite = Favorite.create(station1, station2);
+		favoriteRepository.save(newFavorite);
+		List<Favorite> actualAll = favoriteRepository.findAll();
 
 		assertThat(actualAll).hasSize(expectedLength);
 	}
@@ -67,10 +78,25 @@ class FavoriteRepositoryTest {
 	void delete() {
 		int expectedLength = 1;
 
-		Favorite station = favorites.getOne(1L);
-		favorites.delete(station);
-		List<Favorite> actualAll = favorites.findAll();
+		Favorite station = favoriteRepository.getOne(1L);
+		favoriteRepository.delete(station);
+		List<Favorite> actualAll = favoriteRepository.findAll();
 
 		assertThat(actualAll).hasSize(expectedLength);
+	}
+
+	@Test
+	@DisplayName("즐겨찾기에는 출발역과 도착역이 포함되어 있다.")
+	void favorite() {
+
+		Favorite favorite = favoriteRepository.findById(1L).get();
+		Station departure = favorite.getDepartureStation();
+		Station arrival = favorite.getArrivalStation();
+
+		assertAll(
+			() -> assertThat(departure).isNotNull(),
+			() -> assertThat(arrival).isNotNull()
+		);
+
 	}
 }
