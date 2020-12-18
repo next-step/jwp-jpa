@@ -26,25 +26,27 @@ class StationRepositoryTest {
 
 	@Test
 	void updateTest() {
+		String originName = "문래역";
 		String changeName = "잠실역";
-		Station expected = new Station("문래역");
+		Station expected = new Station(originName);
 		Station actual = stationRepository.save(expected);
 		actual.changeName(changeName);
 		assertAll(
-			() -> assertThat(stationRepository.findByName("문래역")).isNull(),
+			() -> assertThat(stationRepository.findByName(originName)).isNull(),
 			() -> assertThat(stationRepository.findByName(changeName).getName()).isEqualTo(changeName)
 		);
 	}
 
 	@Test
 	void deleteTest() {
-		Station expected = new Station("문래역");
+		String originName = "문래역";
+		Station expected = new Station(originName);
 		Station actual = stationRepository.save(expected);
 		assertThat(actual.getName()).isEqualTo(expected.getName());
 
 		stationRepository.delete(actual);
 		assertAll(
-			() -> assertThat(stationRepository.findByName("문래역")).isNull(),
+			() -> assertThat(stationRepository.findByName(originName)).isNull(),
 			() -> assertThat(stationRepository.findAll().size()).isEqualTo(0)
 		);
 	}
