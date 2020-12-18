@@ -19,9 +19,6 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "line", fetch = FetchType.LAZY)
-    private List<LineStation> lineStations = new ArrayList<>();
-
     protected Line() {
     }
 
@@ -33,11 +30,6 @@ public class Line extends BaseEntity {
 
     public Line(final String color, final String name) {
         this(null, color, name);
-    }
-
-    public void addLineStation(final LineStation lineStation) {
-        this.lineStations.add(lineStation);
-        lineStation.updateLine(this);
     }
 
     public Long getId() {
@@ -61,20 +53,5 @@ public class Line extends BaseEntity {
 
     public LocalDateTime getCreatedDate() {
         return this.createdDate;
-    }
-
-    public List<LineStation> getLineStations() {
-        return this.lineStations;
-    }
-
-    public List<Station> getStations() {
-        Set<Station> dupRemovedStations = lineStations.stream()
-                .map(LineStation::getStations)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
-
-        return new ArrayList<>(dupRemovedStations).stream()
-                .sorted(Comparator.comparingLong(Station::getId))
-                .collect(Collectors.toList());
     }
 }

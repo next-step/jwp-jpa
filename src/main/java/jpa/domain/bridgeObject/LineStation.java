@@ -15,7 +15,7 @@ public class LineStation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "line_id")
-    private Line line;
+    private LineUseBridge line;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "up_station_id")
@@ -30,7 +30,7 @@ public class LineStation {
     protected LineStation() {
     }
 
-    LineStation(final Long id, final Line line, final Station upStation, final Station downStation, final Long distance) {
+    LineStation(final Long id, final LineUseBridge line, final Station upStation, final Station downStation, final Long distance) {
         this.id = id;
         this.line = line;
         this.upStation = upStation;
@@ -42,8 +42,8 @@ public class LineStation {
         this(null, null, upStation, downStation, distance);
     }
 
-    public void updateLine(final Line line) {
-        this.line = line;
+    public void updateLine(final LineUseBridge lineUseBridge) {
+        this.line = lineUseBridge;
         line.getLineStations().add(this);
     }
 
@@ -51,7 +51,7 @@ public class LineStation {
         return id;
     }
 
-    public Line getLine() {
+    public LineUseBridge getLine() {
         return line;
     }
 

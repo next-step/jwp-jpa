@@ -1,7 +1,5 @@
 package jpa.domain.bridgeObject;
 
-import jpa.domain.Line;
-import jpa.domain.LineRepository;
 import jpa.domain.Station;
 import jpa.domain.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 public class LineStationLearningTest {
     @Autowired
-    private LineRepository lineRepository;
+    private LineUseBridgeRepository lineRepository;
 
     @Autowired
     private StationRepository stationRepository;
@@ -46,7 +44,7 @@ public class LineStationLearningTest {
         String lineColor = "green";
         String lineName = "lineNumberTwo";
 
-        Line newLine = createNewLine(lineColor, lineName, gangnam, seocho, 3L);
+        LineUseBridge newLine = createNewLine(lineColor, lineName, gangnam, seocho, 3L);
 
         assertThat(newLine).isNotNull();
     }
@@ -59,7 +57,7 @@ public class LineStationLearningTest {
 
         createNewLine(lineColor, lineName, seocho, bundang, 5L);
 
-        Line foundLine = lineRepository.findByName(lineName).orElse(null);
+        LineUseBridge foundLine = lineRepository.findByName(lineName).orElse(null);
         assertThat(foundLine).isNotNull();
         assertThat(foundLine.getStations().get(0).getName()).isEqualTo(seocho.getName());
 
@@ -79,8 +77,8 @@ public class LineStationLearningTest {
         createNewLine(lineNumberTwoColor, lineNumberTwoName, gangnam, seocho, 10L);
         createNewLine(bundangLineColor, bundangLineName, seocho, bundang, 7L);
 
-        Line lineNumberTwo = lineRepository.findByName(lineNumberTwoName).orElse(null);
-        Line bundangLine = lineRepository.findByName(bundangLineName).orElse(null);
+        LineUseBridge lineNumberTwo = lineRepository.findByName(lineNumberTwoName).orElse(null);
+        LineUseBridge bundangLine = lineRepository.findByName(bundangLineName).orElse(null);
         assertThat(lineNumberTwo).isNotNull();
         assertThat(bundangLine).isNotNull();
 
@@ -102,7 +100,7 @@ public class LineStationLearningTest {
         String lineColor = "green";
         String lineName = "lineNumberTwo";
 
-        Line newLine = createNewLine(lineColor, lineName, seocho, gangnam, 10L);
+        LineUseBridge newLine = createNewLine(lineColor, lineName, seocho, gangnam, 10L);
         LineStation lineStation = newLine.getLineStations().get(0);
 
         LineStation foundLineStation = lineStationRepository.findById(lineStation.getId()).orElse(null);
@@ -113,14 +111,14 @@ public class LineStationLearningTest {
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
-    private Line createNewLine(
+    private LineUseBridge createNewLine(
             final String lineColor, final String lineName, final Station upStation,
             final Station downStation, final Long distance
     ) {
         LineStation lineStation = new LineStation(upStation, downStation, distance);
         lineStationRepository.save(lineStation);
 
-        Line line = new Line(lineColor, lineName);
+        LineUseBridge line = new LineUseBridge(lineColor, lineName);
         line.addLineStation(lineStation);
 
         return lineRepository.save(line);
