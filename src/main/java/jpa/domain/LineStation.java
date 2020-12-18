@@ -22,13 +22,20 @@ public class LineStation extends BaseTime {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Station station;
 
-	public LineStation() {
+	private int distance;
+
+	protected LineStation() {
 	}
 
-	public LineStation(Line line, Station station) {
+	public LineStation(Line line, Station station, int distance) {
 		this.line = line;
 		this.station = station;
-		line.addLineStation(this);
+		this.distance = distance;
+		line.add(this);
 		station.add(this);
+	}
+
+	public int getDistance() {
+		return distance;
 	}
 }

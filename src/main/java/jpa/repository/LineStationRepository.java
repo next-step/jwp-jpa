@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface LineStationRepository extends JpaRepository<LineStation, Long> {
 	List<LineStation> findByStationEquals(Station station);
+
 	List<LineStation> findByLineEquals(Line line);
 
-	void deleteByStation(Station station);
+	LineStation findByLineNameAndStationName(String lineName, String stationName);
 }

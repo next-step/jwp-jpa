@@ -42,9 +42,9 @@ class LineAndStationSearchTest {
 		entityManager.persist(station1);
 		entityManager.persist(station2);
 
-		entityManager.persist(new LineStation(line, station1));
-		entityManager.persist(new LineStation(line2, station1));
-		entityManager.persist(new LineStation(line, station2));
+		entityManager.persist(new LineStation(line, station1, 10));
+		entityManager.persist(new LineStation(line2, station1, 5));
+		entityManager.persist(new LineStation(line, station2, 5));
 	}
 
 	@DisplayName("노선 조회 시 속한 지하철역을 볼 수 있는 테스트")
@@ -75,5 +75,16 @@ class LineAndStationSearchTest {
 
 		assertThat(byLineEquals).isEmpty();
 		assertThat(lineRepository.findByName("2호선")).isNull();
+	}
+
+	@DisplayName("이전 역과 얼마나 차이나는지 거리를 가져온다.")
+	@Test
+	void 거리_TEST() {
+		LineStation 신분당선_강남역 = lineStationRepository.findByLineNameAndStationName("신분당선", "강남역");
+		LineStation 이호선_강남역 = lineStationRepository.findByLineNameAndStationName("2호선", "강남역");
+
+		assertThat(신분당선_강남역.getDistance()).isEqualTo(10);
+		assertThat(이호선_강남역.getDistance()).isEqualTo(5);
+
 	}
 }
