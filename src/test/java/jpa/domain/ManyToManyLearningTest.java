@@ -67,4 +67,35 @@ public class ManyToManyLearningTest {
 
         assertThat(foundStation2.getLines()).contains(line1, line2);
     }
+
+    @DisplayName("노선에 속한 지하철 역을 수정할 수 있다.")
+    @Test
+    void updateStationInLine() {
+        final String koName = "강남";
+
+        final ManyToManyLine foundLine = lineRepository.findByName(line1.getName()).orElse(null);
+        assertThat(foundLine).isNotNull();
+
+        foundLine.getStations().get(0).updateStation(new ManyToManyStation(koName));
+
+        assertThat(stationRepository.findByName(koName)).isNotNull();
+    }
+
+    @DisplayName("노선에 속한 지하철 역을 삭제해도 노선은 유지된다.")
+    @Test
+    void deleteStationInLine() {
+        ManyToManyLine testTarget = line1;
+        int expectedSize = 1;
+
+        assertThat(lineRepository.findById(testTarget.getId())).isNotNull();
+
+        stationRepository.deleteById(testTarget.getStations().get(0).getId());
+        ManyToManyLine foundLine = lineRepository.findById(testTarget.getId()).orElse(null);
+        assertThat(foundLine).isNotNull();
+
+        // Line에 속한 Station ID를 따로 관리해주지는 않는다.
+        // 삭제할 때 주의해서 알아서 잘 삭제해줘야 한다.
+        // 혹은 CASCADE 옵션을 잘 조정해야 한다.
+        assertThat(foundLine.getStations().size()).isNotEqualTo(expectedSize);
+    }
 }
