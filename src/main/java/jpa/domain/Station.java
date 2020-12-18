@@ -4,27 +4,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class Line extends BaseEntity{
-
-	private String color;
+public class Station extends BaseEntity{
 
 	@Column(unique = true)
 	private String name;
 
-	protected Line() {
+	protected Station() {
 	}
 
-	public Line(String name) {
+	public Station(String name) {
 		this.name = name;
-	}
-
-	public Line(String name, String color) {
-		this.name = name;
-		this.color = color;
-	}
-
-	public String getColor() {
-		return color;
 	}
 
 	public String getName() {

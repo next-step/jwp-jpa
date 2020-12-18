@@ -86,54 +86,34 @@ class LineRepositoryTest {
 	}
 
 	@Test
-	void findByCreatedDateBetweenTest() {
-		String expectedName = "2호선";
-		String expectedColor = "RED";
-
-		LocalDateTime december17th = LocalDateTime.of(2020, 12, 17, 0, 0, 0);
-		LocalDateTime december18th = LocalDateTime.of(2020, 12, 18, 0, 0, 0);
-		LocalDateTime december19th = LocalDateTime.of(2020, 12, 19, 0, 0, 0);
-		lineRepository.save(new Line(expectedName, expectedColor, december18th));
-		Line actualBetween = lineRepository.findByCreatedDateBetween(december17th, december19th);
-		Line wrongOrderFromTo = lineRepository.findByCreatedDateBetween(december19th, december17th);
-
-		assertAll(
-			() -> assertThat(actualBetween.getName()).isEqualTo(expectedName),
-			() -> assertThat(actualBetween.getColor()).isEqualTo(expectedColor),
-			() -> assertThat(wrongOrderFromTo).isNull()
-		);
-	}
-
-	@Test
 	void findByLimitTest() {
-		LocalDateTime december18th = LocalDateTime.of(2020, 12, 18, 0, 0, 0);
-
-		lineRepository.save(new Line("1호선", "BLUE", december18th));
-		lineRepository.save(new Line("2호선", "GREEN", december18th));
-		lineRepository.save(new Line("3호선", "ORANGE", december18th));
-		lineRepository.save(new Line("4호선", "SKYBLUE", december18th));
-		lineRepository.save(new Line("5호선", "PURPLE", december18th));
-		lineRepository.save(new Line("6호선", "BROWN", december18th));
+		String duplicatedColor = "BLUE";
+		lineRepository.save(new Line("1호선", duplicatedColor));
+		lineRepository.save(new Line("2호선", duplicatedColor));
+		lineRepository.save(new Line("3호선", duplicatedColor));
+		lineRepository.save(new Line("4호선", duplicatedColor));
+		lineRepository.save(new Line("5호선", duplicatedColor));
+		lineRepository.save(new Line("6호선", duplicatedColor));
 
 		List<Line> allLines = lineRepository.findAll();
-		Line firstLineByCreatedDate = lineRepository.findFirstByCreatedDate(december18th);
-		List<Line> top3LinesByCreatedDate = lineRepository.findTop3ByCreatedDate(december18th);
-		List<Line> top10LinesByCreatedDate = lineRepository.findTop10ByCreatedDate(december18th);
+		Line firstLineByColor = lineRepository.findFirstByColor(duplicatedColor);
+		List<Line> top3LinesByColor = lineRepository.findTop3ByColor(duplicatedColor);
+		List<Line> top10LinesByColor = lineRepository.findTop10ByColor(duplicatedColor);
 
 		assertAll(
 			// 전체 조회
 			() -> assertThat(allLines.size()).isEqualTo(6),
 			// 조회 결과가 중복인데 findBy 사용하면 오류
-			() -> assertThatThrownBy(() -> lineRepository.findByCreatedDate(december18th)).isInstanceOf(
+			() -> assertThatThrownBy(() -> lineRepository.findByColor(duplicatedColor)).isInstanceOf(
 				IncorrectResultSizeDataAccessException.class),
 			// 이때는 findFirst 사용하여야 1개만 가져옴
-			() -> assertThat(firstLineByCreatedDate).isNotNull(),
+			() -> assertThat(firstLineByColor).isNotNull(),
 			// findFirst 는 기본적으로 id가 가장 앞인 것을 가져옴
-			() -> assertThat(firstLineByCreatedDate.getName()).isEqualTo("1호선"),
+			() -> assertThat(firstLineByColor.getName()).isEqualTo("1호선"),
 			// findTop N 을 사용하면 상위 3개만 조회
-			() -> assertThat(top3LinesByCreatedDate.size()).isEqualTo(3),
+			() -> assertThat(top3LinesByColor.size()).isEqualTo(3),
 			// findTop N 이 실제 결과보다 크면 존재하는 만큼만 return
-			() -> assertThat(top10LinesByCreatedDate.size()).isEqualTo(6)
+			() -> assertThat(top10LinesByColor.size()).isEqualTo(6)
 		);
 	}
 
@@ -141,16 +121,16 @@ class LineRepositoryTest {
 	void findByOrderByTest() {
 		LocalDateTime december18th = LocalDateTime.of(2020, 12, 18, 0, 0, 0);
 
-		lineRepository.save(new Line("1호선", "COLOR-A", december18th));
-		lineRepository.save(new Line("2호선", "COLOR-B", december18th));
-		lineRepository.save(new Line("3호선", "COLOR-C", december18th));
-		lineRepository.save(new Line("4호선", "COLOR-D", december18th));
-		lineRepository.save(new Line("5호선", "COLOR-E", december18th));
-		lineRepository.save(new Line("6호선", "COLOR-F", december18th));
+		lineRepository.save(new Line("1호선", "COLOR-A"));
+		lineRepository.save(new Line("2호선", "COLOR-B"));
+		lineRepository.save(new Line("3호선", "COLOR-C"));
+		lineRepository.save(new Line("4호선", "COLOR-D"));
+		lineRepository.save(new Line("5호선", "COLOR-E"));
+		lineRepository.save(new Line("6호선", "COLOR-F"));
 
 		List<Line> allLines = lineRepository.findAll();
-		List<Line> linesOrderByColor = lineRepository.findByCreatedDateOrderByColor(december18th);
-		List<Line> linesOrderByColorDesc = lineRepository.findByCreatedDateOrderByColorDesc(december18th);
+		List<Line> linesOrderByColor = lineRepository.findAllByOrderByColor();
+		List<Line> linesOrderByColorDesc = lineRepository.findAllByOrderByColorDesc();
 
 		assertAll(
 			// 전체 조회
