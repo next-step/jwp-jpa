@@ -1,5 +1,6 @@
 package jpa.domain;
 
+import com.sun.istack.NotNull;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,10 +24,12 @@ public class Favorite extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "source_station_id", nullable = false)
     private Station sourceStation;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "destination_station_id", nullable = false)
     private Station destinyStation;

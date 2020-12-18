@@ -1,5 +1,6 @@
 package jpa.domain;
 
+import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Positive;
 import jpa.infrastructure.jpa.BaseEntity;
 import org.springframework.util.StringUtils;
 
@@ -28,12 +31,16 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Email
     @Column(nullable = false)
     private String email;
 
+    @NotNull
     @Column(nullable = false)
     private String password;
 
+    @Positive
     @Column(nullable = false)
     private int age;
 

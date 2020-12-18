@@ -1,5 +1,6 @@
 package jpa.domain;
 
+import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,9 +27,11 @@ public class Line extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(unique = true, nullable = false)
     private String name;
 
+    @NotNull
     @Column(nullable = false)
     private String color;
 
