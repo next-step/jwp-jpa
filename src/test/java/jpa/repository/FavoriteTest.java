@@ -2,6 +2,7 @@ package jpa.repository;
 
 import jpa.domain.Favorite;
 import jpa.domain.Member;
+import jpa.domain.Station;
 import jpa.dto.FavoriteDto;
 import jpa.service.FavoriteService;
 import jpa.service.StationService;
@@ -24,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class FavoriteTest {
 
 	@Autowired
-	private StationService stationService;
+	private StationRepository stationRepository;
 
 	@Autowired
 	private MemberRepository memberRepository;
@@ -35,8 +36,41 @@ class FavoriteTest {
 	@Autowired
 	private FavoriteRepository favoriteRepository;
 
+	private void given() {
+		stationRepository.save(new Station("강남역"));
+		stationRepository.save(new Station("판교역"));
+		stationRepository.save(new Station("양재역"));
+		stationRepository.save(new Station("정자역"));
+
+		Member member = memberRepository.save(new Member(30, "goodna17@gmail.com", "password"));
+
+		List<Favorite> favoriteByStation = favoriteService.createFavoriteByStation(
+			Arrays.asList(
+				new FavoriteDto("강남역", "판교역"),
+				new FavoriteDto("양재역", "판교역"),
+				new FavoriteDto("강남역", "양재역"),
+				new FavoriteDto("강남역", "정자역")));
+		favoriteByStation.forEach(member::addFavorite);
+	}
+
 	@Transactional
-	@DisplayName("여러개의 즐겨찾기를 사용자에게 저장하는 테스트")
+	@DisplayName("Favorite 에서 사용자에 해당하는 즐겨찾기를 가져온다.")
+	@Test
+	void 즐겨찾기에서_사용자에_해당하는_데이터를_가져온_TEST() {
+		//given
+		given();
+
+		//when
+		Member memberByEmail = memberRepository.findByEmail("goodna17@gmail.com");
+
+		List<Favorite> byMember = favoriteRepository.findByMember(memberByEmail);
+
+		assertThat(byMember).hasSize(4);
+
+	}
+
+	@Transactional
+	@DisplayName("사용자에서 즐겨찾기를 가져온다")
 	@Test
 	void 여러개_즐겨찾기_사용자_저장_TEST() {
 		//given
@@ -62,19 +96,6 @@ class FavoriteTest {
 
 		//then
 		assertThat(favoriteRepository.findByMember(memberByEmail)).isEmpty();
-	}
-
-	private void given() {
-		stationService.saveStations(Arrays.asList("강남역", "판교역", "양재역", "정자역"));
-		Member member = memberRepository.save(new Member(30, "goodna17@gmail.com", "password"));
-
-		List<Favorite> favoriteByStation = favoriteService.createFavoriteByStation(
-			Arrays.asList(
-				new FavoriteDto("강남역", "판교역"),
-				new FavoriteDto("양재역", "판교역"),
-				new FavoriteDto("강남역", "양재역"),
-				new FavoriteDto("강남역", "정자역")));
-		favoriteByStation.forEach(member::addFavorite);
 	}
 
 	@DisplayName("같은 역은 즐겨찾기 추가하지 못하는 기능 테스트")

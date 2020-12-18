@@ -38,6 +38,7 @@ public class Member extends BaseTime {
 
 	public void addFavorite(Favorite favorite) {
 		this.favorite.add(favorite);
+		favorite.setMember(this);
 	}
 
 	public boolean isEqualsFavoriteSize(int size) {
