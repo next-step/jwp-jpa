@@ -17,6 +17,12 @@ public class Member extends BaseEntity{
 
     protected Member() {}
 
+    public Member(Integer age, String email, String password) {
+        this.age = age;
+        this.email = email;
+        this.password = password;
+    }
+
     public Long getId() {
         return id;
     }
