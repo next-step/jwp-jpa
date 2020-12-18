@@ -38,7 +38,10 @@ class MemberRepositoryTest {
         assertAll(
                 () -> assertThat(byId).isNotNull(),
                 () -> assertThat(byId.get().getId()).isEqualTo(expected1.getId()),
-                () -> assertThat(byId.get().getId()).isEqualTo(expected2.getId())
+                () -> assertThat(byId.get().getId()).isEqualTo(expected2.getId()),
+                () -> assertThat(byId.get().getAge()).isEqualTo(25),
+                () -> assertThat(byId.get().getEmail()).isEqualTo("email1@woowa.com"),
+                () -> assertThat(byId.get().getPassword()).isEqualTo("0000")
         );
     }
 
@@ -54,7 +57,10 @@ class MemberRepositoryTest {
 
         assertAll(
                 () -> assertThat(byAge).isNotNull(),
-                () -> assertThat(byAge).hasSize(2)
+                () -> assertThat(byAge).hasSize(2),
+                () -> assertThat(byAge.get(0).getAge()).isEqualTo(25),
+                () -> assertThat(byAge.get(0).getEmail()).isEqualTo("email1@woowa.com"),
+                () -> assertThat(byAge.get(0).getPassword()).isEqualTo("0000")
         );
     }
 
@@ -70,7 +76,10 @@ class MemberRepositoryTest {
 
         assertAll(
                 () -> assertThat(byEmail).isNotNull(),
-                () -> assertThat(byEmail).hasSize(1)
+                () -> assertThat(byEmail).hasSize(1),
+                () -> assertThat(byEmail.get(0).getAge()).isEqualTo(25),
+                () -> assertThat(byEmail.get(0).getEmail()).isEqualTo("email1@woowa.com"),
+                () -> assertThat(byEmail.get(0).getPassword()).isEqualTo("0000")
         );
     }
 }

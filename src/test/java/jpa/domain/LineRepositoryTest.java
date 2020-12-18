@@ -57,10 +57,11 @@ class LineRepositoryTest {
     public void setColor() throws Exception {
         lines.save(new Line("3호선", "주황"));
         lines.save(new Line("4호선", "주황"));
-        List<Line> linesByColor = lines.findByColor("주황");
+        List<Line> byColor = lines.findByColor("주황");
         assertAll(
-                () -> assertThat(linesByColor).isNotNull(),
-                () -> assertThat(linesByColor).hasSize(2)
+                () -> assertThat(byColor).isNotNull(),
+                () -> assertThat(byColor).hasSize(2),
+                () -> assertThat(byColor.get(0).getColor()).isEqualTo("주황")
         );
     }
 }
