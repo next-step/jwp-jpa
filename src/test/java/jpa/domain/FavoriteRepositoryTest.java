@@ -81,9 +81,7 @@ class FavoriteRepositoryTest {
 
         // 즐겨찾기 저장
         String name = "1";
-        Favorite favorite = new Favorite(name);
-        favorite.addStartStation(station1);
-        favorite.addEndStation(station2);
+        Favorite favorite = new Favorite(name, station1, station2);
         em.persist(favorite);
 
         // when

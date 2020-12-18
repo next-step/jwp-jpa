@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,23 +34,31 @@ public class Favorite extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public Favorite(final String name) {
+    public Favorite(final String name, final Station startStation, final Station endStation) {
         this.name = name;
+        this.startStation = startStation;
+        this.endStation = endStation;
     }
 
-    public void setMember(final Member member) {
+    public void changeMember(final Member member) {
         if (Objects.nonNull(this.member)) {
             this.member.getFavorites().remove(this);
         }
+
+        List<Favorite> favorites = member.getFavorites();
+        if (!favorites.contains(this)) {
+            favorites.add(this);
+        }
+
         this.member = member;
-        this.member.getFavorites().add(this);
     }
 
-    public void addStartStation(final Station station) {
-        this.startStation = station;
+    public Favorite changeName(final String name) {
+        this.name = name;
+        return this;
     }
 
-    public void addEndStation(final Station station) {
-        this.endStation = station;
+    public boolean isName(final String favoriteName) {
+        return Objects.equals(name, favoriteName);
     }
 }

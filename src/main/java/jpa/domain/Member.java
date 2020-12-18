@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,8 +31,8 @@ public class Member extends BaseEntity {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "member")
-    private Set<Favorite> favorites = new HashSet<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favorites = new ArrayList<>();
 
     public Member(final Integer age, final String email, final String password) {
         this.age = age;
@@ -44,5 +46,17 @@ public class Member extends BaseEntity {
         }
         this.email = email;
         return this;
+    }
+
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
+        favorite.changeMember(this);
+    }
+
+    public Favorite getFavorite(final String favoriteName) {
+        return favorites.stream()
+                .filter(favorite -> favorite.isName(favoriteName))
+                .findFirst()
+                .orElse(null);
     }
 }

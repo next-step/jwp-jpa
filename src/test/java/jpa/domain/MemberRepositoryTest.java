@@ -4,12 +4,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import javax.persistence.EntityTransaction;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -21,6 +21,9 @@ class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository members;
+
+    @Autowired
+    private FavoriteRepository favorites;
 
     @Autowired
     private EntityManager em;
@@ -115,8 +118,8 @@ class MemberRepositoryTest {
         Member yohan = new Member(28, email, DEFAULT_PASSWORD);
         Favorite favorite1 = new Favorite();
         Favorite favorite2 = new Favorite();
-        favorite1.setMember(yohan);
-        favorite2.setMember(yohan);
+        yohan.addFavorite(favorite1);
+        yohan.addFavorite(favorite2);
 
         em.persist(yohan);
         em.persist(favorite1);
@@ -124,9 +127,135 @@ class MemberRepositoryTest {
 
         // when
         Member member = members.findFirstByEmail(email).get();
-        Set<Favorite> favorites = member.getFavorites();
+        List<Favorite> favorites = member.getFavorites();
 
         // then
         assertThat(favorites).contains(favorite1, favorite2);
+    }
+
+    @DisplayName("사용자는 즐겨찾기를 추가할 수 있다.")
+    @Test
+    void saveFavorite() {
+        // given
+        // 지하철 역 저장
+        Station station1 = new Station("금정역");
+        Station station2 = new Station("당정역");
+        em.persist(station1);
+        em.persist(station2);
+
+        String email = "good_1411@naver.com";
+        Member yohan = new Member(28, email, DEFAULT_PASSWORD);
+        Favorite favorite1 = new Favorite("가는길", station1, station2);
+        Favorite favorite2 = new Favorite("오는길", station2, station1);
+        yohan.addFavorite(favorite1);
+        yohan.addFavorite(favorite2);
+        members.save(yohan);
+
+        // when
+        Member member = members.findFirstByEmail(email).get();
+
+        // then
+        assertThat(member.getFavorites()).contains(favorite1, favorite2);
+    }
+
+    @DisplayName("사용자는 즐겨찾기를 업데이트 할 수 있다.")
+    @Test
+    void updateFavorite() {
+        // given
+        // 지하철 역 저장
+        Station station1 = new Station("금정역");
+        Station station2 = new Station("당정역");
+        em.persist(station1);
+        em.persist(station2);
+
+        // 멤버, 즐겨찾기 저장
+        String email = "good_1411@naver.com";
+        Member yohan = new Member(28, email, DEFAULT_PASSWORD);
+        Favorite favorite1 = new Favorite("가는길", station1, station2);
+        Favorite favorite2 = new Favorite("오는길", station2, station1);
+        yohan.addFavorite(favorite1);
+        yohan.addFavorite(favorite2);
+        members.save(yohan);
+
+        // 즐겨 찾기 변경
+        Favorite expected = yohan.getFavorite("가는길").changeName("테스트");
+
+        em.flush();
+        em.clear();
+
+        // when
+        Member member = members.findFirstByEmail(email).get();
+        Favorite actual = member.getFavorite(expected.getName());
+
+        // then
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+    }
+
+    @DisplayName("사용자는 즐겨찾기를 제거할 수 있다.")
+    @Test
+    void removeFavorite() {
+        // given
+        // 지하철 역 저장
+        Station station1 = new Station("금정역");
+        Station station2 = new Station("당정역");
+        em.persist(station1);
+        em.persist(station2);
+
+        // 멤버, 즐겨찾기 저장
+        String email = "good_1411@naver.com";
+        Member yohan = new Member(28, email, DEFAULT_PASSWORD);
+        Favorite favorite1 = new Favorite("가는길", station1, station2);
+        Favorite favorite2 = new Favorite("오는길", station2, station1);
+        yohan.addFavorite(favorite1);
+        yohan.addFavorite(favorite2);
+        members.save(yohan);
+
+        // 즐겨 찾기 제거
+        yohan.getFavorites().remove(favorite1);
+
+        // when
+        Optional<Favorite> favoriteOptional = favorites.findByName("가는길");
+        Member member = members.findFirstByEmail(email).get();
+        List<Favorite> actual = member.getFavorites();
+
+        // then
+        assertThat(favoriteOptional.isPresent()).isFalse(); // 고아객체 확인
+        assertThat(actual.size()).isEqualTo(1); // 삭제 확인
+        assertThat(actual).containsExactly(favorite2);
+    }
+
+    @DisplayName("사용자가 제거되면 즐겨찾기는 제거된다.")
+    @Test
+    void removeAll() {
+        // given
+        // 지하철 역 저장
+        Station station1 = new Station("금정역");
+        Station station2 = new Station("당정역");
+        em.persist(station1);
+        em.persist(station2);
+
+        // 멤버, 즐겨찾기 저장
+        String email = "good_1411@naver.com";
+        Member yohan = new Member(28, email, DEFAULT_PASSWORD);
+        Favorite favorite1 = new Favorite("가는길", station1, station2);
+        Favorite favorite2 = new Favorite("오는길", station2, station1);
+        yohan.addFavorite(favorite1);
+        yohan.addFavorite(favorite2);
+        members.save(yohan);
+
+        // 즐겨 찾기 제거
+        members.delete(yohan);
+
+        // when
+        Optional<Favorite> favoriteOptional1 = favorites.findByName("가는길");
+        Optional<Favorite> favoriteOptional2 = favorites.findByName("오는길");
+        Optional<Member> memberOptional = members.findFirstByEmail(email);
+
+        // then
+        assertAll(
+                () -> assertThat(favoriteOptional1.isPresent()).isFalse(),
+                () -> assertThat(favoriteOptional2.isPresent()).isFalse(),
+                () -> assertThat(memberOptional.isPresent()).isFalse()
+        );
     }
 }
