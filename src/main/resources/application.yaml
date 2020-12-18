@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create # 운영시 validate, none 사용
+    show-sql: true
+## test 실행시 에러
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL57Dialect
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:tcp://localhost/~/test;MODE=MYSQL
+  h2:
+    console:
+      enabled: true
