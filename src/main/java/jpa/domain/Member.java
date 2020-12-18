@@ -3,22 +3,23 @@ package jpa.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "member_id")
     private Long id;
 
     @Column(name = "age")
@@ -30,17 +31,8 @@ public class Member {
     @Column(name = "password")
     private String password;
 
-    @CreatedDate
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
-
-    public Member(final Integer age, final String email) {
-        this(age, email, "0000");
-    }
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favorites = new ArrayList<>();
 
     public Member(final Integer age, final String email, final String password) {
         this.age = age;
@@ -54,5 +46,17 @@ public class Member {
         }
         this.email = email;
         return this;
+    }
+
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
+        favorite.changeMember(this);
+    }
+
+    public Favorite getFavorite(final String favoriteName) {
+        return favorites.stream()
+                .filter(favorite -> favorite.isName(favoriteName))
+                .findFirst()
+                .orElse(null);
     }
 }

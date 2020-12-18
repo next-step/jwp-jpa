@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Rollback;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +22,9 @@ class LineRepositoryTest {
 
     @Autowired
     private LineRepository lines;
+
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("단건 조회를 확인합니다.")
     @Test
@@ -71,7 +74,6 @@ class LineRepositoryTest {
 
     @DisplayName("정상적으로 저장되는지 확인합니다.")
     @Test
-    @Rollback(value = false)
     void save() {
         // given
         Line expected = new Line("1호선", Color.BLUE);
@@ -82,6 +84,7 @@ class LineRepositoryTest {
         // then
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getCreatedDate()).isNotNull(),
                 () -> assertThat(actual).isEqualTo(expected),
                 () -> assertThat(actual).isSameAs(expected)
         );
@@ -100,6 +103,7 @@ class LineRepositoryTest {
         // then
         assertAll(
                 () -> assertThat(actual).isNotNull(),
+                () -> assertThat(actual.getModifiedDate()).isNotNull(),
                 () -> assertThat(actual).isEqualTo(expected)
         );
     }
@@ -113,5 +117,35 @@ class LineRepositoryTest {
 
         // when / then
         assertThrows(DataIntegrityViolationException.class, () -> lines.save(new Line(lineName, Color.RED)));
+    }
+
+    @DisplayName("노선 조회 시 속한 지하철역을 볼 수 있다.")
+    @Test
+    void checkStations() {
+        // given
+        // 지하철 노선 저장
+        String lineName = "2호선";
+        Line line1 = new Line(lineName, Color.GREEN);
+        em.persist(line1);
+
+        // 지하철역 저장
+        Station gangnam = new Station("강남역");
+        Station hapjeong = new Station("합정역");
+        em.persist(gangnam);
+        em.persist(hapjeong);
+
+        // 지하철역 노선 저장
+        em.persist(new LineStation(gangnam, line1));
+        em.persist(new LineStation(hapjeong, line1));
+
+        // when
+        Line line = lines.findByName(lineName).get();
+        List<Station> stations = line.stations();
+
+        // then
+        assertAll(
+                () -> assertThat(stations).isNotNull(),
+                () -> assertThat(stations).contains(gangnam, hapjeong)
+        );
     }
 }

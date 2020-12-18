@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +18,9 @@ class FavoriteRepositoryTest {
 
     @Autowired
     private FavoriteRepository favorites;
+
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("조회 시 값이 없을 경우 null 이 반환됩니다.")
     @Test
@@ -50,7 +53,6 @@ class FavoriteRepositoryTest {
 
     @DisplayName("정상적으로 저장되는지 확인합니다.")
     @Test
-    @Rollback(value = false)
     void save() {
         // given
         Favorite expected = new Favorite();
@@ -61,8 +63,34 @@ class FavoriteRepositoryTest {
         // then
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getCreatedDate()).isNotNull(),
                 () -> assertThat(actual).isEqualTo(expected),
                 () -> assertThat(actual).isSameAs(expected)
+        );
+    }
+
+    @DisplayName("즐겨찾기에는 출발역과 도착역이 포함되어 있다")
+    @Test
+    void containsStation() {
+        // given
+        // 지하철 역 저장
+        Station station1 = new Station("잠실역");
+        Station station2 = new Station("합정역");
+        em.persist(station1);
+        em.persist(station2);
+
+        // 즐겨찾기 저장
+        String name = "1";
+        Favorite favorite = new Favorite(name, station1, station2);
+        em.persist(favorite);
+
+        // when
+        Favorite expected = favorites.findByName(name).get();
+
+        // then
+        assertAll(
+                () -> assertThat(expected.getStartStation()).isEqualTo(station1),
+                () -> assertThat(expected.getEndStation()).isEqualTo(station2)
         );
     }
 }

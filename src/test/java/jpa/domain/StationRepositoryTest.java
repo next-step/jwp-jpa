@@ -1,24 +1,29 @@
 package jpa.domain;
 
+import jpa.domain.Line.Color;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Rollback;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 class StationRepositoryTest {
 
     @Autowired
     private StationRepository stations;
+
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("단건 조회를 확인합니다.")
     @Test
@@ -68,7 +73,6 @@ class StationRepositoryTest {
 
     @DisplayName("정상적으로 저장되는지 확인합니다.")
     @Test
-    @Rollback(value = false)
     void save() {
         // given
         Station expected = new Station("서울역");
@@ -79,6 +83,7 @@ class StationRepositoryTest {
         // then
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getCreatedDate()).isNotNull(),
                 () -> assertThat(actual).isEqualTo(expected),
                 () -> assertThat(actual).isSameAs(expected)
         );
@@ -97,6 +102,7 @@ class StationRepositoryTest {
         // then
         assertAll(
                 () -> assertThat(actual).isNotNull(),
+                () -> assertThat(actual.getModifiedDate()).isNotNull(),
                 () -> assertThat(actual).isEqualTo(expected)
         );
     }
@@ -110,5 +116,35 @@ class StationRepositoryTest {
 
         // when / then
         assertThrows(DataIntegrityViolationException.class, () -> stations.save(new Station(stationName)));
+    }
+
+    @DisplayName("지하철역 조회 시 어느 노선에 속한지 볼 수 있다.")
+    @Test
+    void checkLines() {
+        // given
+        // 지하철 노선 저장
+        Line line1 = new Line("1호선", Color.BLUE);
+        Line line4 = new Line("4호선", Color.GREEN);
+        em.persist(line1);
+        em.persist(line4);
+
+        // 지하철역 저장
+        String stationName = "금정역";
+        Station geumjeong = new Station(stationName);
+        em.persist(geumjeong);
+
+        // 지하철역 노선 저장
+        em.persist(new LineStation(geumjeong, line1));
+        em.persist(new LineStation(geumjeong, line4));
+
+        // when
+        Station station = stations.findByName(stationName).get();
+        List<Line> lines = station.lines();
+
+        // then
+        assertAll(
+                () -> assertThat(lines).isNotNull(),
+                () -> assertThat(lines).contains(line1, line4)
+        );
     }
 }
