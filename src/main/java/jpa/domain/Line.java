@@ -66,9 +66,14 @@ public class Line extends BaseEntity {
         return this.lineStations;
     }
 
-    public Set<Station> getStations() {
-        return lineStations.stream()
+    public List<Station> getStations() {
+        Set<Station> dupRemovedStations = lineStations.stream()
                 .map(LineStation::getStations)
-                .flatMap(Collection::stream).collect(Collectors.toSet());
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
+
+        return new ArrayList<>(dupRemovedStations).stream()
+                .sorted(Comparator.comparingLong(Station::getId))
+                .collect(Collectors.toList());
     }
 }
