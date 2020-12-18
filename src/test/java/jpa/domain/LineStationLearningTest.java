@@ -45,14 +45,9 @@ public class LineStationLearningTest {
         String lineColor = "green";
         String lineName = "lineNumberTwo";
 
-        LineStation lineStation = new LineStation(gangnam, seocho, 3L);
-        lineStationRepository.save(lineStation);
+        Line newLine = createNewLine(lineColor, lineName, gangnam, seocho, 3L);
 
-        Line line = new Line(lineColor, lineName);
-        line.addLineStation(lineStation);
-
-        Line saved = lineRepository.save(line);
-        assertThat(saved.getStations().size()).isEqualTo(2);
+        assertThat(newLine).isNotNull();
     }
 
     @DisplayName("구간 정보가 포함된 Line을 저장한 뒤 정보를 조회할 수 있다.")
@@ -61,19 +56,27 @@ public class LineStationLearningTest {
         String lineColor = "yellow";
         String lineName = "bundangLine";
 
-        LineStation lineStation = new LineStation(seocho, bundang, 5L);
+        createNewLine(lineColor, lineName, seocho, bundang, 5L);
 
-        Line line = new Line(lineColor, lineName);
-        line.addLineStation(lineStation);
-        lineRepository.save(line);
-        lineStationRepository.save(lineStation);
-
-        Line foundLine = lineRepository.findByName(line.getName()).orElse(null);
+        Line foundLine = lineRepository.findByName(lineName).orElse(null);
         assertThat(foundLine).isNotNull();
         assertThat(foundLine.getStations().get(0).getName()).isEqualTo(seocho.getName());
 
         LineStation foundLineStation = lineStationRepository.findByLine(foundLine).orElse(null);
         assertThat(foundLineStation).isNotNull();
         assertThat(foundLineStation.getLine()).isEqualTo(foundLine);
+    }
+
+    private Line createNewLine(
+            final String lineColor, final String lineName, final Station upStation,
+            final Station downStation, final Long distance
+    ) {
+        LineStation lineStation = new LineStation(upStation, downStation, distance);
+        lineStationRepository.save(lineStation);
+
+        Line line = new Line(lineColor, lineName);
+        line.addLineStation(lineStation);
+
+        return lineRepository.save(line);
     }
 }
