@@ -1,5 +1,6 @@
 package jpa.domain;
 
+import jpa.domain.bridgeObject.LineStation;
 import jpa.utils.BaseEntity;
 
 import javax.persistence.*;
@@ -62,7 +63,7 @@ public class Line extends BaseEntity {
         return this.createdDate;
     }
 
-    List<LineStation> getLineStations() {
+    public List<LineStation> getLineStations() {
         return this.lineStations;
     }
 

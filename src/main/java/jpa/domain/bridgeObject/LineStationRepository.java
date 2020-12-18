@@ -1,5 +1,6 @@
-package jpa.domain;
+package jpa.domain.bridgeObject;
 
+import jpa.domain.Line;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,24 +1,21 @@
-package jpa.domain;
+package jpa.domain.bridgeObject;
 
+import jpa.domain.Line;
+import jpa.domain.LineRepository;
+import jpa.domain.Station;
+import jpa.domain.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.convert.DataSizeUnit;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
-
-import javax.persistence.EntityManager;
-import javax.swing.text.html.parser.Entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 public class LineStationLearningTest {
-    @Autowired
-    private EntityManager entityManager;
-
     @Autowired
     private LineRepository lineRepository;
 

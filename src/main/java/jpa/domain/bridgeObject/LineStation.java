@@ -1,4 +1,7 @@
-package jpa.domain;
+package jpa.domain.bridgeObject;
+
+import jpa.domain.Line;
+import jpa.domain.Station;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -39,7 +42,7 @@ public class LineStation {
         this(null, null, upStation, downStation, distance);
     }
 
-    void updateLine(final Line line) {
+    public void updateLine(final Line line) {
         this.line = line;
         line.getLineStations().add(this);
     }
