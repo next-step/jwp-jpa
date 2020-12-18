@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class LineStation {
+public class LineStation extends BaseTime {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -29,6 +29,6 @@ public class LineStation {
 		this.line = line;
 		this.station = station;
 		line.addLineStation(this);
-		station.addLineStation(this);
+		station.add(this);
 	}
 }

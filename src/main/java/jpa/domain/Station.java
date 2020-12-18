@@ -29,15 +29,11 @@ public class Station extends BaseTime {
 
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	public String getName() {
 		return name;
 	}
 
-	public void addLineStation(LineStation lineStation) {
+	public void add(LineStation lineStation) {
 		this.lineStations.add(lineStation);
 	}
 

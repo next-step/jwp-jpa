@@ -9,14 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@SpringBootTest
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 class FavoriteTest {
 
@@ -28,9 +22,6 @@ class FavoriteTest {
 
 	@Autowired
 	private FavoriteRepository favoriteRepository;
-
-	@Autowired
-	private EntityManager entityManager;
 
 	@BeforeEach
 	void setUp() {

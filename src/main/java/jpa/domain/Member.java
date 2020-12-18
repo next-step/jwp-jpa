@@ -36,7 +36,7 @@ public class Member extends BaseTime {
 	protected Member() {
 	}
 
-	public void addFavorite(Favorite favorite) {
+	public void add(Favorite favorite) {
 		this.favorite.add(favorite);
 	}
 
