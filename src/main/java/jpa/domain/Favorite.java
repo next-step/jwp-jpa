@@ -1,11 +1,9 @@
 package jpa.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "favorite")
 public class Favorite extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

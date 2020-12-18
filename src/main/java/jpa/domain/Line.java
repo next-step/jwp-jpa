@@ -16,7 +16,9 @@ public class Line extends BaseEntity{
 
     private String color;
 
-    protected Line() {}
+    protected Line(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -28,5 +30,9 @@ public class Line extends BaseEntity{
 
     public String getColor() {
         return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
