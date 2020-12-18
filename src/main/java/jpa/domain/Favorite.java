@@ -14,22 +14,8 @@ public class Favorite extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
-
     protected Favorite() {
-        this(null, LocalDateTime.now(), null);
-    }
 
-    Favorite(Long id, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-    }
-
-    public void updateFavorite(Favorite favorite) {
-        this.modifiedDate = LocalDateTime.now();
     }
 
     public Long getId() {

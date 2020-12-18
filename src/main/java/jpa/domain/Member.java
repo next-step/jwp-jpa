@@ -14,10 +14,6 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
-
     private Integer age;
 
     private String email;
@@ -27,23 +23,17 @@ public class Member extends BaseEntity {
     protected Member() {
     }
 
-    Member(
-            final LocalDateTime createdDate, final LocalDateTime modifiedDate, final Integer age,
-            final String email, final String password
-    ) {
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+    Member(final Long id, final Integer age, final String email, final String password) {
         this.age = age;
         this.email = email;
         this.password = password;
     }
 
     public Member(final Integer age, final String email, final String password) {
-        this(LocalDateTime.now(), null, age, email, password);
+        this(null, age, email, password);
     }
 
     public void updateMember(final Member member) {
-        this.modifiedDate = LocalDateTime.now();
         this.age = member.age;
         this.email = member.email;
         this.password = member.password;

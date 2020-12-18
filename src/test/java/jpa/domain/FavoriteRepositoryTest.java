@@ -23,15 +23,6 @@ public class FavoriteRepositoryTest {
         assertThat(saved.getCreatedDate()).isNotNull();
     }
 
-    @DisplayName("더티 체킹을 통한 업데이트 확인")
-    @Test
-    void updateTest() {
-        assertThat(testFavorite.getModifiedDate()).isNull();
-        Favorite changedFavorite = new Favorite();
-        testFavorite.updateFavorite(changedFavorite);
-        assertThat(testFavorite.getModifiedDate()).isNotNull();
-    }
-
     @DisplayName("쿼리 메서드를 통한 조회 기능 확인")
     @Test
     void getTest() {

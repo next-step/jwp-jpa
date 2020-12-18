@@ -11,28 +11,22 @@ public class Station extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
-
     @Column(unique = true)
     private String name;
 
     protected Station() {
     }
 
-    Station(final LocalDateTime createdDate, final LocalDateTime modifiedDate, final String name) {
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+    Station(final Long id, final String name) {
+        this.id = id;
         this.name = name;
     }
 
     public Station(final String name) {
-        this(LocalDateTime.now(), null, name);
+        this(null, name);
     }
 
     public void updateStation(final Station station) {
-        this.modifiedDate = LocalDateTime.now();
         this.name = station.name;
     }
 
@@ -41,7 +35,7 @@ public class Station extends BaseEntity {
     }
 
     public LocalDateTime getModifiedDate() {
-        return modifiedDate;
+        return super.modifiedDate;
     }
 
     public String getName() {
@@ -49,6 +43,6 @@ public class Station extends BaseEntity {
     }
 
     public LocalDateTime getCreatedDate() {
-        return this.createdDate;
+        return super.createdDate;
     }
 }

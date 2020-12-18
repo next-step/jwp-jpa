@@ -11,10 +11,6 @@ public class Line extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
-
     private String color;
 
     @Column(unique = true)
@@ -23,15 +19,14 @@ public class Line extends BaseEntity {
     protected Line() {
     }
 
-    Line(final LocalDateTime createdDate, final LocalDateTime modifiedDate, final String color, final String name) {
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+    Line(final Long id, final String color, final String name) {
+        this.id = id;
         this.color = color;
         this.name = name;
     }
 
     public Line(final String color, final String name) {
-        this(LocalDateTime.now(), null, color, name);
+        this(null, color, name);
     }
 
     public Long getId() {

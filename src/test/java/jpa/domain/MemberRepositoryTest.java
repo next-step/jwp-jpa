@@ -29,6 +29,7 @@ public class MemberRepositoryTest {
         assertThat(testMember.getModifiedDate()).isNull();
         Member changedMember = new Member(100, "modified", "modified");
         testMember.updateMember(changedMember);
+        memberRepository.save(testMember);
         assertThat(testMember.getModifiedDate()).isNotNull();
     }
 

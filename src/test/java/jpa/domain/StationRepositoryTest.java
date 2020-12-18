@@ -29,6 +29,7 @@ public class StationRepositoryTest {
         assertThat(testStation.getModifiedDate()).isNull();
         Station changedStation = new Station("갱남역");
         testStation.updateStation(changedStation);
+        stationRepository.save(testStation);
         assertThat(testStation.getModifiedDate()).isNotNull();
     }
 
