@@ -23,12 +23,16 @@ public class Favorite extends BaseTime {
 	protected Favorite() {
 	}
 
-	public Favorite(Station departure, Station arrival) {
+	public Favorite(Station departure, Station arrival, Member member) {
 		this.departure = departure;
 		this.arrival = arrival;
+		this.member = member;
+		member.addFavorite(this);
 	}
 
 	public void setMember(Member member) {
 		this.member = member;
 	}
+
+
 }
