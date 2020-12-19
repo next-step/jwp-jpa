@@ -104,11 +104,13 @@ create table favorite (
     - [ ] VO 컬렉션으로 연관관계를 매핑해본다.
 
 ### Todo-list (최종)
-- [ ] Line, Station 다대다 관계 설정하기
-  - [ ] 중간 객체 LineStation을 이용해서 관계 설정하기
+- [X] Line, Station 다대다 관계 설정하기
+  - [X] 중간 객체 LineStation을 이용해서 관계 설정하기
     - 결정 사유
       - VO 컬렉션을 사용할 경우 Station에서 Line을 조회하는 요구사항을 충족시키기 위해 과하게 복잡한 설계를 진행해야 함
       - 현재 요구사항에 맞는 만큼 구현하기 위해 최대한 간단한 구현방법 선택
+    - Line이 도메인 개념상 LineStation의 부모(Aggregate Root)로 활동하도록 구현
+    - Station은 단순히 양방향 관계로 LineStation을 통해 속한 Line이 어딘지 조회만 가능
 - [ ] Member, Favortie 다대다 관계 설정하기
   - [ ] VO Collection을 이용해서 관계 설정하기
     - 결정 사유
