@@ -1,11 +1,14 @@
 package jpa.domain;
 
+import jpa.converter.DistanceConverter;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(of = {"line", "station"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -18,17 +21,23 @@ public class LineStation extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "station_id")
-    private Station station;
-
-    @ManyToOne
     @JoinColumn(name = "line_id")
     private Line line;
 
-    public LineStation(final Station station, final Line line) {
+    @ManyToOne
+    @JoinColumn(name = "station_id")
+    private Station station;
+
+    @Convert(converter = DistanceConverter.class)
+    private Distance distance;
+
+    public LineStation(final Station station, final Line line, final Distance distance) {
         this.station = station;
-        station.getLineStations().add(this);
         this.line = line;
-        line.getLineStations().add(this);
+        this.distance = distance;
+    }
+
+    public boolean isStation(final Station station) {
+        return this.station.equals(station);
     }
 }

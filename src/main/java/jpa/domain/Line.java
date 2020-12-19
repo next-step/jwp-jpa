@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode(of = "id")
@@ -19,8 +18,9 @@ import java.util.stream.Collectors;
 @Table(name = "line")
 public class Line extends BaseEntity {
 
+
     public enum Color {
-        RED, BLUE, GREEN
+        RED, BLUE, GREEN;
     }
 
     @Id
@@ -35,15 +35,15 @@ public class Line extends BaseEntity {
     @Column(name = "color")
     private Color color;
 
-    @OneToMany(mappedBy = "line")
-    private Set<LineStation> lineStations = new HashSet<>();
+    @OneToMany(mappedBy = "line", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LineStation> lineStations = new ArrayList<>();
 
     public Line(final String name, final Color color) {
         this.name = name;
         this.color = color;
     }
 
-    public Line changeName(String name) {
+    public Line changeName(final String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("옯바른 이름이 아닙니다.");
         }
@@ -55,6 +55,31 @@ public class Line extends BaseEntity {
         return lineStations.stream()
                 .map(LineStation::getStation)
                 .collect(Collectors.toList());
+    }
+
+    public Line addLineStation(final Station station, final Distance distance) {
+        LineStation lineStation = new LineStation(station, this, distance);
+        if (lineStations.contains(lineStation)) {
+            throw new IllegalArgumentException("이미 등록된 지하철 역입니다.");
+        }
+
+        lineStations.add(lineStation);
+        station.getLineStations().add(lineStation);
+        return this;
+    }
+
+    public Line removeLineStation(final Station station) {
+        LineStation targetStation = getLineStation(station);
+        lineStations.remove(targetStation);
+        station.getLineStations().remove(targetStation);
+        return this;
+    }
+
+    public LineStation getLineStation(final Station station) {
+        return lineStations.stream()
+                .filter(lineStation -> lineStation.isStation(station))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("등록된 지하철 역이 없습니다."));
     }
 }
 

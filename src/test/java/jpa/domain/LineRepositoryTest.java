@@ -135,8 +135,8 @@ class LineRepositoryTest {
         em.persist(hapjeong);
 
         // 지하철역 노선 저장
-        em.persist(new LineStation(gangnam, line1));
-        em.persist(new LineStation(hapjeong, line1));
+        line1.addLineStation(gangnam, Distance.ofMeter(100L));
+        line1.addLineStation(hapjeong, Distance.ofMeter(200L));
 
         // when
         Line line = lines.findByName(lineName).get();
@@ -147,5 +147,66 @@ class LineRepositoryTest {
                 () -> assertThat(stations).isNotNull(),
                 () -> assertThat(stations).contains(gangnam, hapjeong)
         );
+    }
+
+    @DisplayName("노선에 역을 추가할 때는 이전 역과 얼마나 차이가 나는지 길이(distance)를 알고 있어야 한다.")
+    @Test
+    void lineStationDistance() {
+        // given
+        Line line1 = new Line("1호선", Color.BLUE);
+
+        Station station1 = new Station("안양역");
+        em.persist(station1);
+
+        Distance distance = Distance.ofMeter(10L);
+
+        line1.addLineStation(station1, distance);
+
+        Line savedLine = lines.save(line1);
+
+        // when
+        Line actual = lines.findByName(savedLine.getName()).get();
+        LineStation lineStation = actual.getLineStation(station1);
+
+        // then
+        assertThat(distance).isEqualTo(lineStation.getDistance());
+    }
+
+    @DisplayName("노선에 역을 중복으로 추가 할 수 없다.")
+    @Test
+    void nonDuplicateLineStation() {
+        // given
+        Line line1 = new Line("1호선", Color.BLUE);
+
+        Station station1 = new Station("안양역");
+        em.persist(station1);
+
+        Distance distance = Distance.ofMeter(10L);
+
+        line1.addLineStation(station1, distance);
+
+        Line savedLine = lines.save(line1);
+
+        // when / then
+        assertThrows(IllegalArgumentException.class, () -> savedLine.addLineStation(station1, Distance.ofMeter(10L)));
+    }
+
+    @DisplayName("노선에서 지하철 역을 제거할 수 있다.")
+    @Test
+    void test() {
+        // given
+        Line line1 = new Line("1호선", Color.BLUE);
+
+        Station station1 = new Station("안양역");
+        em.persist(station1);
+
+        line1.addLineStation(station1, Distance.ofMeter(10L));
+        Line savedLine = lines.save(line1);
+
+        // when
+        Line removedLine = savedLine.removeLineStation(station1);
+
+        // then
+        assertThat(removedLine.getLineStations().size()).isEqualTo(0);
     }
 }

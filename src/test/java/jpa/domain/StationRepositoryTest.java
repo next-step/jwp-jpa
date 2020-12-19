@@ -122,20 +122,20 @@ class StationRepositoryTest {
     @Test
     void checkLines() {
         // given
+        // 지하철역 저장
+        String stationName = "금정역";
+        Station geumjeong = new Station(stationName);
+        em.persist(geumjeong);
+
         // 지하철 노선 저장
         Line line1 = new Line("1호선", Color.BLUE);
         Line line4 = new Line("4호선", Color.GREEN);
         em.persist(line1);
         em.persist(line4);
 
-        // 지하철역 저장
-        String stationName = "금정역";
-        Station geumjeong = new Station(stationName);
-        em.persist(geumjeong);
-
         // 지하철역 노선 저장
-        em.persist(new LineStation(geumjeong, line1));
-        em.persist(new LineStation(geumjeong, line4));
+        line1.addLineStation(geumjeong, Distance.ofMeter(10L));
+        line4.addLineStation(geumjeong, Distance.ofMeter(20L));
 
         // when
         Station station = stations.findByName(stationName).get();
