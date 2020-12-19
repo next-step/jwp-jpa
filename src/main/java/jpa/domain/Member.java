@@ -2,10 +2,7 @@ package jpa.domain;
 
 import jpa.utils.BaseEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,6 +16,9 @@ public class Member extends BaseEntity {
     private String email;
 
     private String password;
+
+    @Embedded
+    private Favorites favorites;
 
     protected Member() {
     }
@@ -53,5 +53,9 @@ public class Member extends BaseEntity {
 
     public String getPassword() {
         return password;
+    }
+
+    public Favorites getFavorites() {
+        return favorites;
     }
 }

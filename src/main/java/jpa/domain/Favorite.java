@@ -1,32 +1,38 @@
 package jpa.domain;
 
-import jpa.utils.BaseEntity;
+import jpa.utils.IdentifiedValueObject;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-public class Favorite extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Favorite extends IdentifiedValueObject {
+    private Long startStationId;
+    private Long destinationStationId;
 
     protected Favorite() {
-
     }
 
-    public Long getId() {
-        return this.id;
+    Favorite(final Long id, final Long startStationId, final Long destinationStationId) {
+        super.setId(id);
+        this.startStationId = startStationId;
+        this.destinationStationId = destinationStationId;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public Favorite(final Long startStationId, final Long destinationStationId) {
+        this(null, startStationId, destinationStationId);
     }
 
-    public LocalDateTime getModifiedDate() {
-        return this.modifiedDate;
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Favorite favorite = (Favorite) o;
+        return Objects.equals(startStationId, favorite.startStationId) && Objects.equals(destinationStationId, favorite.destinationStationId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startStationId, destinationStationId);
     }
 }
