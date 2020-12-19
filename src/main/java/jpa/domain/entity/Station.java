@@ -46,13 +46,11 @@ public class Station extends BaseEntity {
 		return new Station(name);
 	}
 
-	public Station updateName(String name) {
+	public void updateName(String name) {
 		this.name = name;
-		return this;
 	}
 
-	public Station addLineStation(Line line, Station preStation, Integer distance) {
+	public void addLineStation(Line line, Station preStation, Integer distance) {
 		this.lineStations.add(LineStation.create(line, this, preStation, distance));
-		return this;
 	}
 }

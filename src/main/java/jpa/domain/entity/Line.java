@@ -50,13 +50,11 @@ public class Line extends BaseEntity {
 		return new Line(color, name);
 	}
 
-	public Line updateName(String name) {
+	public void updateName(String name) {
 		this.name = name;
-		return this;
 	}
 
-	public Line addLineStation(Station station, Station preStation, Integer distance) {
+	public void addLineStation(Station station, Station preStation, Integer distance) {
 		this.lineStations.add(LineStation.create(this, station, preStation, distance));
-		return this;
 	}
 }
