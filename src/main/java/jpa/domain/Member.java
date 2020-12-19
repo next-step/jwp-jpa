@@ -18,7 +18,7 @@ public class Member extends BaseEntity {
     private String password;
 
     @Embedded
-    private Favorites favorites;
+    private Favorites favorites = new Favorites();
 
     protected Member() {
     }
@@ -37,6 +37,10 @@ public class Member extends BaseEntity {
         this.age = member.age;
         this.password = member.password;
         this.email = member.email;
+    }
+
+    public void addFavorite(final Favorite favorite) {
+        this.favorites.add(favorite);
     }
 
     public Long getId() {

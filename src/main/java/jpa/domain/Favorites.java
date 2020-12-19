@@ -12,4 +12,8 @@ public class Favorites {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "member_id")
     private List<Favorite> favorites = new ArrayList<>();
+
+    public void add(final Favorite favorite) {
+        this.favorites.add(favorite);
+    }
 }
