@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import jpa.domain.entity.Line;
 import jpa.domain.entity.LineStation;
@@ -130,7 +128,6 @@ class StationRepositoryTest {
 
 	@Test
 	@DisplayName("지하철역 조회 시 어느 노선에 속한지 볼 수 있다.")
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	void lineStation() {
 
 		Station station = stationRepository.findByName(EXAMPLE_STATION_NAME1);
