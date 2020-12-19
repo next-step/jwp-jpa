@@ -109,5 +109,9 @@ public class LineStationTest {
         assertThat(foundLine.getLineStations()).hasSize(0);
         LineStation foundAfterDelete = lineStationRepository.findById(lineStation.getId()).orElse(null);
         assertThat(foundAfterDelete).isNull();
+        Station foundGangnam = stationRepository.findByName(gangnam.getName()).orElse(null);
+        assertThat(foundGangnam).isNotNull();
+        Station foundSeocho = stationRepository.findByName(seocho.getName()).orElse(null);
+        assertThat(foundSeocho).isNotNull();
     }
 }
