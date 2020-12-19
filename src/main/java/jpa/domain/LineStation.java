@@ -1,5 +1,6 @@
 package jpa.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,20 +23,31 @@ public class LineStation extends BaseTime {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Station station;
 
-	private int distance;
+	@JoinColumn(name = "locationId")
+	@ManyToOne(cascade = {CascadeType.ALL})
+	private Location location;
 
 	protected LineStation() {
 	}
 
-	public LineStation(Line line, Station station, int distance) {
+	public LineStation(Line line, Station station) {
 		this.line = line;
 		this.station = station;
-		this.distance = distance;
+	}
+
+	public LineStation(Line line, Station station, Location location) {
+		this.line = line;
+		this.station = station;
+		this.location = location;
 		line.add(this);
 		station.add(this);
 	}
 
-	public int getDistance() {
-		return distance;
+	public Station getStation() {
+		return station;
+	}
+
+	public Location getLocation() {
+		return location;
 	}
 }
