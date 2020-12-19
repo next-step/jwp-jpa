@@ -1,27 +1,13 @@
 package jpa.com.jaenyeong.domain.station;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jpa.com.jaenyeong.domain.BaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Station {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
-    @CreatedDate
-    @Column(nullable = false)
-    LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    LocalDateTime modifiedDate;
-
+public class Station extends BaseEntity {
     @Column(unique = true)
     String name;
 

@@ -1,27 +1,12 @@
 package jpa.com.jaenyeong.domain.favorite;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jpa.com.jaenyeong.domain.BaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Favorite {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
-    @CreatedDate
-    @Column(nullable = false)
-    LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    LocalDateTime modifiedDate;
-
+public class Favorite extends BaseEntity {
     public Long getId() {
         return id;
     }

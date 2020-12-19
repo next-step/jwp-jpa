@@ -1,27 +1,12 @@
 package jpa.com.jaenyeong.domain.member;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jpa.com.jaenyeong.domain.BaseEntity;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
-    @CreatedDate
-    @Column(nullable = false)
-    LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    LocalDateTime modifiedDate;
-
+public class Member extends BaseEntity {
     @Column
     Integer age;
 
