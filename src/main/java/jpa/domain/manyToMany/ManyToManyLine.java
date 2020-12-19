@@ -18,7 +18,7 @@ public class ManyToManyLine extends BaseEntity {
     private String name;
 
     @ManyToMany
-    @JoinTable(name = "SECTION")
+    @JoinTable(name = "MANY")
     private List<ManyToManyStation> stations = new ArrayList<>();
 
     protected ManyToManyLine() {

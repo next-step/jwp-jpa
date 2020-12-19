@@ -1,12 +1,10 @@
 package jpa.domain;
 
-import jpa.domain.bridgeObject.LineStation;
 import jpa.utils.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Entity
 public class Line extends BaseEntity {
@@ -18,6 +16,9 @@ public class Line extends BaseEntity {
 
     @Column(unique = true)
     private String name;
+
+    @Embedded
+    private Sections sections = new Sections();
 
     protected Line() {
     }
@@ -53,5 +54,17 @@ public class Line extends BaseEntity {
 
     public LocalDateTime getCreatedDate() {
         return this.createdDate;
+    }
+
+    public void addSection(final Section section) {
+        this.sections.addSection(section);
+    }
+
+    public Sections getSections() {
+        return sections;
+    }
+
+    public Long getFirstDistance() {
+        return this.sections.firstDistance();
     }
 }
