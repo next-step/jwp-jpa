@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Line extends BaseEntity {
@@ -18,9 +19,6 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @Embedded
-    private Sections sections = new Sections();
-
     protected Line() {
     }
 
@@ -28,48 +26,5 @@ public class Line extends BaseEntity {
         this.id = id;
         this.color = color;
         this.name = name;
-    }
-
-    public Line(final String color, final String name) {
-        this(null, color, name);
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void updateLine(final Line line) {
-        this.createdDate = line.createdDate;
-        this.modifiedDate = line.modifiedDate;
-        this.name = line.name;
-        this.color = line.color;
-    }
-
-    public List<Station> getAllStations() {
-        return new ArrayList<>(this.sections.getAllStations());
-    }
-
-    public String getColor() {
-        return this.color;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return this.createdDate;
-    }
-
-    public void addSection(final Section section) {
-        this.sections.addSection(section);
-    }
-
-    public Sections getSections() {
-        return sections;
-    }
-
-    public Long getFirstDistance() {
-        return this.sections.firstDistance();
     }
 }
