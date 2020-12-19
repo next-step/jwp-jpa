@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.persistence.EntityManager;
 import java.util.Arrays;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 public class MemberFavoriteTest {
     private Station gangnam = new Station("gangnam");
@@ -19,9 +21,6 @@ public class MemberFavoriteTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private EntityManager entityManager;
 
     @BeforeEach
     void setup() {
@@ -35,7 +34,20 @@ public class MemberFavoriteTest {
 
         member.addFavorite(new Favorite(gangnam.getId(), seocho.getId()));
 
-        entityManager.flush();
+        memberRepository.save(member);
         // 이후 favorite까지 저장되는 쿼리 확인
+    }
+
+    @DisplayName("Member에 Favorite을 저장한 후 영속 컨텍스트에서 Favorite을 조회할 수 있다.")
+    @Test
+    void getFavoriteTest() {
+        Member member = new Member(31, "test@test.gmail.com", "password");
+        member.addFavorite(new Favorite(gangnam.getId(), seocho.getId()));
+        memberRepository.save(member);
+
+        Member foundMember = memberRepository.findByEmail(member.getEmail()).orElse(null);
+        assertThat(foundMember).isNotNull();
+        assertThat(foundMember.getFavorites().isContains(gangnam)).isTrue();
+        assertThat(foundMember.getFavorites().isContains(seocho)).isTrue();
     }
 }

@@ -16,4 +16,10 @@ public class Favorites {
     public void add(final Favorite favorite) {
         this.favorites.add(favorite);
     }
+
+    public boolean isContains(final Station station) {
+        long count = favorites.stream().filter(it -> it.isContain(station)).count();
+
+        return count > 0L;
+    }
 }

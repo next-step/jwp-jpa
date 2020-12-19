@@ -23,6 +23,10 @@ public class Favorite extends IdentifiedValueObject {
         this(null, startStationId, destinationStationId);
     }
 
+    public boolean isContain(final Station station) {
+        return startStationId.equals(station.getId()) || destinationStationId.equals(station.getId());
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
