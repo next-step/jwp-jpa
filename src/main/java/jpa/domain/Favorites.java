@@ -23,6 +23,10 @@ public class Favorites {
         return count > 0L;
     }
 
+    public void remove(final Favorite favorite) {
+        this.favorites.remove(favorite);
+    }
+
     public int size() {
         return this.favorites.size();
     }

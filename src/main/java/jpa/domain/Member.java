@@ -43,6 +43,10 @@ public class Member extends BaseEntity {
         this.favorites.add(favorite);
     }
 
+    public void removeFavorite(final Favorite favorite) {
+        this.favorites.remove(favorite);
+    }
+
     public Long getId() {
         return id;
     }

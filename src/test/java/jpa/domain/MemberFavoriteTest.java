@@ -23,6 +23,9 @@ public class MemberFavoriteTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private EntityManager entityManager;
+
     @BeforeEach
     void setup() {
         stationRepository.saveAll(Arrays.asList(gangnam, seocho, samsung));
@@ -63,5 +66,19 @@ public class MemberFavoriteTest {
         member.addFavorite(new Favorite(samsung.getId(), seocho.getId()));
         Member foundMember = memberRepository.findByEmail(member.getEmail()).orElse(null);  // 쿼리 발생 확인
         assertThat(foundMember.getFavorites().size()).isEqualTo(2);
+    }
+
+    @DisplayName("Member에 속한 Favorite을 제거할 수 있다.")
+    @Test
+    void deleteTest() {
+        Member member = new Member(31, "test@test.gmail.com", "password");
+        Favorite favorite = new Favorite(gangnam.getId(), seocho.getId());
+        member.addFavorite(favorite);
+        memberRepository.save(member);
+        assertThat(member.getFavorites().size()).isEqualTo(1);
+
+        member.removeFavorite(favorite);
+        entityManager.flush();  // delete 쿼리 생성 확인
+        assertThat(member.getFavorites().size()).isEqualTo(0);
     }
 }
