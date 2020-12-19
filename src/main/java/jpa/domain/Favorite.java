@@ -22,11 +22,11 @@ public class Favorite extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "start_station_id")
     private Station startStation;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "end_station_id")
     private Station endStation;
 
