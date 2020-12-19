@@ -44,7 +44,7 @@ public class Station extends BaseEntity {
 
 	public static Station create(String name) {
 		return new Station(name);
-	}
+  }
 
 	public void updateName(String name) {
 		this.name = name;
