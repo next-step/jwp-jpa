@@ -32,6 +32,11 @@ public class LineStation extends BaseEntity {
         this(null, line, station);
     }
 
+    void updateLine(final Line line) {
+        this.line = line;
+        line.addLineStation(this);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

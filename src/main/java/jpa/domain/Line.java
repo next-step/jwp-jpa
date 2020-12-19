@@ -47,6 +47,16 @@ public class Line extends BaseEntity {
         return name;
     }
 
+    public void updateLine(final Line line) {
+        this.color = line.color;
+        this.name = line.name;
+    }
+
+    public void addLineStation(final LineStation lineStation) {
+        this.lineStations.add(lineStation);
+        lineStation.updateLine(this);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
