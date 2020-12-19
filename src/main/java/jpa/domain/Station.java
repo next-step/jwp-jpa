@@ -3,6 +3,7 @@ package jpa.domain;
 import jpa.utils.BaseEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,8 +16,8 @@ public class Station extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "station", fetch = FetchType.LAZY)
-    private List<LineStation> lineStations;
+    @OneToMany(mappedBy = "upStation", fetch = FetchType.LAZY)
+    private List<LineStation> lineStations = new ArrayList<>();
 
     protected Station() {
     }
@@ -39,12 +40,16 @@ public class Station extends BaseEntity {
     }
 
     public void addLineStation(final LineStation lineStation) {
-        lineStation.updateStation(this);
+        lineStation.updateUpStation(this);
         this.lineStations.add(lineStation);
     }
 
     public void updateStation(final Station station) {
         this.name = station.name;
+    }
+
+    List<LineStation> getLineStations() {
+        return this.lineStations;
     }
 
     @Override
