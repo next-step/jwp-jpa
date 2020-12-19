@@ -33,6 +33,12 @@ public class Member extends BaseEntity {
         this(null, age, email, password);
     }
 
+    public void updateMember(final Member member) {
+        this.age = member.age;
+        this.password = member.password;
+        this.email = member.email;
+    }
+
     public Long getId() {
         return id;
     }

@@ -38,6 +38,15 @@ public class Station extends BaseEntity {
         return name;
     }
 
+    public void addLineStation(final LineStation lineStation) {
+        lineStation.updateStation(this);
+        this.lineStations.add(lineStation);
+    }
+
+    public void updateStation(final Station station) {
+        this.name = station.name;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
