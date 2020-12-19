@@ -32,4 +32,20 @@ public class Member extends BaseEntity {
     public Member(final Integer age, final String email, final String password) {
         this(null, age, email, password);
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

@@ -19,7 +19,7 @@ public class LineStation extends BaseEntity {
     @JoinColumn(name = "station_id")
     private Station station;
 
-    protectedgit  LineStation() {
+    protected  LineStation() {
     }
 
     LineStation(final Long id, final Line line, final Station station) {
