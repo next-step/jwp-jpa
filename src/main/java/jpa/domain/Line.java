@@ -4,6 +4,7 @@ import jpa.utils.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,6 +43,10 @@ public class Line extends BaseEntity {
         this.modifiedDate = line.modifiedDate;
         this.name = line.name;
         this.color = line.color;
+    }
+
+    public List<Station> getAllStations() {
+        return new ArrayList<>(this.sections.getAllStations());
     }
 
     public String getColor() {

@@ -1,6 +1,9 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Table
@@ -31,5 +34,9 @@ public class Section extends IdentifiedValueObject {
 
     public Long getDistance() {
         return this.distance;
+    }
+
+    public List<Station> getStations() {
+        return Arrays.asList(upStation, downStation);
     }
 }
