@@ -24,6 +24,9 @@ public class LineStationTest {
     private LineRepository lineRepository;
 
     @Autowired
+    private LineStationRepository lineStationRepository;
+
+    @Autowired
     private EntityManager entityManager;
 
     @BeforeEach
@@ -85,18 +88,26 @@ public class LineStationTest {
         assertThat(secondFoundLine.getStations()).hasSize(3);
     }
 
-    @DisplayName("노선과 연관된 LineStation을 삭제하면 노선이 영향을 받는다.")
+    @DisplayName("노선의 LineStation을 삭제하면 영속 DB에도 반영된다.")
     @Test
-    void deleteTest() {
+    void cannotDeleteTest() {
         Line line = new Line("green", "lineNumberTwo");
 
         LineStation lineStation = new LineStation(line, gangnam, seocho, 3);
         line.addLineStation(lineStation);
         lineRepository.save(line);
         assertThat(lineStation.getId()).isNotNull();
-        lineRepository.deleteById(lineStation.getId());
 
         Line foundLine = lineRepository.findByName(line.getName()).orElse(null);
-        assertThat(foundLine).isNull();
+        assertThat(foundLine).isNotNull();
+        assertThat(foundLine.getLineStations()).hasSize(1);
+        LineStation foundLineStation = lineStationRepository.findById(lineStation.getId()).orElse(null);
+        assertThat(foundLineStation).isNotNull();
+
+        line.removeLineStation(lineStation);
+        entityManager.flush();
+        assertThat(foundLine.getLineStations()).hasSize(0);
+        LineStation foundAfterDelete = lineStationRepository.findById(lineStation.getId()).orElse(null);
+        assertThat(foundAfterDelete).isNull();
     }
 }

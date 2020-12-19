@@ -48,12 +48,10 @@ public class LineStation extends BaseEntity {
 
     void updateLine(final Line line) {
         this.line = line;
-        line.getLineStations().add(this);
     }
 
     void updateUpStation(final Station station) {
         this.upStation = station;
-        station.getLineStations().add(this);
     }
 
     List<Station> getStations() {

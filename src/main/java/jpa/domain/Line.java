@@ -21,7 +21,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "line", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "line", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<LineStation> lineStations = new ArrayList<>();
 
     protected Line() {
@@ -65,6 +65,10 @@ public class Line extends BaseEntity {
                 .collect(Collectors.toSet());
 
         return new ArrayList<>(dupRemovedStations);
+    }
+
+    public void removeLineStation(final LineStation lineStation) {
+        this.lineStations.remove(lineStation);
     }
 
     List<LineStation> getLineStations() {
