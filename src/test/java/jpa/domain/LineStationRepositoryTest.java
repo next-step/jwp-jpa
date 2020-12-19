@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
  * @project : jpa
  * @since : 2020-12-17
  */
+@SuppressWarnings("NonAsciiCharacters")
 @DataJpaTest
 @DisplayName("LineStation Repository Test Class")
 class LineStationRepositoryTest {
@@ -27,7 +28,6 @@ class LineStationRepositoryTest {
     @Autowired
     private LineStationRepository lineStationRepository;
 
-    @SuppressWarnings("NonAsciiCharacters")
     @BeforeEach
     void initializeData() {
         Line lineNumber2 = lineRepository.save(new Line("2호선", "Green"));
@@ -40,13 +40,14 @@ class LineStationRepositoryTest {
         Station 총신대입구 = stationRepository.save(new Station("총신대입구"));
         Station 남태령 = stationRepository.save(new Station("남태령"));
 
-        lineStationRepository.save(new LineStation(lineNumber2, 서울대입구));
-        lineStationRepository.save(new LineStation(lineNumber2, 낙성대));
-        lineStationRepository.save(new LineStation(lineNumber2, 사당));
+        lineStationRepository.save(new LineStation(lineNumber2, 서울대입구, null, null));
+        lineStationRepository.save(new LineStation(lineNumber2, 낙성대, Meter.of(10), 서울대입구));
+        lineStationRepository.save(new LineStation(lineNumber2, 사당, Meter.of(20), 낙성대));
 
-        lineStationRepository.save(new LineStation(lineNumber4, 총신대입구));
-        lineStationRepository.save(new LineStation(lineNumber4, 사당));
-        lineStationRepository.save(new LineStation(lineNumber4, 남태령));
+        lineStationRepository.save(new LineStation(lineNumber4, 총신대입구, null, null));
+        lineStationRepository.save(new LineStation(lineNumber4, 사당, Meter.of(4), 총신대입구));
+        lineStationRepository.save(new LineStation(lineNumber4, 남태령, Meter.of(10), 사당));
+
     }
 
     @Test
@@ -67,10 +68,19 @@ class LineStationRepositoryTest {
 
     @Test
     @DisplayName("Line에 포함된 역 Test")
-    void shouldBeExceptionCreateFavoriteTest() {
-        assertThatThrownBy(() -> new Line(null, null))
+    void shouldBeExceptionCreateLineStationTest() {
+        assertThatThrownBy(() -> new LineStation(null, null, null, null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Line의 name, color는 필수 값 입니다.");
+                .hasMessageContaining("LineStation line, station는 필수 값 입니다.");
+    }
+
+    @Test
+    @DisplayName("Line 이름 And 역 명으로 lineStation 탐색 Test")
+    void lineStationSelectTest() {
+        LineStation 사당 = lineStationRepository.findByLineNameAndStationName("2호선", "사당");
+        assertThat(사당).isNotNull();
+        assertThat(사당.getDistance()).isEqualTo(Meter.of(20));
+        assertThat(사당.getDistanceTargetStation().getName()).isEqualTo("낙성대");
     }
 
 }
