@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MemberFavoriteTest {
     private Station gangnam = new Station("gangnam");
     private Station seocho = new Station("seocho");
+    private Station samsung = new Station("samsung");
 
     @Autowired
     private StationRepository stationRepository;
@@ -24,7 +25,7 @@ public class MemberFavoriteTest {
 
     @BeforeEach
     void setup() {
-        stationRepository.saveAll(Arrays.asList(gangnam, seocho));
+        stationRepository.saveAll(Arrays.asList(gangnam, seocho, samsung));
     }
 
     @DisplayName("POJO에 데이터를 추가하는 것처럼 Favorite을 추가할 수 있다.")
@@ -49,5 +50,18 @@ public class MemberFavoriteTest {
         assertThat(foundMember).isNotNull();
         assertThat(foundMember.getFavorites().isContains(gangnam)).isTrue();
         assertThat(foundMember.getFavorites().isContains(seocho)).isTrue();
+    }
+
+    @DisplayName("더티 체킹을 통해 Member의 Favorite을 추가하고 저장할 수 있다.")
+    @Test
+    void updateTest() {
+        Member member = new Member(31, "test@test.gmail.com", "password");
+        member.addFavorite(new Favorite(gangnam.getId(), seocho.getId()));
+        memberRepository.save(member);
+        assertThat(member.getFavorites().size()).isEqualTo(1);
+
+        member.addFavorite(new Favorite(samsung.getId(), seocho.getId()));
+        Member foundMember = memberRepository.findByEmail(member.getEmail()).orElse(null);  // 쿼리 발생 확인
+        assertThat(foundMember.getFavorites().size()).isEqualTo(2);
     }
 }

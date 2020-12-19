@@ -22,4 +22,8 @@ public class Favorites {
 
         return count > 0L;
     }
+
+    public int size() {
+        return this.favorites.size();
+    }
 }
