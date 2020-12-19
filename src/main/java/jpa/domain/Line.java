@@ -21,7 +21,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "line", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "line", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<LineStation> lineStations = new ArrayList<>();
 
     protected Line() {

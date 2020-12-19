@@ -56,6 +56,10 @@ public class LineStation extends BaseEntity {
         return Arrays.asList(upStation, downStation);
     }
 
+    Line getLine() {
+        return this.line;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

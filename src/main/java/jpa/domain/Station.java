@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 public class Station extends BaseEntity {
@@ -46,6 +47,12 @@ public class Station extends BaseEntity {
 
     public void updateStation(final Station station) {
         this.name = station.name;
+    }
+
+    public List<Line> getLines() {
+        return this.lineStations.stream()
+                .map(LineStation::getLine)
+                .collect(Collectors.toList());
     }
 
     List<LineStation> getLineStations() {
