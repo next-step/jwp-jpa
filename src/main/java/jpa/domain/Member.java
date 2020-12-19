@@ -53,9 +53,9 @@ public class Member extends BaseEntity {
         favorite.changeMember(this);
     }
 
-    public Favorite getFavorite(final String favoriteName) {
+    public Favorite getFavorite(final Long favoriteId) {
         return favorites.stream()
-                .filter(favorite -> favorite.isName(favoriteName))
+                .filter(favorite -> favorite.isId(favoriteId))
                 .findFirst()
                 .orElse(null);
     }

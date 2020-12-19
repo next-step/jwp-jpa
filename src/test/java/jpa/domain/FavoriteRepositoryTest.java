@@ -80,12 +80,11 @@ class FavoriteRepositoryTest {
         em.persist(station2);
 
         // 즐겨찾기 저장
-        String name = "1";
-        Favorite favorite = new Favorite(name, station1, station2);
+        Favorite favorite = new Favorite(station1, station2);
         em.persist(favorite);
 
         // when
-        Favorite expected = favorites.findByName(name).get();
+        Favorite expected = favorites.findById(favorite.getId()).get();
 
         // then
         assertAll(

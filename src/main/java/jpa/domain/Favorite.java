@@ -19,9 +19,6 @@ public class Favorite extends BaseEntity {
     @Column(name = "favorite_id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
-
     @ManyToOne
     @JoinColumn(name = "start_station_id")
     private Station startStation;
@@ -34,8 +31,7 @@ public class Favorite extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public Favorite(final String name, final Station startStation, final Station endStation) {
-        this.name = name;
+    public Favorite(final Station startStation, final Station endStation) {
         this.startStation = startStation;
         this.endStation = endStation;
     }
@@ -53,12 +49,11 @@ public class Favorite extends BaseEntity {
         this.member = member;
     }
 
-    public Favorite changeName(final String name) {
-        this.name = name;
-        return this;
+    public boolean isId(final Long favoriteId) {
+        return Objects.equals(id, favoriteId);
     }
 
-    public boolean isName(final String favoriteName) {
-        return Objects.equals(name, favoriteName);
+    public void changeEndStation(final Station station) {
+        this.endStation = station;
     }
 }

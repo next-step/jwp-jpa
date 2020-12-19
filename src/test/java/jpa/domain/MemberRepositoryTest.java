@@ -144,8 +144,8 @@ class MemberRepositoryTest {
 
         String email = "good_1411@naver.com";
         Member yohan = new Member(28, email, DEFAULT_PASSWORD);
-        Favorite favorite1 = new Favorite("가는길", station1, station2);
-        Favorite favorite2 = new Favorite("오는길", station2, station1);
+        Favorite favorite1 = new Favorite(station1, station2);
+        Favorite favorite2 = new Favorite(station2, station1);
         yohan.addFavorite(favorite1);
         yohan.addFavorite(favorite2);
         members.save(yohan);
@@ -164,30 +164,28 @@ class MemberRepositoryTest {
         // 지하철 역 저장
         Station station1 = new Station("금정역");
         Station station2 = new Station("당정역");
+        Station station3 = new Station("범계역");
         em.persist(station1);
         em.persist(station2);
+        em.persist(station3);
 
         // 멤버, 즐겨찾기 저장
         String email = "good_1411@naver.com";
         Member yohan = new Member(28, email, DEFAULT_PASSWORD);
-        Favorite favorite1 = new Favorite("가는길", station1, station2);
-        Favorite favorite2 = new Favorite("오는길", station2, station1);
+        Favorite favorite1 = new Favorite(station1, station2);
+        Favorite favorite2 = new Favorite(station2, station1);
         yohan.addFavorite(favorite1);
         yohan.addFavorite(favorite2);
         members.save(yohan);
 
-        // 즐겨 찾기 변경
-        Favorite expected = yohan.getFavorite("가는길").changeName("테스트");
-
-        em.flush();
-        em.clear();
-
         // when
+        Favorite expected = yohan.getFavorite(favorite1.getId());
+        expected.changeEndStation(station3);
         Member member = members.findFirstByEmail(email).get();
-        Favorite actual = member.getFavorite(expected.getName());
+        Favorite actual = member.getFavorite(expected.getId());
 
         // then
-        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getEndStation()).isEqualTo(expected.getEndStation());
     }
 
     @DisplayName("사용자는 즐겨찾기를 제거할 수 있다.")
@@ -203,17 +201,18 @@ class MemberRepositoryTest {
         // 멤버, 즐겨찾기 저장
         String email = "good_1411@naver.com";
         Member yohan = new Member(28, email, DEFAULT_PASSWORD);
-        Favorite favorite1 = new Favorite("가는길", station1, station2);
-        Favorite favorite2 = new Favorite("오는길", station2, station1);
+        Favorite favorite1 = new Favorite(station1, station2);
+        Favorite favorite2 = new Favorite(station2, station1);
         yohan.addFavorite(favorite1);
         yohan.addFavorite(favorite2);
         members.save(yohan);
 
         // 즐겨 찾기 제거
         yohan.getFavorites().remove(favorite1);
+        em.flush();
 
         // when
-        Optional<Favorite> favoriteOptional = favorites.findByName("가는길");
+        Optional<Favorite> favoriteOptional = favorites.findById(favorite1.getId());
         Member member = members.findFirstByEmail(email).get();
         List<Favorite> actual = member.getFavorites();
 
@@ -236,8 +235,8 @@ class MemberRepositoryTest {
         // 멤버, 즐겨찾기 저장
         String email = "good_1411@naver.com";
         Member yohan = new Member(28, email, DEFAULT_PASSWORD);
-        Favorite favorite1 = new Favorite("가는길", station1, station2);
-        Favorite favorite2 = new Favorite("오는길", station2, station1);
+        Favorite favorite1 = new Favorite(station1, station2);
+        Favorite favorite2 = new Favorite(station2, station1);
         yohan.addFavorite(favorite1);
         yohan.addFavorite(favorite2);
         members.save(yohan);
@@ -246,8 +245,8 @@ class MemberRepositoryTest {
         members.delete(yohan);
 
         // when
-        Optional<Favorite> favoriteOptional1 = favorites.findByName("가는길");
-        Optional<Favorite> favoriteOptional2 = favorites.findByName("오는길");
+        Optional<Favorite> favoriteOptional1 = favorites.findById(favorite1.getId());
+        Optional<Favorite> favoriteOptional2 = favorites.findById(favorite2.getId());
         Optional<Member> memberOptional = members.findFirstByEmail(email);
 
         // then
