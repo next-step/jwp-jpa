@@ -84,4 +84,19 @@ public class LineStationTest {
         assertThat(secondFoundLine).isNotNull();
         assertThat(secondFoundLine.getStations()).hasSize(3);
     }
+
+    @DisplayName("노선과 연관된 LineStation을 삭제하면 노선이 영향을 받는다.")
+    @Test
+    void deleteTest() {
+        Line line = new Line("green", "lineNumberTwo");
+
+        LineStation lineStation = new LineStation(line, gangnam, seocho, 3);
+        line.addLineStation(lineStation);
+        lineRepository.save(line);
+        assertThat(lineStation.getId()).isNotNull();
+        lineRepository.deleteById(lineStation.getId());
+
+        Line foundLine = lineRepository.findByName(line.getName()).orElse(null);
+        assertThat(foundLine).isNull();
+    }
 }
