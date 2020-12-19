@@ -3,7 +3,6 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,8 +44,15 @@ class LineRepositoryTest {
 		Station station2 = stationRepository.save(Station.create(STATION_NAME2));
 		Station station3 = stationRepository.save(Station.create(STATION_NAME3));
 
-		lineRepository.save(Line.create(EXAMPLE_GREEN, EXAMPLE_LINE_1, Arrays.asList(station1, station2)));
-		lineRepository.save(Line.create(EXAMPLE_RED, EXAMPLE_LINE_2, Arrays.asList(station2, station3)));
+		Line line1 = Line.create(EXAMPLE_GREEN, EXAMPLE_LINE_1);
+		Line line2 = Line.create(EXAMPLE_RED, EXAMPLE_LINE_2);
+		line1.addLineStation(station1, station2, 10);
+		line1.addLineStation(station2, station1, 10);
+		line2.addLineStation(station3, null, null);
+
+		lineRepository.save(line1);
+		lineRepository.save(line2);
+
 	}
 
 	@DisplayName("단일 조회 테스트")

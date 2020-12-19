@@ -3,7 +3,6 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import jpa.domain.entity.Line;
 import jpa.domain.entity.LineStation;
@@ -38,11 +39,17 @@ class StationRepositoryTest {
 
 	@BeforeEach
 	void setup() {
+		Station station1 = stationRepository.save(Station.create(EXAMPLE_STATION_NAME1));
+		Station station2 = stationRepository.save(Station.create(EXAMPLE_STATION_NAME2));
+
 		Line line1 = Line.create("RED", LINE_NAME1);
 		Line line2 = Line.create("GREEN", LINE_NAME2);
 
-		stationRepository.save(Station.create(EXAMPLE_STATION_NAME1, Arrays.asList(line1, line2)));
-		stationRepository.save(Station.create(EXAMPLE_STATION_NAME2, Arrays.asList(line2)));
+		station1.addLineStation(line1, station2, 10);
+		station1.addLineStation(line2, null, null);
+
+		lineRepository.save(line1);
+		lineRepository.save(line2);
 	}
 
 	@DisplayName("단일 조회 테스트")
@@ -123,6 +130,7 @@ class StationRepositoryTest {
 
 	@Test
 	@DisplayName("지하철역 조회 시 어느 노선에 속한지 볼 수 있다.")
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	void lineStation() {
 
 		Station station = stationRepository.findByName(EXAMPLE_STATION_NAME1);
