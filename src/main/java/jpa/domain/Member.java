@@ -1,11 +1,13 @@
 package jpa.domain;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Member extends BaseEntity {
   @Id
@@ -28,28 +30,10 @@ public class Member extends BaseEntity {
     this.age = age;
   }
 
-  protected Member() {
-  }
-
   public Member(final String email, final int age, final String password) {
     this.email = email;
     this.age = age;
     this.password = password;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public int getAge() {
-    return age;
-  }
-
-  public String getPassword() {
-    return password;
-  }
 }

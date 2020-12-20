@@ -1,7 +1,13 @@
 package jpa.domain;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Station extends BaseEntity {
 
@@ -12,10 +18,6 @@ public class Station extends BaseEntity {
   @Column(nullable = false, unique = true)
   private String name;
 
-  protected Station() {
-
-  }
-
   public Station(final String name) {
     this.name = name;
   }
@@ -24,11 +26,4 @@ public class Station extends BaseEntity {
     this.name = name;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
 }

@@ -1,11 +1,13 @@
 package jpa.domain;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Line extends BaseEntity {
   @Id
@@ -18,9 +20,6 @@ public class Line extends BaseEntity {
   @Column(nullable = false)
   private String color;
 
-  protected Line() {
-  }
-
   public Line(final String name, final String color) {
     this.name = name;
     this.color = color;
@@ -29,18 +28,5 @@ public class Line extends BaseEntity {
   public void changeName(final String name) {
     this.name = name;
   }
-
-  public Long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getColor() {
-    return color;
-  }
-
 
 }
