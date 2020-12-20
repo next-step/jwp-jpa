@@ -18,4 +18,11 @@ public class Line extends BaseEntity {
     private String color;
 
     private String name;
+
+    public Line() {
+    }
+
+    public Line(String name) {
+        this.name = name;
+    }
 }
