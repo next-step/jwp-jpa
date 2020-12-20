@@ -1,13 +1,16 @@
 package jpa.com.jaenyeong.domain.line;
 
 import jpa.com.jaenyeong.domain.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
 @Table(name = "LINE")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Line extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

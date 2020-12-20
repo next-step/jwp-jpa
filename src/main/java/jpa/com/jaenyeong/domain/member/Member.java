@@ -1,13 +1,16 @@
 package jpa.com.jaenyeong.domain.member;
 
 import jpa.com.jaenyeong.domain.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
 @Table(name = "MEMBER")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +19,6 @@ public class Member extends BaseEntity {
     private int age;
     private String email;
     private String password;
-
-    protected Member() {
-    }
 
     public void changeMemberEmail(final String email) {
         this.email = email;
