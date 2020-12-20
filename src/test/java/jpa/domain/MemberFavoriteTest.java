@@ -45,11 +45,16 @@ public class MemberFavoriteTest {
     @DisplayName("Member에 Favorite을 저장한 후 영속 컨텍스트에서 Favorite을 조회할 수 있다.")
     @Test
     void getFavoriteTest() {
-        Member member = new Member(31, "test@test.gmail.com", "password");
-        member.addFavorite(new Favorite(gangnam.getId(), seocho.getId()));
-        memberRepository.save(member);
+        // given
+        int age = 32;
+        String email = "test@gmail.com";
+        String password = "password";
+        Member member = Member에_Favorite_추가됨(age, email, password, gangnam, seocho);
 
+        // when
         Member foundMember = memberRepository.findByEmail(member.getEmail()).orElse(null);
+
+        // then
         assertThat(foundMember).isNotNull();
         assertThat(foundMember.getFavorites().isContains(gangnam)).isTrue();
         assertThat(foundMember.getFavorites().isContains(seocho)).isTrue();
@@ -58,12 +63,17 @@ public class MemberFavoriteTest {
     @DisplayName("더티 체킹을 통해 Member의 Favorite을 추가하고 저장할 수 있다.")
     @Test
     void updateTest() {
-        Member member = new Member(31, "test@test.gmail.com", "password");
-        member.addFavorite(new Favorite(gangnam.getId(), seocho.getId()));
-        memberRepository.save(member);
+        // given
+        int age = 32;
+        String email = "test@gmail.com";
+        String password = "password";
+        Member member = Member에_Favorite_추가됨(age, email, password, gangnam, seocho);
         assertThat(member.getFavorites().size()).isEqualTo(1);
 
+        // when
         member.addFavorite(new Favorite(samsung.getId(), seocho.getId()));
+
+        // then
         Member foundMember = memberRepository.findByEmail(member.getEmail()).orElse(null);  // 쿼리 발생 확인
         assertThat(foundMember.getFavorites().size()).isEqualTo(2);
     }
@@ -71,14 +81,27 @@ public class MemberFavoriteTest {
     @DisplayName("Member에 속한 Favorite을 제거할 수 있다.")
     @Test
     void deleteTest() {
-        Member member = new Member(31, "test@test.gmail.com", "password");
-        Favorite favorite = new Favorite(gangnam.getId(), seocho.getId());
-        member.addFavorite(favorite);
-        memberRepository.save(member);
+        // given
+        int age = 32;
+        String email = "test@gmail.com";
+        String password = "password";
+        Member member = Member에_Favorite_추가됨(age, email, password, gangnam, seocho);
         assertThat(member.getFavorites().size()).isEqualTo(1);
 
-        member.removeFavorite(favorite);
+        // when
+        member.removeFavorite(member.getFirstFavorite());
+
+        // then
         entityManager.flush();  // delete 쿼리 생성 확인
         assertThat(member.getFavorites().size()).isEqualTo(0);
+    }
+
+    private Member Member에_Favorite_추가됨(
+            final int age, final String email , final String password,
+            final Station startStation, final Station destinationStation
+    ) {
+        Member member = new Member(age, email, password);
+        member.addFavorite(new Favorite(startStation.getId(), destinationStation.getId()));
+        return memberRepository.save(member);
     }
 }

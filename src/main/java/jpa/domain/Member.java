@@ -66,4 +66,8 @@ public class Member extends BaseEntity {
     public Favorites getFavorites() {
         return favorites;
     }
+
+    public Favorite getFirstFavorite() {
+        return this.favorites.getFirst();
+    }
 }

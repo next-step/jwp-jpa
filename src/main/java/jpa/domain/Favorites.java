@@ -30,4 +30,8 @@ public class Favorites {
     public int size() {
         return this.favorites.size();
     }
+
+    public Favorite getFirst() {
+        return this.favorites.get(0);
+    }
 }
