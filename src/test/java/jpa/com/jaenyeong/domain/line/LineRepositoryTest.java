@@ -53,7 +53,8 @@ class LineRepositoryTest extends BaseTest {
         final Line savedGreenLine = lines.save(greenLine);
         assertThat(savedGreenLine.getId()).isNotNull();
 
-        final Line foundLine = lines.findByName(greenLine.getName());
+        final Line foundLine = lines.findByName(greenLine.getName())
+            .orElseThrow(RuntimeException::new);
 
         assertSame(savedGreenLine.getColor(), foundLine.getColor());
         assertSame(savedGreenLine, foundLine);
@@ -91,8 +92,10 @@ class LineRepositoryTest extends BaseTest {
         lines.delete(savedGreenLine);
         assertThat(savedGreenLine).isNotNull();
 
-        final Line foundByName = lines.findByName(savedGreenLine.getName());
-        final Line foundById = lines.findById(savedGreenLine.getId()).orElse(null);
+        final Line foundByName = lines.findByName(savedGreenLine.getName())
+            .orElse(null);
+        final Line foundById = lines.findById(savedGreenLine.getId())
+            .orElse(null);
 
         assertThat(foundByName).isNull();
         assertThat(foundById).isNull();

@@ -48,13 +48,15 @@ class MemberRepositoryTest extends BaseTest {
     @DisplayName("객체를 이메일로 찾는 테스트")
     void findByEmail() {
         final String targetEmail = "jaenyeong.dev@gmail.com";
-        final Member beforeSave = members.findByEmail(targetEmail);
+        final Member beforeSave = members.findByEmail(targetEmail)
+            .orElse(null);
 
         assertThat(beforeSave).isNull();
 
         firstMember.changeMemberEmail(targetEmail);
         members.save(firstMember);
-        final Member afterSave = members.findByEmail(targetEmail);
+        final Member afterSave = members.findByEmail(targetEmail)
+            .orElseThrow(RuntimeException::new);
 
         assertThat(afterSave).isNotNull();
         assertThat(afterSave.getEmail()).isNotNull();
