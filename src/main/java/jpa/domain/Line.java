@@ -3,6 +3,7 @@ package jpa.domain;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "line")
@@ -17,6 +18,11 @@ public class Line extends BaseEntity{
 	private List<Station> stationList = new ArrayList<>();
 
 	public Line() {
+	}
+
+	public Line(String color, String name) {
+		this.color = color;
+		this.name = name;
 	}
 
 	public Line(String color, String name, List<Station> stationList) {
@@ -47,5 +53,19 @@ public class Line extends BaseEntity{
 
 	public void setStationList(List<Station> stationList) {
 		this.stationList = stationList;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Line line = (Line) o;
+		return Objects.equals(color, line.color) &&
+				Objects.equals(name, line.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(color, name);
 	}
 }

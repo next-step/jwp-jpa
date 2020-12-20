@@ -24,4 +24,18 @@ public class Member extends BaseEntity{
 	@OneToMany
 	private List<Favorite> favoriteList = new ArrayList<>();
 
+	public Member() {
+	}
+
+	public Member(String name, int age, String email, String password, List<Favorite> favoriteList) {
+		this.name = name;
+		this.age = age;
+		this.email = email;
+		this.password = password;
+		this.favoriteList = favoriteList;
+	}
+
+	public List<Favorite> getFavoriteList() {
+		return favoriteList;
+	}
 }
