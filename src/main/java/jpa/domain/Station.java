@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  * @description :
  **/
 @Entity
-public class Station extends BaseEntity{
+public class Station extends BaseEntity {
 	@Column(unique = true)
 	private String name;
 
@@ -22,5 +22,9 @@ public class Station extends BaseEntity{
 
 	public String getName() {
 		return name;
+	}
+
+	public void changeName(String name) {
+		this.name = name;
 	}
 }

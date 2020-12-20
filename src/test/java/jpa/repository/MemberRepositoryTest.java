@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.domain.Line;
 import jpa.domain.Member;
 
 /**
@@ -38,7 +37,7 @@ public class MemberRepositoryTest {
 		String expectedPassword = "pwd";
 		int expectedAge = 30;
 
-		members.save(new Member(expectedEmail,expectedPassword,expectedAge));
+		members.save(new Member(expectedEmail, expectedPassword, expectedAge));
 
 		Member actual = members.findByEmail(expectedEmail);
 		assertAll(
@@ -48,6 +47,5 @@ public class MemberRepositoryTest {
 			() -> assertThat(actual.getAge()).isEqualTo(expectedAge)
 		);
 	}
-
 
 }

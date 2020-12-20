@@ -1,6 +1,5 @@
 package jpa.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -9,7 +8,7 @@ import javax.persistence.Entity;
  * @description :
  **/
 @Entity
-public class Member extends BaseEntity{
+public class Member extends BaseEntity {
 
 	private String email;
 	private String password;

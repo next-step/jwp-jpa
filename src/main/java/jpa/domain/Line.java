@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  * @description :
  **/
 @Entity
-public class Line extends BaseEntity{
+public class Line extends BaseEntity {
 
 	private String color;
 	@Column(unique = true)

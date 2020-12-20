@@ -8,5 +8,5 @@ import javax.persistence.Entity;
  * @description :
  **/
 @Entity
-public class Favorite extends BaseEntity{
+public class Favorite extends BaseEntity {
 }

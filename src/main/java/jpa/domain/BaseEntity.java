@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  **/
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public class BaseEntity extends BaseTimeEntity{
+public class BaseEntity extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
