@@ -5,6 +5,7 @@ import jpa.com.jaenyeong.domain.BaseEntity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "LINE")
 public class Line extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
