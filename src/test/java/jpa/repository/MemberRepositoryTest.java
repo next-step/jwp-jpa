@@ -27,7 +27,9 @@ public class MemberRepositoryTest {
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
 			() -> assertThat(actual.getEmail()).isEqualTo(expected.getEmail()),
-			() -> assertThat(actual.getPassword()).isEqualTo(expected.getPassword())
+			() -> assertThat(actual.getPassword()).isEqualTo(expected.getPassword()),
+			() -> assertThat(actual.getCreateDate()).isNotNull(),
+			() -> assertThat(actual.getModifiedDate()).isNotNull()
 		);
 	}
 

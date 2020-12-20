@@ -7,6 +7,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -18,12 +19,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 public class BaseTimeEntity {
-	@CreatedBy
+	@CreatedDate
 	@Column(updatable = false, columnDefinition = "datetime(6)")
 	private LocalDateTime createDate;
 
 	@LastModifiedDate
-	@Column(updatable = false, columnDefinition = "datetime(6)")
+	@Column(columnDefinition = "datetime(6)")
 	private LocalDateTime modifiedDate;
 
 	public LocalDateTime getCreateDate() {
@@ -33,4 +34,5 @@ public class BaseTimeEntity {
 	public LocalDateTime getModifiedDate() {
 		return modifiedDate;
 	}
+
 }

@@ -26,7 +26,9 @@ public class LineRepositoryTest {
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
 			() -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-			() -> assertThat(actual.getColor()).isEqualTo(expected.getColor())
+			() -> assertThat(actual.getColor()).isEqualTo(expected.getColor()),
+			() -> assertThat(actual.getCreateDate()).isNotNull(),
+			() -> assertThat(actual.getModifiedDate()).isNotNull()
 		);
 	}
 
@@ -40,6 +42,7 @@ public class LineRepositoryTest {
 			() -> assertThat(actual.getId()).isNotNull(),
 			() -> assertThat(actual.getName()).isEqualTo(expectedName),
 			() -> assertThat(actual.getColor()).isEqualTo(expectedColor)
+
 		);
 	}
 

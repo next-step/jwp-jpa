@@ -27,7 +27,9 @@ public class StationRepositoryTest {
 
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(expected.getName())
+			() -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+			() -> assertThat(actual.getCreateDate()).isNotNull(),
+			() -> assertThat(actual.getModifiedDate()).isNotNull()
 		);
 	}
 
