@@ -47,10 +47,10 @@ class LineAndStationSearchTest {
 		entityManager.persist(station4);
 
 		LineStation line_station1 = new LineStation(line, station1);
-		LineStation line_station2 = new LineStation(line, station2, new Location(7, line_station1));
-		LineStation line_station3 = new LineStation(line, station3, new Location(10, line_station2));
+		LineStation line_station2 = new LineStation(line, station2, new Location(7, station1));
+		LineStation line_station3 = new LineStation(line, station3, new Location(10, station2));
 		LineStation line2_station1 = new LineStation(line2, station1);
-		LineStation line2_station4 = new LineStation(line2, station4, new Location(10, line2_station1));
+		LineStation line2_station4 = new LineStation(line2, station4, new Location(10, station1));
 		entityManager.persist(line_station1);
 		entityManager.persist(line_station2);
 		entityManager.persist(line_station3);
@@ -94,10 +94,10 @@ class LineAndStationSearchTest {
 		LineStation 신분당선_양재역 = lineStationRepository.findByLineNameAndStationName("신분당선", "양재역");
 		LineStation 이호선_서초역 = lineStationRepository.findByLineNameAndStationName("2호선", "서초역");
 
-		assertThat(신분당선_양재역.getLocation().getDistance()).isEqualTo(7);
-		assertThat(신분당선_양재역.getLocation().getPreviousStation().getStation().getName()).isEqualTo("강남역");
+		assertThat(신분당선_양재역.getDistance()).isEqualTo(7);
+		assertThat(신분당선_양재역.getPreviousStation().getName()).isEqualTo("강남역");
 
-		assertThat(이호선_서초역.getLocation().getDistance()).isEqualTo(10);
-		assertThat(이호선_서초역.getLocation().getPreviousStation().getStation().getName()).isEqualTo("강남역");
+		assertThat(이호선_서초역.getDistance()).isEqualTo(10);
+		assertThat(이호선_서초역.getPreviousStation().getName()).isEqualTo("강남역");
 	}
 }

@@ -2,23 +2,19 @@ package jpa.domain;
 
 import javax.persistence.*;
 
-@Entity
-public class Location extends BaseTime {
+@Embeddable
+public class Location {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private int distance;
+	private Integer distance;
 
 	@JoinColumn(name = "previousStationId")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private LineStation previousStation;
+	private Station previousStation;
 
 	protected Location() {
 	}
 
-	public Location(int distance, LineStation previousStation) {
+	public Location(Integer distance, Station previousStation) {
 		this.distance = distance;
 		this.previousStation = previousStation;
 	}
@@ -27,7 +23,7 @@ public class Location extends BaseTime {
 		return distance;
 	}
 
-	public LineStation getPreviousStation() {
+	public Station getPreviousStation() {
 		return previousStation;
 	}
 }
