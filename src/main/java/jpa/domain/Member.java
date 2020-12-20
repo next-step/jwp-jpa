@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Entity
 public class Member extends BaseTimeEntity {
 
@@ -26,4 +24,13 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     private String password;
+
+    public Member(int age, String email) {
+        this.age = age;
+        this.email = email;
+    }
+
+    public Member(int age) {
+        this.age = age;
+    }
 }
