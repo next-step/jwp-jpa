@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 @DisplayName("Member Repository 테스트")
 class MemberRepositoryTest extends BaseTest {
     @Autowired
-    MemberRepository members;
+    private MemberRepository members;
 
-    Member firstMember;
-    Member secondMember;
-    Member thirdMember;
+    private Member firstMember;
+    private Member secondMember;
+    private Member thirdMember;
 
     @BeforeEach
     void setUp() {

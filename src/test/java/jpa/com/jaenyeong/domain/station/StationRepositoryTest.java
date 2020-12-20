@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Station Repository 테스트")
 class StationRepositoryTest extends BaseTest {
     @Autowired
-    StationRepository stations;
+    private StationRepository stations;
 
     private Station gangnam;
     private Station jamsil;

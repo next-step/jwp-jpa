@@ -11,9 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Favorite Repository 테스트")
 class FavoriteRepositoryTest extends BaseTest {
     @Autowired
-    FavoriteRepository favorites;
+    private FavoriteRepository favorites;
 
-    Favorite favorite;
+    private Favorite favorite;
 
     @BeforeEach
     void setUp() {
