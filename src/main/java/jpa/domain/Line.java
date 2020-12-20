@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Line {
+public class Line extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -18,11 +18,13 @@ public class Line {
   @Column(nullable = false)
   private String color;
 
-  @CreationTimestamp
-  private LocalDateTime createdDate;
+  protected Line() {
+  }
 
-  @UpdateTimestamp
-  private LocalDateTime modifiedDate;
+  public Line(final String name, final String color) {
+    this.name = name;
+    this.color = color;
+  }
 
   public void changeName(final String name) {
     this.name = name;
@@ -40,19 +42,5 @@ public class Line {
     return color;
   }
 
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
 
-  public LocalDateTime getModifiedDate() {
-    return modifiedDate;
-  }
-
-  protected Line() {
-  }
-
-  public Line(final String name, final String color) {
-    this.name = name;
-    this.color = color;
-  }
 }

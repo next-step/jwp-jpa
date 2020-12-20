@@ -33,9 +33,12 @@ class MemberRepositoryTest {
 
   @Test
   void update() {
+    // 준비
     final Member member = members.save(getMemberSampelData());
+    // 실행
     member.changeAge(35);
     members.flush();
+    // 검증
     assertThat(member.getAge()).isEqualTo(35);
     assertThatThrownBy(() -> {
       member.changeAge(-1);

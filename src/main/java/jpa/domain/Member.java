@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Member {
+public class Member extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -20,12 +20,6 @@ public class Member {
 
   @Column
   private String password;
-
-  @CreationTimestamp
-  private LocalDateTime createdDate;
-
-  @UpdateTimestamp
-  private LocalDateTime modifiedDate;
 
   public void changeAge(final int age) {
     if (age < 0) {
@@ -57,13 +51,5 @@ public class Member {
 
   public String getPassword() {
     return password;
-  }
-
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public LocalDateTime getModifiedDate() {
-    return modifiedDate;
   }
 }

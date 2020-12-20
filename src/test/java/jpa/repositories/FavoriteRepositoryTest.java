@@ -32,7 +32,7 @@ class FavoriteRepositoryTest {
   void delete() {
     final Favorite favorite = favorites.save(getFavoriteSampleData());
     favorites.delete(favorite);
-    assertThat(favorites.findById(favorite.getId()).orElse(null)).isNull();
+    assertThat(favorites.findById(favorite.getId())).isNotPresent();
   }
 
   private Favorite getFavoriteSampleData() {
