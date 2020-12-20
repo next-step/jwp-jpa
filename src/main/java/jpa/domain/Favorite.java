@@ -6,11 +6,9 @@ import javax.persistence.*;
 @Table(name = "favorite")
 public class Favorite extends BaseEntity{
 
-//	@Column
 	@OneToOne
 	private Station departureStation;
 
-//	@Column
 	@OneToOne
 	private Station arrivalStation;
 
