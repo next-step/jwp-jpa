@@ -4,18 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "STATION")
-public class Station {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private java.util.Date created_date;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private java.util.Date modified_date;
-
+public class Station extends BaseEntity{
 	@Column(unique = true)
 	private String name;
 
@@ -24,10 +13,6 @@ public class Station {
 
 	public Station(String name) {
 		this.name = name;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public String getName() {

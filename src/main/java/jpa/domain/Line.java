@@ -1,23 +1,13 @@
 package jpa.domain;
 
 import com.sun.istack.Nullable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "line")
-public class Line {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private java.util.Date created_date;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private java.util.Date modified_date;
-
+public class Line extends BaseEntity{
 	@Column
 	private String color;
 
