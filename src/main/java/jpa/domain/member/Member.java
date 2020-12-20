@@ -1,4 +1,6 @@
-package jpa.domain;
+package jpa.domain.member;
+
+import jpa.domain.BaseEntity;
 
 import javax.persistence.*;
 
@@ -9,7 +11,7 @@ public class Member extends BaseEntity {
     @Column
     private Long id;
 
-    private Integer age;
+    private int age;
 
     private String email;
 

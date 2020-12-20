@@ -1,6 +1,5 @@
-package jpa.repository;
+package jpa.domain.line;
 
-import jpa.domain.Line;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

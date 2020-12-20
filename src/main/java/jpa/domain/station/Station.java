@@ -1,4 +1,6 @@
-package jpa.domain;
+package jpa.domain.station;
+
+import jpa.domain.BaseEntity;
 
 import javax.persistence.*;
 
