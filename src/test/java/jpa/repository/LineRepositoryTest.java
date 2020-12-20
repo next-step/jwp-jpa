@@ -43,4 +43,35 @@ public class LineRepositoryTest {
 		);
 	}
 
+	@Test
+	void update() {
+		String name = "2호선";
+		String color = "green";
+
+		Line origin = lines.save(new Line(name, color));
+
+		String expectedColor = "blue";
+		origin.changeColor(expectedColor);
+
+		Line actual = lines.findByName(name);
+
+		assertAll(
+			() -> assertThat(actual.getId()).isNotNull(),
+			() -> assertThat(actual.getName()).isEqualTo(name),
+			() -> assertThat(actual.getColor()).isEqualTo(expectedColor)
+		);
+	}
+
+	@Test
+	void delete() {
+		String name = "2호선";
+		String color = "green";
+
+		Line origin = lines.save(new Line(name, color));
+
+		lines.delete(origin);
+		Line deletedLine = lines.findByName(name);
+
+		assertThat(deletedLine).isNull();
+	}
 }
