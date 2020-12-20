@@ -3,6 +3,7 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,6 +13,8 @@ class FavoriteRepositoryTest {
 
 	@Autowired
 	private FavoriteRepository favoriteRepository;
+	@Autowired
+	private StationRepository stationRepository;
 
 	@Test
 	void saveTest() {
@@ -40,6 +43,19 @@ class FavoriteRepositoryTest {
 		assertAll(
 			() -> assertThat(favoriteRepository.findById(actual.getId())).isEmpty(),
 			() -> assertThat(favoriteRepository.findAll().size()).isEqualTo(0)
+		);
+	}
+
+	@Test
+	@DisplayName("즐겨찾기에는 출발역과 도착역이 포함되어 있다.")
+	void containsStartAndDestination() {
+		Station startStation = stationRepository.save(new Station("문래역"));
+		Station destinationStation = stationRepository.save(new Station("잠실역"));
+		Favorite expected = favoriteRepository.save(new Favorite(startStation, destinationStation));
+
+		assertAll(
+			() -> assertThat(expected.getStartStation()).isEqualTo(startStation),
+			() -> assertThat(expected.getDestinationStation()).isEqualTo(destinationStation)
 		);
 	}
 }
