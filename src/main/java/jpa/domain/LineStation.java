@@ -1,6 +1,5 @@
 package jpa.domain;
 
-import jpa.converter.DistanceConverter;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,7 +27,7 @@ public class LineStation extends BaseEntity {
     @JoinColumn(name = "station_id")
     private Station station;
 
-    @Convert(converter = DistanceConverter.class)
+    @Embedded
     private Distance distance;
 
     public LineStation(final Station station, final Line line, final Distance distance) {

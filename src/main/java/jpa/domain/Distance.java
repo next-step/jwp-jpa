@@ -1,12 +1,18 @@
 package jpa.domain;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Distance {
 
     private static final long MIN_VALUE = 0;
 
-    private final long meter;
+    private long meter;
 
     private Distance(final long meter) {
         if (meter < MIN_VALUE) {
@@ -17,10 +23,6 @@ public class Distance {
 
     public static Distance ofMeter(final long meter) {
         return new Distance(meter);
-    }
-
-    public long toMeter() {
-        return meter;
     }
 
     @Override
