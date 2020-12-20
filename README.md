@@ -10,7 +10,7 @@ DDL(Data Definition Language)을 보고 유추하여 엔티티 클래스와 리�
 * build.gradle
 * application.properties
 
-- [ ] 공통 부분 엔티티 추출 (BaseTimeEntity)
+- [X] 공통 부분 엔티티 추출 (BaseTimeEntity)
 * created_date
 * modified_date
 
