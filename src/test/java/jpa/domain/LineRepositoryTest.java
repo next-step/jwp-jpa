@@ -38,7 +38,7 @@ class LineRepositoryTest {
     }
 
     @Test
-    void update() {
+    void update_color() {
         Line line = lineRepository.findByName("1호선");
         assertThat(line.getColor()).isNull();
 
@@ -50,7 +50,7 @@ class LineRepositoryTest {
 
     @Test
     void delete() {
-        Line line = lineRepository.findById(1L).get();
+        Line line = lineRepository.getOne(1L);
         assertThat(line).isNotNull();
         assertThat(line.getName()).isEqualTo("1호선");
 

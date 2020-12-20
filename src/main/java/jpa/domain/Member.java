@@ -14,6 +14,20 @@ public class Member extends BaseTimeEntity {
     private String email;
     private String password;
 
+    protected Member() {
+    }
+
+    public Member(Integer age, String password) {
+        this.age = age;
+        this.password = password;
+    }
+
+    public Member(Integer age, String email, String password) {
+        this.age = age;
+        this.email = email;
+        this.password = password;
+    }
+
     public Long getId() {
         return id;
     }
@@ -28,5 +42,9 @@ public class Member extends BaseTimeEntity {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
