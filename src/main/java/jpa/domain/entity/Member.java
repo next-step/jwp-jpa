@@ -61,8 +61,7 @@ public class Member extends BaseEntity {
 		return new Member(age, email, password, favorites);
 	}
 
-	public Member updateEmail(String email) {
+	public void updateEmail(String email) {
 		this.email = email;
-		return this;
 	}
 }
