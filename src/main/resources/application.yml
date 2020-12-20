@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create # 운영시 validate, none 사용
+    show-sql: true
+    properties:
+      format_sql: true
+  h2:
+    console:
+      enabled: true
