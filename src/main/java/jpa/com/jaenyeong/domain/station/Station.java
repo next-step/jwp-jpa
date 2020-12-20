@@ -1,9 +1,11 @@
 package jpa.com.jaenyeong.domain.station;
 
 import jpa.com.jaenyeong.domain.BaseEntity;
+import lombok.Getter;
 
 import javax.persistence.*;
 
+@Getter
 @Entity
 @Table(name = "STATION")
 public class Station extends BaseEntity {
@@ -18,16 +20,7 @@ public class Station extends BaseEntity {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Station setName(final String name) {
+    public void changeStationName(final String name) {
         this.name = name;
-        return this;
-    }
-
-    public String getName() {
-        return name;
     }
 }

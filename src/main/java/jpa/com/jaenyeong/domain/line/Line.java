@@ -1,9 +1,11 @@
 package jpa.com.jaenyeong.domain.line;
 
 import jpa.com.jaenyeong.domain.BaseEntity;
+import lombok.Getter;
 
 import javax.persistence.*;
 
+@Getter
 @Entity
 @Table(name = "LINE")
 public class Line extends BaseEntity {
@@ -20,20 +22,12 @@ public class Line extends BaseEntity {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public Line setColor(final String color) {
+    public Line(final String color, final String name) {
         this.color = color;
-        return this;
+        this.name = name;
     }
 
-    public String getName() {
-        return name;
+    public void changeLineColor(final String color) {
+        this.color = color;
     }
 }

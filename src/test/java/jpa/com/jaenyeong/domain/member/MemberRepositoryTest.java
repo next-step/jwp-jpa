@@ -52,7 +52,8 @@ class MemberRepositoryTest extends BaseTest {
 
         assertThat(beforeSave).isNull();
 
-        members.save(firstMember.setEmail(targetEmail));
+        firstMember.changeMemberEmail(targetEmail);
+        members.save(firstMember);
         final Member afterSave = members.findByEmail(targetEmail);
 
         assertThat(afterSave).isNotNull();
@@ -66,9 +67,9 @@ class MemberRepositoryTest extends BaseTest {
 
         assertSame(beforeSave.size(), 0);
 
-        firstMember.setAge(18);
-        secondMember.setAge(18);
-        thirdMember.setAge(22);
+        firstMember.changeMemberAge(18);
+        secondMember.changeMemberAge(18);
+        thirdMember.changeMemberAge(22);
 
         members.save(firstMember);
         members.save(secondMember);

@@ -76,7 +76,7 @@ class StationRepositoryTest extends BaseTest {
         final Station savedGangnam = stations.save(gangnam);
         assertSame(savedGangnam.getName(), "강남역");
 
-        savedGangnam.setName("용산역");
+        savedGangnam.changeStationName("용산역");
         final Station foundYongsan = stations.findByName("용산역");
 
         assertNotEquals(foundYongsan.getName(), "강남역");

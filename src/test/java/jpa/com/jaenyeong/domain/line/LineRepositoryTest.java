@@ -23,9 +23,9 @@ class LineRepositoryTest extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        greenLine = new Line("2호선").setColor("Green");
-        blueLine = new Line("1호선").setColor("Blue");
-        purpleLIne = new Line("5호선").setColor("Purple");
+        greenLine = new Line("2호선", "Green");
+        blueLine = new Line("1호선", "Blue");
+        purpleLIne = new Line("5호선", "Purple");
     }
 
     @Test
@@ -77,7 +77,7 @@ class LineRepositoryTest extends BaseTest {
         assertSame(savedGreenLine.getColor(), "Green");
         assertSame(lines.findByColor("Green").size(), 1);
 
-        savedGreenLine.setColor("Red");
+        savedGreenLine.changeLineColor("Red");
         assertSame(lines.findByColor("Red").size(), 1);
         assertSame(lines.findByColor("Green").size(), 0);
     }
