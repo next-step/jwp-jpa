@@ -8,7 +8,7 @@ public class Distance {
 
     private final long meter;
 
-    private Distance(final Long meter) {
+    private Distance(final long meter) {
         if (meter < MIN_VALUE) {
             throw new IllegalArgumentException("거리 값은 음수가 될 수 없습니다.");
         }
@@ -19,7 +19,7 @@ public class Distance {
         return new Distance(meter);
     }
 
-    public Long toMeter() {
+    public long toMeter() {
         return meter;
     }
 
