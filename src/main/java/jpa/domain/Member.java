@@ -34,4 +34,12 @@ public class Member extends BaseEntity {
 	public int getAge() {
 		return age;
 	}
+
+	public void changePassword(String password) {
+		this.password = password;
+	}
+
+	public void changeAge(int age) {
+		this.age = age;
+	}
 }

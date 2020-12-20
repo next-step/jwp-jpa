@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import jpa.domain.Member;
+import jpa.domain.Station;
 
 /**
  * @author : byungkyu
@@ -48,4 +49,39 @@ public class MemberRepositoryTest {
 		);
 	}
 
+	@Test
+	void update() {
+		String email = "email@email.com";
+		String password = "pwd";
+		int age = 30;
+		Member origin = new Member(email, password, age);
+		members.save(origin);
+		String expectedPassword = "changePwd";
+		int expectedAge = 40;
+		origin.changePassword(expectedPassword);
+		origin.changeAge(expectedAge);
+
+		Member actual = members.findByEmail(email);
+		assertAll(
+			() -> assertThat(actual.getId()).isNotNull(),
+			() -> assertThat(actual.getEmail()).isEqualTo(email),
+			() -> assertThat(actual.getPassword()).isEqualTo(expectedPassword),
+			() -> assertThat(actual.getAge()).isEqualTo(expectedAge)
+		);
+	}
+
+	@Test
+	void delete() {
+		String email = "email@email.com";
+		String password = "pwd";
+		int age = 30;
+		Member origin = new Member(email, password, age);
+		members.save(origin);
+
+		members.delete(origin);
+		Member actual = members.findByEmail(email);
+
+		assertThat(actual).isNull();
+
+	}
 }
