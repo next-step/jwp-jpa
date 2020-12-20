@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import jpa.infrastructure.jpa.BaseEntity;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author : leesangbae
@@ -68,7 +68,7 @@ public class Line extends BaseEntity {
     }
 
     private void validation(String name, String color) {
-        if (!StringUtils.hasText(name) || !StringUtils.hasText(color)) {
+        if (StringUtils.isBlank(name) || StringUtils.isBlank(color)) {
             throw new IllegalArgumentException("Line의 name, color는 필수 값 입니다.");
         }
     }

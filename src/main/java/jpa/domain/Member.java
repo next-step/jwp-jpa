@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Positive;
 import jpa.infrastructure.jpa.BaseEntity;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author : leesangbae
@@ -83,7 +83,7 @@ public class Member extends BaseEntity {
     }
 
     private void validate(String email, String password, int age) {
-        if (!StringUtils.hasText(email) || !StringUtils.hasText(password)) {
+        if (StringUtils.isBlank(email) || StringUtils.isBlank(password)) {
             throw new IllegalArgumentException("Member name, password는 필수 값 입니다.");
         }
         if (age < 0) {
