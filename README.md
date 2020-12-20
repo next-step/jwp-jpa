@@ -111,8 +111,13 @@ create table favorite (
       - 현재 요구사항에 맞는 만큼 구현하기 위해 최대한 간단한 구현방법 선택
     - Line이 도메인 개념상 LineStation의 부모(Aggregate Root)로 활동하도록 구현
     - Station은 단순히 양방향 관계로 LineStation을 통해 속한 Line이 어딘지 조회만 가능
-- [ ] Member, Favortie 다대다 관계 설정하기
-  - [ ] VO Collection을 이용해서 관계 설정하기
+- [X] Member, Favortie 다대다 관계 설정하기
+  - [X] VO Collection을 이용해서 관계 설정하기
     - 결정 사유
       - 단방향 조회 조건만 있고 Favorite에서 같은 타입의 엔티티를 두개 갖는 상황이기 때문에 연관관계를 끊어 주는 게 관리하기 더 쉬운 상황
       - 설계적으로 VO 컬렉션이 더 적합하다고 판단되어 선택
+
+## Step2. 리뷰 반영
+- [ ] IdentifiedValueObject를 좀더 적합한 이름으로 변경
+- [ ] 매핑시 불필요한 기본 옵션 제거
+- [ ] 지나치게 장황한 테스트 메서드에서 공통 부분 추출하기
