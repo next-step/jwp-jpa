@@ -6,6 +6,7 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Converter;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -38,22 +39,17 @@ public class LineStation extends BaseEntity {
     @JoinColumn(name = "station_id", nullable = false)
     private Station station;
 
-    @Convert(converter = MeterInteger.class)
-    private Meter distance;
-
-    @OneToOne
-    @JoinColumn(name = "distance_target_station_id")
-    private Station distanceTargetStation;
+    @Embedded
+    private Distance distance;
 
     protected LineStation() {
     }
 
-    public LineStation(Line line, Station station, Meter distance, Station distanceTargetStation) {
+    public LineStation(Line line, Station station, Distance distance) {
         validate(line, station);
         this.line = line;
         this.station = station;
         this.distance = distance;
-        this.distanceTargetStation = distanceTargetStation;
         this.line.add(this);
         this.station.add(this);
     }
@@ -70,36 +66,13 @@ public class LineStation extends BaseEntity {
         return station;
     }
 
-    public Meter getDistance() {
+    public Distance getDistance() {
         return distance;
-    }
-
-    public Station getDistanceTargetStation() {
-        return distanceTargetStation;
     }
 
     private void validate(Line line, Station station) {
         if (line == null || station == null) {
             throw new IllegalArgumentException("LineStation line, station는 필수 값 입니다.");
-        }
-    }
-
-
-    static class MeterInteger implements AttributeConverter<Meter, Integer> {
-        @Override
-        public Integer convertToDatabaseColumn(Meter attribute) {
-            if (attribute == null) {
-                return null;
-            }
-            return attribute.getMeter();
-        }
-
-        @Override
-        public Meter convertToEntityAttribute(Integer dbData) {
-            if (dbData == null) {
-                return null;
-            }
-            return Meter.of(dbData);
         }
     }
 
