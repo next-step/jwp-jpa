@@ -98,14 +98,14 @@ class MemberRepositoryTest {
         Member savedMember = members.save(new Member(28, "good_1411@naver.com", DEFAULT_PASSWORD));
 
         // when
-        Member expected = savedMember.changeEmail("nextstep@gmail.com");
-        Member actual = members.findFirstByEmail(expected.getEmail()).get();
+        savedMember.changeEmail("nextstep@gmail.com");
+        Member actual = members.findFirstByEmail(savedMember.getEmail()).get();
 
         // then
         assertAll(
                 () -> assertThat(actual).isNotNull(),
                 () -> assertThat(actual.getModifiedDate()).isNotNull(),
-                () -> assertThat(actual).isEqualTo(expected)
+                () -> assertThat(actual).isEqualTo(savedMember)
         );
     }
 

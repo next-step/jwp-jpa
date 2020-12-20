@@ -33,21 +33,16 @@ public class Station extends BaseEntity {
         this.name = name;
     }
 
-    public Station changeName(final String name) {
+    public void changeName(final String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("옯바른 역 이름이 아닙니다.");
         }
         this.name = name;
-        return this;
     }
 
     public List<Line> lines() {
         return lineStations.stream()
                 .map(LineStation::getLine)
                 .collect(Collectors.toList());
-    }
-
-    public boolean isName(final String stationName) {
-        return this.name.equals(stationName);
     }
 }

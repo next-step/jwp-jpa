@@ -96,14 +96,14 @@ class StationRepositoryTest {
         Station savedStation = stations.save(new Station("서울역"));
 
         // when
-        Station expected = savedStation.changeName("잠실역");
-        Station actual = stations.findByName(expected.getName()).get();
+        savedStation.changeName("잠실역");
+        Station actual = stations.findByName(savedStation.getName()).get();
 
         // then
         assertAll(
                 () -> assertThat(actual).isNotNull(),
                 () -> assertThat(actual.getModifiedDate()).isNotNull(),
-                () -> assertThat(actual).isEqualTo(expected)
+                () -> assertThat(actual).isEqualTo(savedStation)
         );
     }
 

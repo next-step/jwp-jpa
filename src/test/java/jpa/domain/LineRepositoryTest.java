@@ -204,9 +204,9 @@ class LineRepositoryTest {
         Line savedLine = lines.save(line1);
 
         // when
-        Line removedLine = savedLine.removeLineStation(station1);
+        savedLine.removeLineStation(station1);
 
         // then
-        assertThat(removedLine.getLineStations().size()).isEqualTo(0);
+        assertThat(savedLine.getLineStations().size()).isEqualTo(0);
     }
 }
