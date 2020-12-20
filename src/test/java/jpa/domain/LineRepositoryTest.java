@@ -1,6 +1,5 @@
 package jpa.domain;
 
-
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,6 +15,7 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 @DataJpaTest
 class LineRepositoryTest {
+
 	@Autowired
 	private LineRepository lineRepository;
 	@Autowired
@@ -159,10 +159,12 @@ class LineRepositoryTest {
 		line.addStations(Arrays.asList(station1, station2, station3));
 		Line actual = lineRepository.findByName(expectedName);
 
-		assertThat(actual.getStations().size()).isEqualTo(3);
-		assertThat(actual.getStations().contains(station1)).isTrue();
-		assertThat(actual.getStations().contains(station2)).isTrue();
-		assertThat(actual.getStations().contains(station3)).isTrue();
+		assertAll(
+			() -> assertThat(actual.getStations().size()).isEqualTo(3),
+			() -> assertThat(actual.getStations().contains(station1)).isTrue(),
+			() -> assertThat(actual.getStations().contains(station2)).isTrue(),
+			() -> assertThat(actual.getStations().contains(station3)).isTrue()
+		);
 	}
 
 	@Test
@@ -185,12 +187,14 @@ class LineRepositoryTest {
 		Station actualStation1 = stationRepository.findByName(expectedStation1Name);
 		Station actualStation2 = stationRepository.findByName(expectedStation2Name);
 
-		assertThat(actualLine.getStations().size()).isEqualTo(2);
-		assertThat(actualLine.getStations().contains(station1)).isTrue();
-		assertThat(actualLine.getStations().contains(station2)).isTrue();
-		assertThat(actualStation1.getLines().size()).isEqualTo(1);
-		assertThat(actualStation1.getLines().contains(actualLine)).isTrue();
-		assertThat(actualStation2.getLines().size()).isEqualTo(1);
-		assertThat(actualStation2.getLines().contains(actualLine)).isTrue();
+		assertAll(
+			() -> assertThat(actualLine.getStations().size()).isEqualTo(2),
+			() -> assertThat(actualLine.getStations().contains(station1)).isTrue(),
+			() -> assertThat(actualLine.getStations().contains(station2)).isTrue(),
+			() -> assertThat(actualStation1.getLines().size()).isEqualTo(1),
+			() -> assertThat(actualStation1.getLines().contains(actualLine)).isTrue(),
+			() -> assertThat(actualStation2.getLines().size()).isEqualTo(1),
+			() -> assertThat(actualStation2.getLines().contains(actualLine)).isTrue()
+		);
 	}
 }
