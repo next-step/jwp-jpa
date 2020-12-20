@@ -12,4 +12,8 @@ import javax.persistence.Entity;
 public class Station extends BaseEntity{
 	@Column(unique = true)
 	private String name;
+
+	public String getName() {
+		return name;
+	}
 }

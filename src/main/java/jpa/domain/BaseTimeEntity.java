@@ -26,4 +26,12 @@ public class BaseTimeEntity {
 	@LastModifiedDate
 	@Column(updatable = false, columnDefinition = "datetime(6)")
 	private LocalDateTime modifiedDate;
+
+	public LocalDateTime getCreateDate() {
+		return createDate;
+	}
+
+	public LocalDateTime getModifiedDate() {
+		return modifiedDate;
+	}
 }
