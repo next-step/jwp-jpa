@@ -17,7 +17,7 @@ public class Station extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "upStation", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "upStation")
     private List<LineStation> lineStations = new ArrayList<>();
 
     protected Station() {
