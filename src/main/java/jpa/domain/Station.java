@@ -13,8 +13,12 @@ public class Station {
     private LocalDateTime createDate;
     @Column(name = "modified_date")
     private LocalDateTime updateDate;
-    @Column(unique = true)
+    @Column(name = "name", unique = true)
     private String name;
+
+    protected Station() {
+
+    }
 
     public Station(String name) {
         this.name = name;
@@ -26,5 +30,9 @@ public class Station {
 
     public String getName() {
         return name;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
     }
 }
