@@ -2,17 +2,18 @@ package jpa.com.jaenyeong.domain.line;
 
 import jpa.com.jaenyeong.domain.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import java.time.LocalDateTime;
+import javax.persistence.*;
 
 @Entity
 public class Line extends BaseEntity {
-    @Column
-    String color;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String color;
 
     @Column(unique = true)
-    String name;
+    private String name;
 
     public Line(final String name) {
         this.name = name;
@@ -20,14 +21,6 @@ public class Line extends BaseEntity {
 
     public Long getId() {
         return id;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
     }
 
     public String getColor() {

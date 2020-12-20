@@ -2,19 +2,20 @@ package jpa.com.jaenyeong.domain.member;
 
 import jpa.com.jaenyeong.domain.BaseEntity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Member extends BaseEntity {
-    @Column
-    Integer age;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column
-    String email;
-
-    @Column
-    String password;
+    private int age;
+    private String email;
+    private String password;
 
     public Member() {
     }
