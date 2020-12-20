@@ -18,6 +18,6 @@ DDL(Data Definition Language)을 보고 유추하여 엔티티 클래스와 리�
 
 - [X] Station 엔티티 클래스 생성 및 테스트
 
-- [ ] Member 엔티티 클래스 생성 및 테스트
+- [X] Member 엔티티 클래스 생성 및 테스트
 
-- [ ] Favorite 엔티티 클래스 생성 및 테스트
+- [X] Favorite 엔티티 클래스 생성 및 테스트
