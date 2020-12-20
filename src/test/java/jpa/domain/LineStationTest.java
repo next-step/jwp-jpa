@@ -69,8 +69,7 @@ public class LineStationTest {
         String name = "lineNumberTwo";
         int distance = 3;
         Line line = 신규_노선_생성됨(color, name, gangnam, seocho, distance);
-        LineStation lineStation = new LineStation(line, gangnam, seocho, 3);
-        gangnam.addLineStation(lineStation);
+        역에_새로운_구간_추가됨(line, gangnam, seocho, 3);
 
         // when
         Station foundStation = stationRepository.findByName(gangnam.getName()).orElse(null);
@@ -125,6 +124,13 @@ public class LineStationTest {
         Line line = new Line (color, name);
         line.addLineStation(new LineStation(line, upStation, downStation, distance));
         return lineRepository.save(line);
+    }
+
+    private void 역에_새로운_구간_추가됨(
+            final Line line, final Station upStation, final Station downStation, final int distance
+    ) {
+        LineStation lineStation = new LineStation(line, upStation, downStation, distance);
+        upStation.addLineStation(lineStation);
     }
 
     private void DB에_연관된_LineStation_없음(final Line line) {
