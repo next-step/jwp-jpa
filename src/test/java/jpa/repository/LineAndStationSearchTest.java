@@ -93,7 +93,7 @@ class LineAndStationSearchTest {
 		assertThat(lineRepository.findByName("2호선")).isNull();
 	}
 
-	@DisplayName("이전 역과 얼차이나는지 거리를 가져온다.")
+	@DisplayName("해당 역의 이전 역 이름과 거리를 가져온다.")
 	@Test
 	void 거리_TEST() {
 		LineStation 신분당선_양재역 = lineStationRepository.findByLineNameAndStationName("신분당선", "양재역");
