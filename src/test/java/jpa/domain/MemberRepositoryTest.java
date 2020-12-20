@@ -2,6 +2,7 @@ package jpa.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -37,10 +38,12 @@ class MemberRepositoryTest {
         Member member = new Member(email, password, age);
         Member savedMember = memberRepository.save(member);
 
-        assertThat(savedMember.getId()).isNotNull();
-        assertThat(savedMember.getEmail()).isEqualTo(email);
-        assertThat(savedMember.getPassword()).isEqualTo(password);
-        assertThat(savedMember.getAge()).isEqualTo(age);
+        assertAll(
+                () -> assertThat(savedMember.getId()).isNotNull(),
+                () -> assertThat(savedMember.getEmail()).isEqualTo(email),
+                () -> assertThat(savedMember.getPassword()).isEqualTo(password),
+                () -> assertThat(savedMember.getAge()).isEqualTo(age)
+        );
     }
 
     @Test
@@ -80,17 +83,18 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("Member 생성시 에러 Test")
     void shouldBeExceptionCreateMemberTest() {
-        assertThatThrownBy(() -> new Member(null, "password", 20))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Member name, password는 필수 값 입니다.");
 
-        assertThatThrownBy(() -> new Member("email", null, 20))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Member name, password는 필수 값 입니다.");
+        assertAll(
+                () -> assertThatThrownBy(() -> new Member(null, "password", 20))
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessageContaining("Member name, password는 필수 값 입니다."),
+                () -> assertThatThrownBy(() -> new Member("email", null, 20))
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessageContaining("Member name, password는 필수 값 입니다."),
+                () -> assertThatThrownBy(() -> new Member("email", "password", -1))
+                        .isInstanceOf(IllegalArgumentException.class)
+                        .hasMessageContaining("Member age는 0보다 커야합니다.")
+        );
 
-
-        assertThatThrownBy(() -> new Member("email", "password", -1))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Member age는 0보다 커야합니다.");
     }
 }

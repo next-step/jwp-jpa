@@ -2,6 +2,7 @@ package jpa.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,13 +41,13 @@ class LineStationRepositoryTest {
         Station 총신대입구 = stationRepository.save(new Station("총신대입구"));
         Station 남태령 = stationRepository.save(new Station("남태령"));
 
-        lineStationRepository.save(new LineStation(lineNumber2, 서울대입구, null, null));
-        lineStationRepository.save(new LineStation(lineNumber2, 낙성대, Meter.of(10), 서울대입구));
-        lineStationRepository.save(new LineStation(lineNumber2, 사당, Meter.of(20), 낙성대));
+        lineStationRepository.save(new LineStation(lineNumber2, 서울대입구, null));
+        lineStationRepository.save(new LineStation(lineNumber2, 낙성대, new Distance(10, 서울대입구)));
+        lineStationRepository.save(new LineStation(lineNumber2, 사당, new Distance(20, 낙성대)));
 
-        lineStationRepository.save(new LineStation(lineNumber4, 총신대입구, null, null));
-        lineStationRepository.save(new LineStation(lineNumber4, 사당, Meter.of(4), 총신대입구));
-        lineStationRepository.save(new LineStation(lineNumber4, 남태령, Meter.of(10), 사당));
+        lineStationRepository.save(new LineStation(lineNumber4, 총신대입구, null));
+        lineStationRepository.save(new LineStation(lineNumber4, 사당, new Distance(4, 총신대입구)));
+        lineStationRepository.save(new LineStation(lineNumber4, 남태령, new Distance(10, 사당)));
 
     }
 
@@ -69,7 +70,7 @@ class LineStationRepositoryTest {
     @Test
     @DisplayName("Line에 포함된 역 Test")
     void shouldBeExceptionCreateLineStationTest() {
-        assertThatThrownBy(() -> new LineStation(null, null, null, null))
+        assertThatThrownBy(() -> new LineStation(null, null, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("LineStation line, station는 필수 값 입니다.");
     }
@@ -78,9 +79,12 @@ class LineStationRepositoryTest {
     @DisplayName("Line 이름 And 역 명으로 lineStation 탐색 Test")
     void lineStationSelectTest() {
         LineStation 사당 = lineStationRepository.findByLineNameAndStationName("2호선", "사당");
-        assertThat(사당).isNotNull();
-        assertThat(사당.getDistance()).isEqualTo(Meter.of(20));
-        assertThat(사당.getDistanceTargetStation().getName()).isEqualTo("낙성대");
+        assertAll(
+                () -> assertThat(사당).isNotNull(),
+                () -> assertThat(사당.getDistance().getDistanceMeter()).isEqualTo(20),
+                () -> assertThat(사당.getDistance().getDistanceTargetStation().getName()).isEqualTo("낙성대")
+        );
+
     }
 
 }
