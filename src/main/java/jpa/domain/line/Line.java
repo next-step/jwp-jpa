@@ -1,6 +1,6 @@
 package jpa.domain.line;
 
-import jpa.domain.base.BaseTimeEntity;
+import jpa.domain.base.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +10,9 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Line extends BaseTimeEntity {
+public class Line extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "name")
+    @Column(name = "name", unique=true)
     private String name;
 
     @Column(name = "color")
