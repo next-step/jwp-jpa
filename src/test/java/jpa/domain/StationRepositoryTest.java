@@ -124,8 +124,10 @@ class StationRepositoryTest {
         // given
         // 지하철역 저장
         String stationName = "금정역";
-        Station geumjeong = new Station(stationName);
-        em.persist(geumjeong);
+        Station station1 = new Station("당정역");
+        Station station2 = new Station(stationName);
+        em.persist(station1);
+        em.persist(station2);
 
         // 지하철 노선 저장
         Line line1 = new Line("1호선", Color.BLUE);
@@ -134,8 +136,8 @@ class StationRepositoryTest {
         em.persist(line4);
 
         // 지하철역 노선 저장
-        line1.addLineStation(geumjeong, Distance.ofMeter(10L));
-        line4.addLineStation(geumjeong, Distance.ofMeter(20L));
+        line1.addLineStation(station1, station2, Distance.ofMeter(10L));
+        line4.addLineStation(station1, station2, Distance.ofMeter(20L));
 
         // when
         Station station = stations.findByName(stationName).get();

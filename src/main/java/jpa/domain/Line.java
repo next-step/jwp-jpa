@@ -57,8 +57,8 @@ public class Line extends BaseEntity {
                 .collect(Collectors.toList());
     }
 
-    public void addLineStation(final Station station, final Distance distance) {
-        LineStation lineStation = new LineStation(station, this, distance);
+    public void addLineStation(final Station preStation, final Station station, final Distance distance) {
+        LineStation lineStation = new LineStation(this, preStation, station, distance);
         if (lineStations.contains(lineStation)) {
             throw new IllegalArgumentException("이미 등록된 지하철 역입니다.");
         }

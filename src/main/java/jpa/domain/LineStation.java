@@ -24,15 +24,20 @@ public class LineStation extends BaseEntity {
     private Line line;
 
     @ManyToOne
+    @JoinColumn(name = "pre_station_id")
+    private Station preStation;
+
+    @ManyToOne
     @JoinColumn(name = "station_id")
     private Station station;
 
     @Embedded
     private Distance distance;
 
-    public LineStation(final Station station, final Line line, final Distance distance) {
-        this.station = station;
+    public LineStation(final Line line, final Station preStation, final Station station, final Distance distance) {
         this.line = line;
+        this.preStation = preStation;
+        this.station = station;
         this.distance = distance;
     }
 
