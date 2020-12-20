@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class Member extends BaseTimeEntity {
 
     private Integer age;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
@@ -37,13 +39,13 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member")
     private List<Favorite> favorites = new ArrayList<>();
 
+    public Member(int age) {
+        this(age, null);
+    }
+
     public Member(int age, String email) {
         this.age = age;
         this.email = email;
-    }
-
-    public Member(int age) {
-        this.age = age;
     }
 
     public void addFavorite(Favorite favorite) {

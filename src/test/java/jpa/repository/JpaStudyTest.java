@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import jpa.domain.Line;
@@ -61,11 +60,11 @@ public class JpaStudyTest {
     @Test
     void findAllByAge() {
         //when
-        Optional<List<Member>> maybeMemberList = memberRepository.findAllByAge(10);
+        List<Member> maybeMemberList = memberRepository.findAllByAge(10);
 
         //then
-        assertThat(maybeMemberList.isPresent()).isTrue();
-        assertThat(maybeMemberList.get()).hasSize(2);
+        assertThat(maybeMemberList).isNotEmpty();
+        assertThat(maybeMemberList).hasSize(2);
     }
 
     @DisplayName("이메일이 dev.com 으로 끝나는 회원목록")
@@ -95,7 +94,7 @@ public class JpaStudyTest {
     void deleteInBatch() {
         //given
         List<Member> members = IntStream.rangeClosed(1, 1_000)
-              .mapToObj(age -> new Member(age, "test@batch.com"))
+              .mapToObj(age -> new Member(age, "test" + age + "@batch.com"))
               .collect(Collectors.toList());
         List<Member> savedMembers = memberRepository.saveAll(members);
         memberRepository.flush();
@@ -112,12 +111,12 @@ public class JpaStudyTest {
     void deleteByQuery() {
         //given
         List<Member> members = IntStream.rangeClosed(1, 50)
-              .mapToObj(age -> new Member(age, "test@batch.com"))
+              .mapToObj(age -> new Member(age, "test" + age + "@batch.com"))
               .collect(Collectors.toList());
         memberRepository.saveAll(members);
 
         //when
-        memberRepository.deleteByEmailInQuery("test@batch.com");
+        memberRepository.deleteByEmailLikeInQuery("%@batch.com");
 
         //then
         assertThat(memberRepository.findAllByEmailEndsWith("batch.com")).isEmpty();

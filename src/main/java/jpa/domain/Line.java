@@ -25,7 +25,7 @@ public class Line extends BaseTimeEntity {
     private String name;
 
     public Line(String name) {
-        this.name = name;
+        this(name, null);
     }
 
     public Line(String name, String color) {
