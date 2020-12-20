@@ -1,6 +1,5 @@
 package jpa.domain.favorite;
 
-import jpa.domain.line.Line;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,6 +65,8 @@ class FavoriteRepositoryTest {
 
         // then
         assertThat(persistFavorite.getId()).isNotNull();
+        assertThat(persistFavorite.getCreatedDate()).isNotNull();
+        assertThat(persistFavorite.getModifiedDate()).isNotNull();
         assertThat(favorites.size()).isEqualTo(3);
     }
 

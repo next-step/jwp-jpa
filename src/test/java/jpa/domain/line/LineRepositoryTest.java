@@ -37,6 +37,8 @@ class LineRepositoryTest {
 
         // then
         assertThat(persistLine.getId()).isNotNull();
+        assertThat(persistLine.getCreatedDate()).isNotNull();
+        assertThat(persistLine.getModifiedDate()).isNotNull();
     }
 
     @Test

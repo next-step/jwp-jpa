@@ -37,6 +37,8 @@ class MemberRepositoryTest {
 
         // then
         assertThat(persistMember.getId()).isNotNull();
+        assertThat(persistMember.getCreatedDate()).isNotNull();
+        assertThat(persistMember.getModifiedDate()).isNotNull();
     }
 
     @Test

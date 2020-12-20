@@ -35,6 +35,8 @@ class StationRepositoryTest {
 
         // then
         assertThat(persistStation.getId()).isNotNull();
+        assertThat(persistStation.getCreatedDate()).isNotNull();
+        assertThat(persistStation.getModifiedDate()).isNotNull();
     }
 
     @Test
