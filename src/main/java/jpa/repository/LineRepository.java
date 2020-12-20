@@ -10,4 +10,5 @@ import jpa.domain.Line;
  * @description :
  **/
 public interface LineRepository extends JpaRepository<Line, Long> {
+	Line findByName(String name);
 }

@@ -15,6 +15,14 @@ public class Line extends BaseEntity{
 	@Column(unique = true)
 	private String name;
 
+	public Line() {
+	}
+
+	public Line(String name, String color) {
+		this.name = name;
+		this.color = color;
+	}
+
 	public String getColor() {
 		return color;
 	}
