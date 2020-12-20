@@ -50,9 +50,8 @@ class LineRepositoryTest {
 
     @Test
     void delete() {
-        Line line = lineRepository.getOne(1L);
+        Line line = lineRepository.findByName("1호선");
         assertThat(line).isNotNull();
-        assertThat(line.getName()).isEqualTo("1호선");
 
         lineRepository.delete(line);
 
