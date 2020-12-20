@@ -33,6 +33,8 @@ public class LineStation extends BaseTime {
 		this.line = line;
 		this.station = station;
 		this.location = new Location(null,null);
+		line.add(this);
+		station.add(this);
 	}
 
 	public LineStation(Line line, Station station, Location location) {
@@ -49,5 +51,9 @@ public class LineStation extends BaseTime {
 
 	public Station getPreviousStation() {
 		return location.getPreviousStation();
+	}
+
+	public void deletePreviousStation() {
+		this.location.setPreviousStation(null);
 	}
 }

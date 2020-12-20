@@ -62,7 +62,7 @@ class LineAndStationSearchTest {
 	@Test
 	void 노선으로_역_이름을_가져오는_TEST() {
 		assertThat(lineRepository.findByName("신분당선").isEqualsContainsStationSize(3)).isTrue();
-		assertThat(lineRepository.findByName("2호선").isEqualsContainsStationSize(1)).isTrue();
+		assertThat(lineRepository.findByName("2호선").isEqualsContainsStationSize(2)).isTrue();
 		assertThat(stationRepository.findByName("강남역").isEqualsContainsLineSize(2)).isTrue();
 	}
 
@@ -70,10 +70,15 @@ class LineAndStationSearchTest {
 	@Test
 	void 역_삭제_테스트() {
 		Station findStation = stationRepository.findByName("강남역");
-		entityManager.remove(findStation);
-		List<LineStation> byStationEquals = lineStationRepository.findByStationEquals(findStation);
+		List<LineStation> byPreviousStation = lineStationRepository.findByLocationPreviousStation(findStation);
+		byPreviousStation.forEach(LineStation::deletePreviousStation);
+		lineStationRepository.saveAll(byPreviousStation);
 
-		assertThat(byStationEquals).isEmpty();
+		entityManager.remove(findStation);
+
+		List<LineStation> byStation = lineStationRepository.findByStation(findStation);
+
+		assertThat(byStation).isEmpty();
 		assertThat(stationRepository.findByName("강남역")).isNull();
 	}
 

@@ -26,4 +26,8 @@ public class Location {
 	public Station getPreviousStation() {
 		return previousStation;
 	}
+
+	public void setPreviousStation(Station previousStation) {
+		this.previousStation = previousStation;
+	}
 }
