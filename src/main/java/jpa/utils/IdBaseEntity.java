@@ -6,13 +6,13 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class IdentifiedValueObject extends BaseEntity {
+public abstract class IdBaseEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // for JPA
-    protected IdentifiedValueObject() {
+    protected IdBaseEntity() {
     }
 
     protected Long getId() {

@@ -118,6 +118,6 @@ create table favorite (
       - 설계적으로 VO 컬렉션이 더 적합하다고 판단되어 선택
 
 ## Step2. 리뷰 반영
-- [ ] IdentifiedValueObject를 좀더 적합한 이름으로 변경
+- [X] IdentifiedValueObject를 좀더 적합한 이름으로 변경
 - [ ] 매핑시 불필요한 기본 옵션 제거
 - [ ] 지나치게 장황한 테스트 메서드에서 공통 부분 추출하기

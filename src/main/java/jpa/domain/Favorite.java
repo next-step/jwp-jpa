@@ -1,12 +1,12 @@
 package jpa.domain;
 
-import jpa.utils.IdentifiedValueObject;
+import jpa.utils.IdBaseEntity;
 
 import javax.persistence.Entity;
 import java.util.Objects;
 
 @Entity
-public class Favorite extends IdentifiedValueObject {
+public class Favorite extends IdBaseEntity {
     private Long startStationId;
     private Long destinationStationId;
 
