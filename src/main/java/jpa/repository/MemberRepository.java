@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
+    Member findByEmail(String email);
+
     Optional<List<Member>> findAllByAge(int age);
 
     List<Member> findAllByEmailEndsWith(String postFix);
