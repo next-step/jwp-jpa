@@ -14,9 +14,9 @@ DDL(Data Definition Language)을 보고 유추하여 엔티티 클래스와 리�
 * created_date
 * modified_date
 
-- [ ] Line 엔티티 클래스 생성 및 테스트
+- [X] Line 엔티티 클래스 생성 및 테스트
 
-- [ ] Station 엔티티 클래스 생성 및 테스트
+- [X] Station 엔티티 클래스 생성 및 테스트
 
 - [ ] Member 엔티티 클래스 생성 및 테스트
 
