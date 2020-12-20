@@ -1,12 +1,13 @@
 package jpa.domain;
 
-
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -14,8 +15,11 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 @DataJpaTest
 class LineRepositoryTest {
+
 	@Autowired
 	private LineRepository lineRepository;
+	@Autowired
+	private StationRepository stationRepository;
 
 	@Test
 	void saveTest() {
@@ -139,6 +143,58 @@ class LineRepositoryTest {
 			() -> assertThat(allLines.get(0)).isNotEqualTo(linesOrderByColorDesc.get(0)),
 			() -> assertThat(linesOrderByColorDesc.get(0).getColor()).isEqualTo("COLOR-F"),
 			() -> assertThat(linesOrderByColorDesc.get(5).getColor()).isEqualTo("COLOR-A")
+		);
+	}
+
+	@Test
+	@DisplayName("노선 조회 시 속한 지하철역을 볼 수 있다.")
+	public void stationsInLineTest() {
+		String expectedName = "2호선";
+		Line line = lineRepository.save(new Line(expectedName, "GREEN"));
+
+		Station station1 = stationRepository.save(new Station("문래역"));
+		Station station2 = stationRepository.save(new Station("구로디지털단지역"));
+		Station station3 = stationRepository.save(new Station("잠실역"));
+
+		line.addStations(Arrays.asList(station1, station2, station3));
+		Line actual = lineRepository.findByName(expectedName);
+
+		assertAll(
+			() -> assertThat(actual.getStations().size()).isEqualTo(3),
+			() -> assertThat(actual.getStations().contains(station1)).isTrue(),
+			() -> assertThat(actual.getStations().contains(station2)).isTrue(),
+			() -> assertThat(actual.getStations().contains(station3)).isTrue()
+		);
+	}
+
+	@Test
+	@DisplayName("노선에 지하철역 추가 시, 지하철역에도 노선이 추가되어야한다.")
+	public void addStationsInLineTest() {
+		String expectedLineName = "2호선";
+		String expectedStation1Name = "문래역";
+		String expectedStation2Name = "구로디지털단지역";
+		Line line = lineRepository.save(new Line(expectedLineName, "GREEN"));
+		Station station1 = stationRepository.save(new Station(expectedStation1Name));
+		Station station2 = stationRepository.save(new Station(expectedStation2Name));
+
+		assertThat(line.getStations().size()).isZero();
+		assertThat(station1.getLines().size()).isZero();
+		assertThat(station2.getLines().size()).isZero();
+
+		line.addStations(Arrays.asList(station1, station2));
+
+		Line actualLine = lineRepository.findByName(expectedLineName);
+		Station actualStation1 = stationRepository.findByName(expectedStation1Name);
+		Station actualStation2 = stationRepository.findByName(expectedStation2Name);
+
+		assertAll(
+			() -> assertThat(actualLine.getStations().size()).isEqualTo(2),
+			() -> assertThat(actualLine.getStations().contains(station1)).isTrue(),
+			() -> assertThat(actualLine.getStations().contains(station2)).isTrue(),
+			() -> assertThat(actualStation1.getLines().size()).isEqualTo(1),
+			() -> assertThat(actualStation1.getLines().contains(actualLine)).isTrue(),
+			() -> assertThat(actualStation2.getLines().size()).isEqualTo(1),
+			() -> assertThat(actualStation2.getLines().contains(actualLine)).isTrue()
 		);
 	}
 }

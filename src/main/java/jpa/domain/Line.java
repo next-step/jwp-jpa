@@ -1,7 +1,11 @@
 package jpa.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Line extends BaseEntity{
@@ -10,6 +14,9 @@ public class Line extends BaseEntity{
 
 	@Column(unique = true)
 	private String name;
+
+	@ManyToMany
+	private List<Station> stations = new ArrayList<>();
 
 	protected Line() {
 	}
@@ -31,7 +38,22 @@ public class Line extends BaseEntity{
 		return name;
 	}
 
+	public List<Station> getStations() {
+		return stations;
+	}
+
 	public void changeName(String name) {
 		this.name = name;
+	}
+
+	public void addStations(List<Station> stations) {
+		for(Station station : stations) {
+			this.addStation(station);
+		}
+	}
+
+	public void addStation(Station station) {
+		this.stations.add(station);
+		station.addLine(this);
 	}
 }
