@@ -18,12 +18,21 @@ public class Station extends BaseEntity {
   @Column(nullable = false, unique = true)
   private String name;
 
+  @ManyToOne
+  @JoinColumn(name = "line_id")
+  private Line line;
+
   public Station(final String name) {
     this.name = name;
   }
 
   public void changeName(String name) {
     this.name = name;
+  }
+
+  public void setLine(final Line line) {
+    this.line = line;
+    line.getStations().add(this);
   }
 
 }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +22,9 @@ public class Line extends BaseEntity {
   @Column(nullable = false)
   private String color;
 
+  @OneToMany(mappedBy = "line")
+  private List<Station> stations = new ArrayList<>();
+
   public Line(final String name, final String color) {
     this.name = name;
     this.color = color;
@@ -29,4 +34,8 @@ public class Line extends BaseEntity {
     this.name = name;
   }
 
+  public void addStation(final Station station) {
+    this.stations.add(station);
+    station.setLine(this);
+  }
 }
