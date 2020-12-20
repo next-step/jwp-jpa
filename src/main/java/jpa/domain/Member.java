@@ -11,12 +11,17 @@ import javax.persistence.Entity;
 @Entity
 public class Member extends BaseEntity{
 
-	private int age;
 	private String email;
 	private String password;
+	private int age;
 
-	public int getAge() {
-		return age;
+	public Member() {
+	}
+
+	public Member(String email, String password, int age) {
+		this.email = email;
+		this.password = password;
+		this.age = age;
 	}
 
 	public String getEmail() {
@@ -25,5 +30,9 @@ public class Member extends BaseEntity{
 
 	public String getPassword() {
 		return password;
+	}
+
+	public int getAge() {
+		return age;
 	}
 }
