@@ -19,11 +19,9 @@ public class Station extends BaseEntity {
 	@Column(unique = true)
 	private String name;
 
-
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "line_id")
 	private Line line;
-
 
 	public Station() {
 	}

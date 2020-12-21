@@ -21,19 +21,15 @@ public class MemberRepositoryTest {
 	@Autowired
 	private MemberRepository members;
 
-	private Member presetMember;
-	@BeforeEach
-	void setUp() {
-		presetMember = new Member("email@email.com", "pwd", 30);
-	}
+	private static Member PRESET_MEMBER = new Member("email@email.com", "pwd", 30);
 
 	@Test
 	void save() {
-		Member actual = members.save(presetMember);
+		Member actual = members.save(PRESET_MEMBER);
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(presetMember.getEmail()),
-			() -> assertThat(actual.getPassword()).isEqualTo(presetMember.getPassword()),
+			() -> assertThat(actual.getEmail()).isEqualTo(PRESET_MEMBER.getEmail()),
+			() -> assertThat(actual.getPassword()).isEqualTo(PRESET_MEMBER.getPassword()),
 			() -> assertThat(actual.getCreateDate()).isNotNull(),
 			() -> assertThat(actual.getModifiedDate()).isNotNull()
 		);
@@ -41,20 +37,20 @@ public class MemberRepositoryTest {
 
 	@Test
 	void findByEmail() {
-		Member savedMember = members.save(presetMember);
+		Member savedMember = members.save(PRESET_MEMBER);
 
 		Member actual = members.findByEmail(savedMember.getEmail());
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(presetMember.getEmail()),
-			() -> assertThat(actual.getPassword()).isEqualTo(presetMember.getPassword()),
-			() -> assertThat(actual.getAge()).isEqualTo(presetMember.getAge())
+			() -> assertThat(actual.getEmail()).isEqualTo(PRESET_MEMBER.getEmail()),
+			() -> assertThat(actual.getPassword()).isEqualTo(PRESET_MEMBER.getPassword()),
+			() -> assertThat(actual.getAge()).isEqualTo(PRESET_MEMBER.getAge())
 		);
 	}
 
 	@Test
 	void update() {
-		Member savedMember = members.save(presetMember);
+		Member savedMember = members.save(PRESET_MEMBER);
 
 		String expectedPassword = "changePwd";
 		int expectedAge = 40;
@@ -72,17 +68,17 @@ public class MemberRepositoryTest {
 
 	@Test
 	void delete() {
-		Member savedMember = members.save(presetMember);
+		Member savedMember = members.save(PRESET_MEMBER);
 
 		members.delete(savedMember);
-		Member actual = members.findByEmail(presetMember.getEmail());
+		Member actual = members.findByEmail(PRESET_MEMBER.getEmail());
 
 		assertThat(actual).isNull();
 	}
 
 	@Test
 	void memberHasAnyFavorites() {
-		Member savedMember = members.save(presetMember);
+		Member savedMember = members.save(PRESET_MEMBER);
 
 		Favorite favorite = new Favorite();
 		savedMember.addFavorites(favorite);
