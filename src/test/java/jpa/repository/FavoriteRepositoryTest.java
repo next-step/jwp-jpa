@@ -1,6 +1,8 @@
 package jpa.repository;
 
 import jpa.entity.Favorite;
+import jpa.entity.Member;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,6 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class FavoriteRepositoryTest {
     @Autowired
     private FavoriteRepository favoriteRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Test
     void save() {
@@ -27,5 +32,16 @@ public class FavoriteRepositoryTest {
         Favorite favorite1 = favoriteRepository.save(new Favorite());
         Favorite favorite2 = favoriteRepository.findById(favorite1.getId()).get();
         assertThat(favorite1 == favorite2).isTrue();
+    }
+
+    @Test
+    @DisplayName("즐겨찾기 멤버 연관관계 테스트")
+    void saveMember() {
+        Member member = new Member(29);
+        memberRepository.save(member);
+        Favorite favorite1 = favoriteRepository.save(new Favorite());
+        favorite1.setMember(member);
+        favoriteRepository.flush();
+        assertThat(favorite1.getMember().getAge()).isEqualTo(29);
     }
 }

@@ -66,5 +66,6 @@ create table favorite (
 
 ### 구현 내용 정리
 * station <-> line (다대다 양방향) : jpa 책 보면서 실습해보기!
-* favorite <-> member (다대일 양방향) : 
-* favorite 속성 - 출발역, 도착
+* favorite <-> member (다대일 양방향) : 테스트 & repository
+* favorite <-> station (일대다 단방향) => station <-> favorite (다대일 양방향) : 테스트 & repository  
+* favorite : 속성 - 출발역, 도착역 
