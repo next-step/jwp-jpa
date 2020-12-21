@@ -2,6 +2,7 @@ package jpa.repository;
 
 import jpa.FromTo;
 import jpa.entity.Favorite;
+import jpa.entity.Member;
 import jpa.entity.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,9 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class StationRepositoryTest {
     @Autowired
     private StationRepository stationRepository;
-
     @Autowired
     private FavoriteRepository favoriteRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Test
     void save() {
@@ -52,7 +54,7 @@ class StationRepositoryTest {
     void saveFavorite() {
         Station startStation = stationRepository.save(new Station("잠실역"));
         Station endStation = stationRepository.save(new Station("홍대입구역"));
-        Favorite favorite = favoriteRepository.save(new Favorite());
+        Favorite favorite = favoriteRepository.save(new Favorite(new Member("29")));
         startStation.setFavorite(favorite, FromTo.START);
         endStation.setFavorite(favorite, FromTo.END);
         Favorite result = favoriteRepository.findById(1L).get();
@@ -64,8 +66,11 @@ class StationRepositoryTest {
     @DisplayName("즐겨찾기 중복 save 테스트")
     void duplicateSaveFavorite() {
         Station startStation = stationRepository.save(new Station("잠실역"));
-        Favorite favorite = favoriteRepository.save(new Favorite());
-        Favorite favorite2 = favoriteRepository.save(new Favorite());
+        stationRepository.flush();
+        Member member = memberRepository.save(new Member(27));
+        Favorite favorite = favoriteRepository.save(new Favorite(member));
+        Favorite favorite2 = favoriteRepository.save(new Favorite(member));
+        favoriteRepository.flush();
         startStation.setFavorite(favorite, FromTo.START);
         startStation.setFavorite(favorite2, FromTo.START);
         Station result = stationRepository.findByName("잠실역");

@@ -25,7 +25,7 @@ public class FavoriteRepositoryTest {
 
     @Test
     void save() {
-        Favorite favorite1 = new Favorite();
+        Favorite favorite1 = new Favorite(new Member(29));
         Favorite result = favoriteRepository.save(favorite1);
         assertAll(
                 () -> assertThat(result.getId()).isNotNull()
@@ -34,7 +34,7 @@ public class FavoriteRepositoryTest {
 
     @Test
     void findById() {
-        Favorite favorite1 = favoriteRepository.save(new Favorite());
+        Favorite favorite1 = favoriteRepository.save(new Favorite(new Member(29)));
         Favorite favorite2 = favoriteRepository.findById(favorite1.getId()).get();
         assertThat(favorite1 == favorite2).isTrue();
     }
@@ -42,18 +42,17 @@ public class FavoriteRepositoryTest {
     @Test
     @DisplayName("즐겨찾기 & 멤버 연관관계 테스트")
     void saveMember() {
-        Member member = new Member(29);
-        memberRepository.save(member);
-        Favorite favorite1 = favoriteRepository.save(new Favorite());
-        favorite1.setMember(member);
+        Member member = memberRepository.save(new Member(30));
+        memberRepository.flush();
+        Favorite favorite1 = favoriteRepository.save(new Favorite(member));
         favoriteRepository.flush();
-        assertThat(favorite1.getMember().getAge()).isEqualTo(29);
+        assertThat(favorite1.getMember().getAge()).isEqualTo(30);
     }
 
     @Test
     @DisplayName("즐겨찾기 & 역 연관관계 테스트")
     void saveStations() {
-        Favorite favorite = favoriteRepository.save(new Favorite());
+        Favorite favorite = favoriteRepository.save(new Favorite(new Member(31)));
         Station startStation = stationRepository.save(new Station("잠실역"));
         Station endStation = stationRepository.save(new Station("홍대입구역"));
         favorite.addFromToStations(startStation, FromTo.START);

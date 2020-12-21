@@ -59,7 +59,7 @@ public class MemberRepositoryTest {
     @DisplayName("즐겨찾기 추가 테스트")
     void saveFavorite() {
         Member member = new Member("test@naver.com");
-        member.addFavorite(favoriteRepository.save(new Favorite()));
+        member.addFavorite(favoriteRepository.save(new Favorite(member)));
         Member result = memberRepository.save(member);
         memberRepository.flush();
         assertThat(result.getFavorites().get(0).getId()).isEqualTo(1L);

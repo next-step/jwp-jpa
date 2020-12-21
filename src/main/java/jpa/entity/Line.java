@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(
         name = "UK_9ney9davbulf79nmn9vg6k7tn", columnNames = {"name"}

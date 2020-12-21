@@ -10,7 +10,7 @@ import java.util.*;
 
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Favorite extends BaseEntity {
 
@@ -20,6 +20,10 @@ public class Favorite extends BaseEntity {
 
     @OneToMany(mappedBy = "favorite")
     private Map<FromTo, Station> fromToStations = new HashMap<>();
+
+    public Favorite(Member member) {
+        this.member = member;
+    }
 
     public void setMember(Member member) {
         if(Objects.nonNull(this.member)) {

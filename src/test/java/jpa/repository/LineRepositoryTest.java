@@ -17,7 +17,7 @@ public class LineRepositoryTest {
     @Test
     @DisplayName("저장test")
     void save() {
-        Line line = new Line();
+        Line line = new Line("blue", "seven");
         Line result = lineRepository.save(line);
         assertThat(result.getId()).isNotNull();
     }
