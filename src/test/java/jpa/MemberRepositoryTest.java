@@ -38,10 +38,5 @@ public class MemberRepositoryTest {
 				() -> assertThat(findMember.getFavoriteList().contains(favorite1)),
 				() -> assertThat(findMember.getFavoriteList().contains(favorite2))
 		);
-
-
-
 	}
-
-
 }
