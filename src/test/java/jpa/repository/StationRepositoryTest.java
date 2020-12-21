@@ -3,10 +3,12 @@ package jpa.repository;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import jpa.domain.Line;
 import jpa.domain.Station;
 
 /**
@@ -18,6 +20,8 @@ import jpa.domain.Station;
 public class StationRepositoryTest {
 	@Autowired
 	private StationRepository stations;
+	@Autowired
+	private LineRepository lines;
 
 	@Test
 	void save() {
@@ -67,6 +71,30 @@ public class StationRepositoryTest {
 		Station actual = stations.findByName(originName);
 
 		assertThat(actual).isNull();
+
+	}
+
+	@DisplayName("지하철 역 조회시 어느 노선에 속한지 볼 수 있다.")
+	@Test
+	void checkLineWithFindingStation(){
+		String lineName = "2호선";
+		String lineColor = "green";
+		String stationName = "강남역";
+
+		Line line = lines.save(new Line(lineName, lineColor));
+		Station station = new Station(stationName);
+		station.changeLine(line);
+		stations.save(station);
+
+		Station actual = stations.findByName(stationName);
+
+		assertAll(
+			() -> assertThat(actual.getId()).isNotNull(),
+			() -> assertThat(actual.getName()).isEqualTo(stationName),
+			() -> assertThat(actual.getLine()).isEqualTo(line),
+			() -> assertThat(actual.getLine().getName()).isEqualTo(lineName),
+			() -> assertThat(actual.getLine().getColor()).isEqualTo(lineColor)
+		);
 
 	}
 }

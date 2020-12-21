@@ -33,4 +33,12 @@ public class Station extends BaseEntity {
 	public void changeName(String name) {
 		this.name = name;
 	}
+
+	public Line getLine() {
+		return line;
+	}
+
+	public void changeLine(Line line) {
+		this.line = line;
+	}
 }

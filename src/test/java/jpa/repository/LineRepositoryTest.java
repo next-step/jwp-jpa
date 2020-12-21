@@ -84,17 +84,18 @@ public class LineRepositoryTest {
 	@DisplayName("노선 조회 시 속한 지하철 역을 볼 수 있다.")
 	@Test
 	void addLineWithStation() {
-		Line line = lines.save(new Line("2호선", "green"));
+		String lineName = "2호선";
+		String lineColor = "green";
+
+		Line line = lines.save(new Line(lineName, lineColor));
 		Station station = new Station("강남역");
-
 		line.addStation(station);
-
-		Line actual = lines.findByName("2호선");
+		Line actual = lines.findByName(lineName);
 
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(line.getName()),
-			() -> assertThat(actual.getColor()).isEqualTo(line.getColor()),
+			() -> assertThat(actual.getName()).isEqualTo(lineName),
+			() -> assertThat(actual.getColor()).isEqualTo(lineColor),
 			() -> assertThat(actual.getStations()).contains(station)
 		);
 
