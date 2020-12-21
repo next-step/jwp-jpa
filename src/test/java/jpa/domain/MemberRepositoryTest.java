@@ -97,4 +97,29 @@ class MemberRepositoryTest {
                 () -> assertThat(byEmail.get(0).getPassword()).isEqualTo("0000")
         );
     }
+
+    @Test
+    @DisplayName("사용자는 여러 즐겨찾기를 가질 수 있다.")
+    public void findMemberWithFavorite() throws Exception {
+        Favorite favorite1 = new Favorite(new Station("화정역"), new Station("잠실역"));
+        Favorite favorite2 = new Favorite(new Station("잠실역"), new Station("강남역"));
+        Member member1 = new Member
+                .Builder("email1@woowa.com", "0000")
+                .age(25)
+                .addFavorites(favorite1)
+                .addFavorites(favorite2)
+                .build();
+        members.save(member1);
+
+        Member expected = members.findById(member1.getId()).get();
+
+        assertAll(
+                () -> assertThat(expected).isNotNull(),
+                () -> assertThat(expected.getFavorites()).hasSize(2),
+                () -> assertThat(expected.getFavorites().get(0).getFromStation()).isEqualTo(favorite1.getFromStation()),
+                () -> assertThat(expected.getFavorites().get(0).getToStation()).isEqualTo(favorite1.getToStation()),
+                () -> assertThat(expected.getFavorites().get(1).getFromStation()).isEqualTo(favorite2.getFromStation()),
+                () -> assertThat(expected.getFavorites().get(1).getToStation()).isEqualTo(favorite2.getToStation())
+        );
+    }
 }
