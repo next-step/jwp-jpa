@@ -76,7 +76,7 @@ public class StationRepositoryTest {
 
 	@DisplayName("지하철 역 조회시 어느 노선에 속한지 볼 수 있다.")
 	@Test
-	void checkLineWithFindingStation(){
+	void checkLineWithFindingStation() {
 		String lineName = "2호선";
 		String lineColor = "green";
 		String stationName = "강남역";

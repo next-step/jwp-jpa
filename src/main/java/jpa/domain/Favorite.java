@@ -1,9 +1,7 @@
 package jpa.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 /**
@@ -14,11 +12,18 @@ import javax.persistence.OneToOne;
 @Entity
 public class Favorite extends BaseEntity {
 
+	@OneToOne
+	@JoinColumn(name = "starting_station_id")
+	private Station startingStation;
+
+	@OneToOne
+	@JoinColumn(name = "destination_station_id")
+	private Station destinationStation;
+
 	public Favorite() {
 
 	}
 
-	/*
 	public Favorite(Station startingStation, Station destinationStation) {
 		this.startingStation = startingStation;
 		this.destinationStation = destinationStation;
@@ -30,5 +35,5 @@ public class Favorite extends BaseEntity {
 
 	public Station getDestinationStation() {
 		return destinationStation;
-	}*/
+	}
 }
