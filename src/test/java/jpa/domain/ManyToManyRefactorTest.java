@@ -25,6 +25,9 @@ public class ManyToManyRefactorTest {
     private StationRepository stationRepository;
 
     @Autowired
+    private DistanceRepository distanceRepository;
+
+    @Autowired
     private EntityManager entityManager;
 
     @BeforeEach
@@ -98,16 +101,16 @@ public class ManyToManyRefactorTest {
 
         // given
         Line line = LINE_CREATED(color, name, distanceValue, gangnam, jamsil);
+        Long distanceId = line.getDistances().get(0).getId();
 
         // when
         lineRepository.deleteById(line.getId());
         entityManager.flush();
 
         // then
-        Line foundLine = lineRepository.findById(line.getId()).orElse(null);
-        assertThat(foundLine).isNull();
-        List<Station> stationIds = stationRepository.findAllById(Arrays.asList(gangnam.getId(), jamsil.getId()));
-        assertThat(stationIds).hasSize(expectedSize);
+        LINE_DELETED(line);
+        STATIONS_NOT_DELETED(gangnam, jamsil, expectedSize);
+        DISTANCE_DELETED(distanceId);
     }
 
     public Line LINE_CREATED(
@@ -128,5 +131,20 @@ public class ManyToManyRefactorTest {
         assertThat(foundLine).isNotNull();
 
         return foundLine;
+    }
+
+    public void LINE_DELETED(final Line line) {
+        Line foundLine = lineRepository.findById(line.getId()).orElse(null);
+        assertThat(foundLine).isNull();
+    }
+
+    public void STATIONS_NOT_DELETED(final Station upStation, final Station downStation, final int expectedSize) {
+        List<Station> stationIds = stationRepository.findAllById(Arrays.asList(upStation.getId(), downStation.getId()));
+        assertThat(stationIds).hasSize(expectedSize);
+    }
+
+    public void DISTANCE_DELETED(final Long distanceId) {
+        Distance foundDistance = distanceRepository.findById(distanceId).orElse(null);
+        assertThat(foundDistance).isNull();
     }
 }
