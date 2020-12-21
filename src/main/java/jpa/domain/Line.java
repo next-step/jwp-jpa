@@ -18,7 +18,7 @@ public class Line extends BaseEntity{
 	private String name;
 
 	@OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
-	private List<LineStation> stations = new ArrayList<>();
+	private List<LineStation> lineStations = new ArrayList<>();
 
 	protected Line() {
 	}
@@ -41,7 +41,7 @@ public class Line extends BaseEntity{
 	}
 
 	public List<Station> getStations() {
-		return stations.stream()
+		return lineStations.stream()
 			.map(LineStation::getStation)
 			.collect(Collectors.toList());
 	}
@@ -54,11 +54,11 @@ public class Line extends BaseEntity{
 		if (isExistStation(station)) {
 			throw new IllegalArgumentException(String.format("%s 역은 %s 노선에 이미 포함된 역입니다.", station.getName(), this.name));
 		}
-		this.stations.add(new LineStation(this, station, distance));
+		this.lineStations.add(new LineStation(this, station, distance));
 	}
 
 	public int distanceFromPreviousStation(Station station) {
-		return this.stations.stream()
+		return this.lineStations.stream()
 			.filter(lineStation -> lineStation.getStation().equals(station))
 			.map(LineStation::getDistance)
 			.findFirst()
@@ -68,7 +68,7 @@ public class Line extends BaseEntity{
 	}
 
 	private boolean isExistStation(Station station) {
-		return this.stations.stream()
+		return this.lineStations.stream()
 			.anyMatch(lineStation -> lineStation.getStation().equals(station));
 	}
 }
