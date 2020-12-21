@@ -3,6 +3,7 @@ package jpa.repository;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -19,18 +20,20 @@ import jpa.domain.Member;
 public class MemberRepositoryTest {
 	@Autowired
 	private MemberRepository members;
-	@Autowired
-	private FavoriteRepository favorites;
+
+	private Member presetMember;
+	@BeforeEach
+	void setUp() {
+		presetMember = new Member("email@email.com", "pwd", 30);
+	}
 
 	@Test
 	void save() {
-		Member expected = new Member("email@email.com", "pwd", 30);
-
-		Member actual = members.save(expected);
+		Member actual = members.save(presetMember);
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(expected.getEmail()),
-			() -> assertThat(actual.getPassword()).isEqualTo(expected.getPassword()),
+			() -> assertThat(actual.getEmail()).isEqualTo(presetMember.getEmail()),
+			() -> assertThat(actual.getPassword()).isEqualTo(presetMember.getPassword()),
 			() -> assertThat(actual.getCreateDate()).isNotNull(),
 			() -> assertThat(actual.getModifiedDate()).isNotNull()
 		);
@@ -38,37 +41,30 @@ public class MemberRepositoryTest {
 
 	@Test
 	void findByEmail() {
-		String expectedEmail = "email@email.com";
-		String expectedPassword = "pwd";
-		int expectedAge = 30;
+		Member savedMember = members.save(presetMember);
 
-		members.save(new Member(expectedEmail, expectedPassword, expectedAge));
-
-		Member actual = members.findByEmail(expectedEmail);
+		Member actual = members.findByEmail(savedMember.getEmail());
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(expectedEmail),
-			() -> assertThat(actual.getPassword()).isEqualTo(expectedPassword),
-			() -> assertThat(actual.getAge()).isEqualTo(expectedAge)
+			() -> assertThat(actual.getEmail()).isEqualTo(presetMember.getEmail()),
+			() -> assertThat(actual.getPassword()).isEqualTo(presetMember.getPassword()),
+			() -> assertThat(actual.getAge()).isEqualTo(presetMember.getAge())
 		);
 	}
 
 	@Test
 	void update() {
-		String email = "email@email.com";
-		String password = "pwd";
-		int age = 30;
-		Member origin = new Member(email, password, age);
-		members.save(origin);
+		Member savedMember = members.save(presetMember);
+
 		String expectedPassword = "changePwd";
 		int expectedAge = 40;
-		origin.changePassword(expectedPassword);
-		origin.changeAge(expectedAge);
+		savedMember.changePassword(expectedPassword);
+		savedMember.changeAge(expectedAge);
 
-		Member actual = members.findByEmail(email);
+		Member actual = members.findByEmail(savedMember.getEmail());
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(email),
+			() -> assertThat(actual.getEmail()).isEqualTo(savedMember.getEmail()),
 			() -> assertThat(actual.getPassword()).isEqualTo(expectedPassword),
 			() -> assertThat(actual.getAge()).isEqualTo(expectedAge)
 		);
@@ -76,35 +72,27 @@ public class MemberRepositoryTest {
 
 	@Test
 	void delete() {
-		String email = "email@email.com";
-		String password = "pwd";
-		int age = 30;
-		Member origin = new Member(email, password, age);
-		members.save(origin);
+		Member savedMember = members.save(presetMember);
 
-		members.delete(origin);
-		Member actual = members.findByEmail(email);
+		members.delete(savedMember);
+		Member actual = members.findByEmail(presetMember.getEmail());
 
 		assertThat(actual).isNull();
 	}
 
 	@Test
 	void memberHasAnyFavorites() {
-		String email = "email@email.com";
-		String password = "pwd";
-		int age = 30;
-		Member member = new Member(email, password, age);
-		members.save(member);
+		Member savedMember = members.save(presetMember);
 
 		Favorite favorite = new Favorite();
-		member.addFavorites(favorite);
+		savedMember.addFavorites(favorite);
 
-		Member actual = members.findByEmail(email);
+		Member actual = members.findByEmail(savedMember.getEmail());
 
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(email),
-			() -> assertThat(actual.getAge()).isEqualTo(age),
+			() -> assertThat(actual.getEmail()).isEqualTo(savedMember.getEmail()),
+			() -> assertThat(actual.getAge()).isEqualTo(savedMember.getAge()),
 			() -> assertThat(actual.getFavorites()).contains(favorite)
 		);
 
