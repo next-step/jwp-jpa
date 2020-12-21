@@ -31,7 +31,7 @@ public class Line {
 	@Column(nullable = false)
 	private String name;
 
-	@ManyToMany(mappedBy = "line")
+	@ManyToMany(mappedBy = "lines")
 	private List<Station> stations = new ArrayList<>();
 
 	@Column
@@ -42,12 +42,32 @@ public class Line {
 	@UpdateTimestamp
 	private LocalDateTime modifiedDate;
 
-	public Line() {
+	protected Line() {
 
 	}
 
 	public Line(Color color, String name) {
 		this.color = color;
 		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Line{" +
+			"id=" + id +
+			", color=" + color +
+			", name='" + name + '\'' +
+			", stations=" + stations +
+			", createdDate=" + createdDate +
+			", modifiedDate=" + modifiedDate +
+			'}';
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public List<Station> getStations() {
+		return this.stations;
 	}
 }
