@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Table(name = "line")
 public class Line {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
