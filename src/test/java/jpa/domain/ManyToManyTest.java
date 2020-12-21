@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import javax.persistence.EntityManager;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -18,6 +20,9 @@ public class ManyToManyTest {
 
     @Autowired
     private ManyToManyLineRepository lineRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @DisplayName("Line에서 새로운 Station을 등록하고 저장할 수 있다.")
     @Test
@@ -86,6 +91,27 @@ public class ManyToManyTest {
         ManyToManyLine foundLine = lineRepository.findByName(lineName).orElse(null);
         assertThat(foundLine).isNotNull();
         assertThat(foundLine.getStations()).hasSize(expectedSize);
+    }
+
+    @DisplayName("Line을 삭제해도 연관된 Station은 삭제되지 않는다.")
+    @Test
+    void stationNotDeleteWhenDeleteRelatedLine() {
+        String stationName = "sinnonhyeon";
+        String lineColor = "gold";
+        String lineName = "linNumber9";
+
+        // given
+        ManyToManyLine line = LINE_SAVED_WITH_STATION(stationName, lineName, lineColor);
+        ManyToManyStation foundStationBeforeDelete = stationRepository.findByName(stationName).orElse(null);
+        assertThat(foundStationBeforeDelete).isNotNull();
+
+        // when
+        lineRepository.deleteById(line.getId());
+        entityManager.flush();
+
+        // then
+        ManyToManyStation foundStationAfterDelete = stationRepository.findByName(stationName).orElse(null);
+        assertThat(foundStationAfterDelete).isNotNull();
     }
 
     private ManyToManyLine LINE_SAVED_WITH_STATION(
