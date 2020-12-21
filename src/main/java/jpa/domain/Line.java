@@ -2,6 +2,7 @@ package jpa.domain;
 
 import lombok.Getter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Getter
@@ -10,6 +11,7 @@ public class Line extends BaseEntity {
 
     private String color;
 
+    @Column(unique = true)
     private String name;
 
     public Line() {

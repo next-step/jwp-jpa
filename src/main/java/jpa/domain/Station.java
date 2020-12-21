@@ -2,6 +2,7 @@ package jpa.domain;
 
 import lombok.Getter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 
@@ -9,6 +10,7 @@ import javax.persistence.Entity;
 @Entity
 public class Station extends BaseEntity {
 
+    @Column(unique = true)
     private String name;
 
     public Station() {
