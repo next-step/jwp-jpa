@@ -16,20 +16,13 @@ public class Station extends BaseEntity {
 	@Column(unique = true)
 	private String name;
 
+
 	@ManyToOne
 	@JoinColumn(name = "line_id")
 	private Line line;
 
-	@OneToOne
-	@JoinColumn(name = "line_station_id")
-	private LineStation lineStation;
 
 	public Station() {
-	}
-
-	public Station(String name, LineStation lineStation) {
-		this.name = name;
-		this.lineStation = lineStation;
 	}
 
 	public Station(String name) {
