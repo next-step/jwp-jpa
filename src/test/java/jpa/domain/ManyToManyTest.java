@@ -55,4 +55,24 @@ public class ManyToManyTest {
         // then
         assertThat(foundLine.getStations()).contains(station);
     }
+
+    @DisplayName("Staiton에서 Line을 조회할 수 있다.")
+    @Test
+    void getLineAtStationTest() {
+        String stationName = "gangnam";
+        String lineColor = "green";
+        String lineName = "lineNumber2";
+        // given
+        ManyToManyStation station = new ManyToManyStation(stationName);
+        ManyToManyLine line = new ManyToManyLine(lineName, lineColor);
+        line.addStation(station);
+        lineRepository.save(line);
+
+        // when
+        ManyToManyStation foundStation = stationRepository.findByName(stationName).orElse(null);
+        assertThat(foundStation).isNotNull();
+
+        // then
+        assertThat(foundStation.getLines()).contains(line);
+    }
 }

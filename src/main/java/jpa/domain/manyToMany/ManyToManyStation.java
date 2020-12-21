@@ -42,7 +42,7 @@ public class ManyToManyStation extends BaseEntity {
         return name;
     }
 
-    List<ManyToManyLine> getLines() {
+    public List<ManyToManyLine> getLines() {
         return lines;
     }
 }
