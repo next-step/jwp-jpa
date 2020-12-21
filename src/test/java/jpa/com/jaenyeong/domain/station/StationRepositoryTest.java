@@ -54,11 +54,13 @@ class StationRepositoryTest {
     @Test
     @DisplayName("객체를 이름으로 찾는 테스트")
     void findByName() {
-        final Station gangnamStation = stations.findByName("강남역");
-        final Station jamsilStation = stations.findByName(stations.save(jamsil).getName());
+        final Station gangnamStation = stations.findByName("강남역")
+            .orElseGet(() -> new Station("Not Found"));
+        final Station jamsilStation = stations.findByName(stations.save(jamsil).getName())
+            .orElseGet(() -> new Station("Not Found"));
 
-        assertThat(gangnamStation).isNull();
-        assertThat(jamsilStation).isNotNull();
+        assertSame(gangnamStation.getName(), "Not Found");
+        assertSame(jamsilStation.getName(), "잠실역");
     }
 
     @Test
@@ -78,7 +80,7 @@ class StationRepositoryTest {
         assertSame(savedGangnam.getName(), "강남역");
 
         savedGangnam.changeStationName("용산역");
-        final Station foundYongsan = stations.findByName("용산역");
+        final Station foundYongsan = stations.findByName("용산역").orElseGet(null);
 
         assertNotEquals(foundYongsan.getName(), "강남역");
     }
