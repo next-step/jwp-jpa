@@ -1,8 +1,11 @@
 package jpa.domain.member;
 
 import jpa.domain.BaseEntity;
+import jpa.domain.favorite.Favorite;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member extends BaseEntity {
@@ -16,6 +19,9 @@ public class Member extends BaseEntity {
     private String email;
 
     private String password;
+
+    @OneToMany(mappedBy = "member")
+    private final List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {
     }
@@ -40,5 +46,9 @@ public class Member extends BaseEntity {
 
     public String getPassword() {
         return password;
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites;
     }
 }
