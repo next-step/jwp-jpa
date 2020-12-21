@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findById(Long aLong);
+    Optional<Member> findById(Long id);
     Optional<Member> findByEmail(String email);
     List<Member> findByAge(int age);
+    List<Member> findAll();
 }

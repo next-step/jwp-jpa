@@ -1,5 +1,9 @@
 package jpa.com.jaenyeong.domain.member;
 
+import jpa.com.jaenyeong.domain.favorite.Favorite;
+import jpa.com.jaenyeong.domain.favorite.FavoriteRepository;
+import jpa.com.jaenyeong.domain.station.Station;
+import jpa.com.jaenyeong.domain.station.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,32 +21,69 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 class MemberRepositoryTest {
     @Autowired
     private MemberRepository members;
+    @Autowired
+    private StationRepository stations;
+    @Autowired
+    private FavoriteRepository favorites;
 
     private Member firstMember;
     private Member secondMember;
     private Member thirdMember;
+
+    private Favorite firstFavorite;
+    private Favorite secondFavorite;
+    private Favorite thirdFavorite;
 
     @BeforeEach
     void setUp() {
         firstMember = new Member();
         secondMember = new Member();
         thirdMember = new Member();
+
+        final Station kkachisan = new Station("까치산역");
+        final Station gangnam = new Station("강남역");
+        final Station yongsan = new Station("용산역");
+        final Station jamsil = new Station("잠실역");
+        final Station gimpoAirport = new Station("김포공항역");
+        final Station yangjae = new Station("양재역");
+        stations.save(kkachisan);
+        stations.save(gangnam);
+        stations.save(yongsan);
+        stations.save(jamsil);
+        stations.save(gimpoAirport);
+        stations.save(yangjae);
+
+        firstFavorite = new Favorite(kkachisan, gangnam);
+        secondFavorite = new Favorite(yongsan, jamsil);
+        thirdFavorite = new Favorite(gimpoAirport, yangjae);
+        favorites.save(firstFavorite);
+        favorites.save(secondFavorite);
+        favorites.save(thirdFavorite);
+
+        firstMember.addFavorite(firstFavorite);
+        secondMember.addFavorite(secondFavorite);
+        thirdMember.addFavorite(thirdFavorite);
+
+        members.save(firstMember);
+        members.save(secondMember);
+        members.save(thirdMember);
     }
 
     @Test
     @DisplayName("객체 저장 테스트")
     void saveAll() {
         final List<Member> before = members.findAll();
-        assertSame(before.size(), 0);
+        assertSame(before.size(), 3);
 
-        final List<Member> members = new ArrayList<>();
-        members.add(firstMember);
-        members.add(secondMember);
-        members.add(thirdMember);
+        final List<Member> newMembers = new ArrayList<>();
+        newMembers.add(new Member());
+        newMembers.add(new Member());
+        newMembers.add(new Member());
 
-        final List<Member> afterSave = this.members.saveAll(members);
+        final List<Member> afterSave = this.members.saveAll(newMembers);
+        List<Member> findAllMembers = members.findAll();
 
-        assertSame(afterSave.size(), 3);
+        assertSame(findAllMembers.size(), 6);
     }
 
     @Test
