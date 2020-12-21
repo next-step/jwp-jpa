@@ -1,13 +1,12 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "line")
 public class Line extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @Column(unique = true)
     private String name;
     private String color;
@@ -21,10 +20,6 @@ public class Line extends BaseEntity{
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

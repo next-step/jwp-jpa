@@ -5,9 +5,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "member")
 public class Member extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private int age;
     private String email;
     private String password;
@@ -39,10 +36,6 @@ public class Member extends BaseEntity{
         age      = builder.age;
         email    = builder.email;
         password = builder.password;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public int getAge() {

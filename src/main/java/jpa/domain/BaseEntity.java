@@ -10,6 +10,10 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 public abstract class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @CreatedDate
     private LocalDateTime createDate;
 
@@ -22,5 +26,9 @@ public abstract class BaseEntity {
 
     public LocalDateTime getModifiedDate() {
         return modifiedDate;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
