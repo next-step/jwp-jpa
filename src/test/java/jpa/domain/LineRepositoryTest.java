@@ -4,10 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -15,21 +14,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 class LineRepositoryTest {
     @Autowired
-    private EntityManager entityManager;
-
-    @Autowired
     private LineRepository lineRepository;
 
-    @DisplayName("저장된 엔티티는 자동으로 id를 부여받는다.")
+    @DisplayName("저장된 엔티티는 자동으로 id와 생성일을 부여받는다.")
     @Test
     void getIdByAutoAfterSaving() {
         String testColor = "red";
         String testName = "test";
 
         Line line = new Line(testColor, testName);
-        lineRepository.save(line);
+        Line saved = lineRepository.save(line);
 
-        assertThat(line.getId()).isNotNull();
+        assertThat(saved.getId()).isNotNull();
+        assertThat(saved.getCreatedDate()).isNotNull();
     }
 
     @DisplayName("영속성 컨텍스트에서 관리되는 엔티티는 더티 체킹을 통해 변경 내용이 자동으로 업데이트 된다.")
@@ -69,11 +66,11 @@ class LineRepositoryTest {
         Line line = new Line("red", testName);
 
         lineRepository.save(line);
-        entityManager.flush();      // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
+        // entityManager.flush();      // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
 
         assertThatThrownBy(() -> {
             lineRepository.save(new Line("blue", line.getName()));
-            entityManager.flush();  // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
-        }).isInstanceOf(PersistenceException.class);
+            // entityManager.flush();  // 영속성 컨텍스트를 DB에 반영하여 DB에 걸린 unique 조건을 확인하기 위한 flush
+        }).isInstanceOf(DataIntegrityViolationException.class);
     }
 }

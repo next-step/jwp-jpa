@@ -14,12 +14,13 @@ public class StationRepositoryTest {
 
     private final Station testStation = new Station("비 내리는 호남선");
 
-    @DisplayName("엔티티 저장 후 ID 부여 확인")
+    @DisplayName("엔티티 저장 후 ID, 생성일 부여 확인")
     @Test
     void saveTest() {
-        stationRepository.save(testStation);
+        Station saved = stationRepository.save(testStation);
 
-        assertThat(testStation.getId()).isNotNull();
+        assertThat(saved.getId()).isNotNull();
+        assertThat(saved.getCreatedDate()).isNotNull();
     }
 
     @DisplayName("더티 체킹을 통한 업데이트 확인")
@@ -28,6 +29,7 @@ public class StationRepositoryTest {
         assertThat(testStation.getModifiedDate()).isNull();
         Station changedStation = new Station("갱남역");
         testStation.updateStation(changedStation);
+        stationRepository.save(testStation);
         assertThat(testStation.getModifiedDate()).isNotNull();
     }
 

@@ -2,5 +2,6 @@ package jpa.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
+public interface LineStationRepository extends JpaRepository<LineStation, Long> {
+
 }

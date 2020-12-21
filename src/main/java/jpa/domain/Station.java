@@ -1,53 +1,82 @@
 package jpa.domain;
 
-import net.bytebuddy.asm.Advice;
+import jpa.utils.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
-public class Station {
+public class Station extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
 
     @Column(unique = true)
     private String name;
 
+    @OneToMany(mappedBy = "upStation")
+    private List<LineStation> lineStations = new ArrayList<>();
+
     protected Station() {
     }
 
-    Station(final LocalDateTime createdDate, final LocalDateTime modifiedDate, final String name) {
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+    Station(final Long id, final String name) {
+        this.id = id;
         this.name = name;
     }
 
     public Station(final String name) {
-        this(LocalDateTime.now(), null, name);
-    }
-
-    public void updateStation(final Station station) {
-        this.modifiedDate = LocalDateTime.now();
-        this.name = station.name;
+        this(null, name);
     }
 
     public Long getId() {
-        return this.id;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
+        return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void addLineStation(final LineStation lineStation) {
+        lineStation.updateUpStation(this);
+        this.lineStations.add(lineStation);
+    }
+
+    public void updateStation(final Station station) {
+        this.name = station.name;
+    }
+
+    public List<Line> getLines() {
+        return this.lineStations.stream()
+                .map(LineStation::getLine)
+                .collect(Collectors.toList());
+    }
+
+    List<LineStation> getLineStations() {
+        return this.lineStations;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Station station = (Station) o;
+        return Objects.equals(id, station.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Station{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
