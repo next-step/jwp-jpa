@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import jpa.domain.Favorite;
 import jpa.domain.Member;
 
 /**
@@ -18,6 +19,8 @@ import jpa.domain.Member;
 public class MemberRepositoryTest {
 	@Autowired
 	private MemberRepository members;
+	@Autowired
+	private FavoriteRepository favorites;
 
 	@Test
 	void save() {
@@ -83,6 +86,27 @@ public class MemberRepositoryTest {
 		Member actual = members.findByEmail(email);
 
 		assertThat(actual).isNull();
+	}
+
+	@Test
+	void memberHasAnyFavorites() {
+		String email = "email@email.com";
+		String password = "pwd";
+		int age = 30;
+		Member member = new Member(email, password, age);
+		members.save(member);
+
+		Favorite favorite = new Favorite();
+		member.addFavorites(favorite);
+
+		Member actual = members.findByEmail(email);
+
+		assertAll(
+			() -> assertThat(actual.getId()).isNotNull(),
+			() -> assertThat(actual.getEmail()).isEqualTo(email),
+			() -> assertThat(actual.getAge()).isEqualTo(age),
+			() -> assertThat(actual.getFavorites()).contains(favorite)
+		);
 
 	}
 }
