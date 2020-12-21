@@ -2,6 +2,7 @@ package jpa.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -26,10 +27,12 @@ class StationRepositoryTest {
         Station station = new Station("교대역");
         Station savedStation = stationRepository.save(station);
 
-        assertThat(savedStation.getId()).isNotNull();
-        assertThat(savedStation.getName()).isEqualTo(savedStation.getName());
-        assertThat(savedStation.getCreatedDate()).isNotNull().isBefore(LocalDateTime.now());
-        assertThat(savedStation.getModifiedDate()).isNotNull().isBefore(LocalDateTime.now());
+        assertAll(
+                () -> assertThat(savedStation.getId()).isNotNull(),
+                () -> assertThat(savedStation.getName()).isEqualTo(savedStation.getName()),
+                () -> assertThat(savedStation.getCreatedDate()).isNotNull().isBefore(LocalDateTime.now()),
+                () -> assertThat(savedStation.getModifiedDate()).isNotNull().isBefore(LocalDateTime.now())
+        );
     }
 
     @Test

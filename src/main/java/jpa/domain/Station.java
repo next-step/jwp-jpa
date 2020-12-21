@@ -1,5 +1,6 @@
 package jpa.domain;
 
+import com.sun.istack.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import jpa.infrastructure.jpa.BaseEntity;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author : leesangbae
@@ -25,6 +26,7 @@ public class Station extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(unique = true, nullable = false)
     private String name;
 
@@ -56,7 +58,7 @@ public class Station extends BaseEntity {
     }
 
     private void validation(String name) {
-        if (!StringUtils.hasText(name)) {
+        if (StringUtils.isBlank(name)) {
             throw new IllegalArgumentException("Station의 name은 필수 값 입니다.");
         }
     }
