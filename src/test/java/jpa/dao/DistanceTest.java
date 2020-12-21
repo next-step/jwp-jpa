@@ -20,7 +20,35 @@ public class DistanceTest {
     private StationRepository stationRepository;
     @Autowired
     private DistanceRepository distanceRepository;
-    
+
+//    private void insertTransaction(String lineName, String lineColor, String[] stationNames) {
+//        Line line = lineRepository.save(new Line(lineName, lineColor));
+//        for ( int ix = 0 ; ix < stationNames.length ; ix ++ ) {
+//            Station station = getStation(stationNames[ix]);
+//            System.out.println(station);
+//            distanceRepository.save(new Distance(line, station, ix, ix + 1));
+//        }
+//    }
+//
+//    private Station getStation(String stationName) {
+//        return stationRepository.findByName(stationName)
+//                .orElseGet(() -> stationRepository.save(new Station(stationName)));
+//    }
+//
+//    private void insertValues(String lineName, String lineColor, String[] stationNames) {
+//        FutureTask<Void> task = new FutureTask<>(() -> {
+//            insertTransaction(lineName, lineColor, stationNames);
+//            return null;
+//        });
+//
+//        try {
+//            new Thread(task).start();
+//            task.get();
+//        } catch ( ExecutionException | InterruptedException ignored ) {
+//            ignored.printStackTrace();
+//        }
+//    }
+
     private void insertValues(String lineName, String lineColor, String[] stationNames) {
         Line line = lineRepository.save(new Line(lineName, lineColor));
         for ( int ix = 0 ; ix < stationNames.length ; ix ++ ) {
