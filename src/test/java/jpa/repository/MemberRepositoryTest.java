@@ -49,13 +49,5 @@ public class MemberRepositoryTest {
         Member member = new Member("test@naver.com");
         Member result = memberRepository.save(member);
         assertThat(result.getEmail()).isEqualTo("test@naver.com");
-
-        member.setEmail("member@gmail.com");
-        memberRepository.flush();
-        assertThat(result.getEmail()).isEqualTo("member@gmail.com");
-
-        member.setEmail("member2@gmail.com");
-        Member member2 = memberRepository.findByEmail("member2@gmail.com");
-        assertThat(result.getEmail()).isEqualTo(member2.getEmail());
     }
 }
