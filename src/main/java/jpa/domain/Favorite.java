@@ -27,7 +27,7 @@ public class Favorite extends BaseTime {
 		this.departure = departure;
 		this.arrival = arrival;
 		this.member = member;
-		member.addFavorite(this);
+		member.add(this);
 	}
 
 	public void setMember(Member member) {

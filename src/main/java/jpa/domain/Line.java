@@ -44,7 +44,7 @@ public class Line extends BaseTime {
 		return color;
 	}
 
-	public void addLineStation(LineStation lineStation) {
+	public void add(LineStation lineStation) {
 		lineStations.add(lineStation);
 	}
 
