@@ -3,11 +3,14 @@ package jpa.repository;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import jpa.domain.Line;
+import jpa.domain.Station;
 
 /**
  * @author : byungkyu
@@ -76,5 +79,24 @@ public class LineRepositoryTest {
 		Line deletedLine = lines.findByName(name);
 
 		assertThat(deletedLine).isNull();
+	}
+
+	@DisplayName("노선 조회 시 속한 지하철 역을 볼 수 있다.")
+	@Test
+	void addLineWithStation() {
+		Line line = lines.save(new Line("2호선", "green"));
+		Station station = new Station("강남역");
+
+		line.addStation(station);
+
+		Line actual = lines.findByName("2호선");
+
+		assertAll(
+			() -> assertThat(actual.getId()).isNotNull(),
+			() -> assertThat(actual.getName()).isEqualTo(line.getName()),
+			() -> assertThat(actual.getColor()).isEqualTo(line.getColor()),
+			() -> assertThat(actual.getStations()).contains(station)
+		);
+
 	}
 }

@@ -1,7 +1,11 @@
 package jpa.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 /**
  * @author : byungkyu
@@ -18,6 +22,9 @@ public class Line extends BaseEntity {
 	public Line() {
 	}
 
+	@OneToMany(mappedBy = "line")
+	private List<Station> stations = new ArrayList<>();
+
 	public Line(String name, String color) {
 		this.name = name;
 		this.color = color;
@@ -33,5 +40,13 @@ public class Line extends BaseEntity {
 
 	public void changeColor(String color) {
 		this.color = color;
+	}
+
+	public void addStation(Station station) {
+		stations.add(station);
+	}
+
+	public List<Station> getStations(){
+		return stations;
 	}
 }

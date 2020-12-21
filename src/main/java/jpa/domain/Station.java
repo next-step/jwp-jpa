@@ -2,6 +2,8 @@ package jpa.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * @author : byungkyu
@@ -15,6 +17,10 @@ public class Station extends BaseEntity {
 
 	public Station() {
 	}
+
+	@ManyToOne
+	@JoinColumn(name = "line_id")
+	private Line line;
 
 	public Station(String name) {
 		this.name = name;
