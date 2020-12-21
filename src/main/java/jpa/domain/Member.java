@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,6 +25,15 @@ public class Member extends BaseEntity {
   @Column
   private String password;
 
+  @OneToMany(mappedBy = "member")
+  private List<Favorite> favorites = new ArrayList<>();
+
+  public Member(final String email, final int age, final String password) {
+    this.email = email;
+    this.age = age;
+    this.password = password;
+  }
+
   public void changeAge(final int age) {
     if (age < 0) {
       throw new IllegalArgumentException("나이가 올바르지 않습니다.");
@@ -30,10 +41,9 @@ public class Member extends BaseEntity {
     this.age = age;
   }
 
-  public Member(final String email, final int age, final String password) {
-    this.email = email;
-    this.age = age;
-    this.password = password;
+  public void addFavorite(final Favorite favorite) {
+    this.favorites.add(favorite);
+    favorite.setMember(this);
   }
 
 }

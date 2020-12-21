@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,6 +32,9 @@ public class Station extends BaseEntity {
   }
 
   public void setLine(final Line line) {
+    if (Objects.nonNull(this.line)) {
+      this.line.getStations().remove(this);
+    }
     this.line = line;
     line.getStations().add(this);
   }
