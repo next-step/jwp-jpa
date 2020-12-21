@@ -11,7 +11,6 @@ import java.util.List;
 public class Line extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
 
     private String color;

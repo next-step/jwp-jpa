@@ -11,7 +11,6 @@ import java.util.List;
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
 
     private int age;
@@ -54,5 +53,6 @@ public class Member extends BaseEntity {
 
     public void addFavorite(Favorite favorite) {
         favorites.add(favorite);
+        favorite.changeMember(this);
     }
 }

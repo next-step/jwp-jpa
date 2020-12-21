@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,27 +57,21 @@ class MemberRepositoryTest {
         Station station3 = new Station("회룡역");
         Station station4 = new Station("도봉산역");
         Station station5 = new Station("삼성역");
-
-        stationRepository.save(station1);
-        stationRepository.save(station2);
-        stationRepository.save(station3);
-        stationRepository.save(station4);
-        stationRepository.save(station5);
+        stationRepository.saveAll(Arrays.asList(station1, station2, station3, station4, station5));
 
         Favorite favorite1 = new Favorite(station1, station2);
         Favorite favorite2 = new Favorite(station1, station3);
         Favorite favorite3 = new Favorite(station4, station5);
-        favoriteRepository.save(favorite1);
-        favoriteRepository.save(favorite2);
-        favoriteRepository.save(favorite3);
+        favoriteRepository.saveAll(Arrays.asList(favorite1, favorite2, favorite3));
+
         //when
         Member member = new Member(30, "kim@gmail.com","qwerty1234");
         member.addFavorite(favorite1);
         member.addFavorite(favorite2);
         member.addFavorite(favorite3);
         Member savedMember = memberRepository.save(member);
-        //then
 
+        //then
         Member findMember = memberRepository.findById(savedMember.getId()).get();
         assertThat(findMember.getFavorites().size()).isEqualTo(3);
         assertThat(findMember.getFavorites().get(0).getDepartureStation()).isEqualTo(station1);

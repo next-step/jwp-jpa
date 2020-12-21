@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Optional;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -47,10 +47,7 @@ class LineRepositoryTest {
         Station station1 = new Station("의정부역");
         Station station2 = new Station("회룡역");
         Station station3 = new Station("망월사역");
-
-        stationRepository.save(station1);
-        stationRepository.save(station2);
-        stationRepository.save(station3);
+        stationRepository.saveAll(Arrays.asList(station1, station2, station3));
 
         Line line1 = new Line("0D3692", "1호선");
         line1.addStation(station1);
