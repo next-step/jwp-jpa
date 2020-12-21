@@ -25,14 +25,14 @@ public class LineRepositoryTest {
     @Test
     @DisplayName("색으로 저장, 조회, 수정")
     void findBycolor() {
-        Line line = new Line("green","two");
+        Line line = new Line("orange","three");
         Line result = lineRepository.save(line);
         assertAll(
-                () -> assertThat(result.getColor()).isEqualTo("green"),
-                () -> assertThat(result).isEqualTo(lineRepository.findByColor("green")),
-                () -> assertThat(result.getColor()).isEqualTo(lineRepository.findByColor("two").getColor())
+                () -> assertThat(result.getColor()).isEqualTo("orange"),
+                () -> assertThat(result).isEqualTo(lineRepository.findByColor("orange")),
+                () -> assertThat(result.getColor()).isEqualTo(lineRepository.findByName("three").getColor())
         );
-        result.setColor("blue");
+        result.changeColor("blue");
         assertThat(result.getColor()).isEqualTo(lineRepository.findByColor("blue").getColor());
     }
 
@@ -46,7 +46,7 @@ public class LineRepositoryTest {
                 () -> assertThat(result).isEqualTo(lineRepository.findByName("five")),
                 () -> assertThat(result.getName()).isEqualTo(lineRepository.findByName("five").getName())
         );
-        result.setName("one");
+        result.changeName("one");
         assertThat(result.getName()).isEqualTo(lineRepository.findByName("one").getName());
     }
 }

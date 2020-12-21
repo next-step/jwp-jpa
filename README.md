@@ -69,3 +69,5 @@ create table favorite (
 * favorite <-> member (다대일 양방향) : 테스트 & repository
 * favorite <-> station (일대다 단방향) => station <-> favorite (다대일 양방향) : 테스트 & repository  
 * favorite : 속성 - 출발역, 도착역 
+* 노선 조회시 속한 지하철역 확인
+* 지하철역 조회시 속한 노선 확인

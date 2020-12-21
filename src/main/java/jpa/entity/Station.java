@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -19,6 +21,9 @@ import java.util.Objects;
 public class Station extends BaseEntity {
 
     private String name;
+
+    @OneToMany(mappedBy = "station")
+    private List<StationLine> stationLines = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "favorite_id")
