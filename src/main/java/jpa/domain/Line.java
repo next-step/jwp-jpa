@@ -13,9 +13,13 @@ public class Line {
     private LocalDateTime createDate;
     @Column(name = "modified_date")
     private LocalDateTime updateDate;
+    @Column(name = "color")
     private String color;
-    @Column(unique = true)
+    @Column(name = "name", unique = true)
     private String name;
+
+    public Line() {
+    }
 
     public Long getId() {
         return id;
@@ -31,6 +35,10 @@ public class Line {
 
     public Line(String color, String name) {
         this.color = color;
+        this.name = name;
+    }
+
+    public void changeName(String name) {
         this.name = name;
     }
 }

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -40,5 +42,26 @@ class LineRepositoryTest {
         repository.save(new Line("green", expected));
         String actual = repository.findByName(expected).getName();
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void updateColor() {
+        Line expected = repository.save(new Line("green", "2호선"));
+
+        expected.changeName("3호선");
+
+        String actual = repository.findByName(expected.getName()).getName();
+        assertThat(actual).isEqualTo(expected.getName());
+    }
+
+    @Test
+    void deleteById() {
+        Line expected = repository.save(new Line("green", "2호선"));
+
+        repository.deleteById(expected.getId());
+        repository.flush();
+
+        Optional<Line> actual = repository.findById(expected.getId());
+        assertThat(actual).isNotPresent();
     }
 }

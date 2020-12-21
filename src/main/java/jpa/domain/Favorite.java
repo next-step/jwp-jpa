@@ -20,4 +20,12 @@ public class Favorite {
     public Long getId() {
         return id;
     }
+
+    public LocalDateTime getUpdateDate() {
+        return updateDate;
+    }
+
+    public void changeUpdateTime(LocalDateTime dateTime) {
+        this.updateDate = dateTime;
+    }
 }

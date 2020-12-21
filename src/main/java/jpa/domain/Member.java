@@ -13,9 +13,15 @@ public class Member {
     private LocalDateTime createDate;
     @Column(name = "modified_date")
     private LocalDateTime updateDate;
+    @Column(name = "age")
     private Integer age;
+    @Column(name = "email")
     private String email;
+    @Column(name = "password")
     private String password;
+
+    public Member() {
+    }
 
     public Member(Integer age, String email) {
         this.age = age;
@@ -32,5 +38,9 @@ public class Member {
 
     public String getEmail() {
         return email;
+    }
+
+    public void changeEmail(String email) {
+        this.email = email;
     }
 }

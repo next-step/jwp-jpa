@@ -54,4 +54,26 @@ class MemberRepositoryTest {
         assertThat(member).isPresent();
         assertThat(member.get().getAge()).isEqualTo(10);
     }
+
+    @Test
+    void updateEmail() {
+        Member exptectd = repository.save(new Member(8, "mj1@naver.com"));
+
+        exptectd.changeEmail("mj2@naver.com");
+
+        Optional<Member> actual = repository.findByEmail(exptectd.getEmail());
+        assertThat(actual).isPresent();
+        assertThat(actual.get().getEmail()).isEqualTo(exptectd.getEmail());
+    }
+
+    @Test
+    void delete() {
+        Member exptectd = repository.save(new Member(8, "mj1@naver.com"));
+
+        repository.deleteById(exptectd.getId());
+        repository.flush();
+
+        Optional<Member> member = repository.findById(exptectd.getId());
+        assertThat(member).isNotPresent();
+    }
 }
