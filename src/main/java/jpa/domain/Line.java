@@ -21,7 +21,12 @@ public class Line {
     private String name;
     private String color;
 
-    public Line() {
+    protected Line() {
+    }
+
+    public Line(String name, String color) {
+        this.name = name;
+        this.color = color;
     }
 
     public Long getId() {
@@ -42,5 +47,9 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
     }
 }

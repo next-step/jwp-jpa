@@ -16,9 +16,18 @@ public class Member {
     private Long id;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-    private Integer age;
     private String email;
     private String password;
+    private Integer age;
+
+    protected Member() {
+    }
+
+    public Member(String email, String password, Integer age) {
+        this.email = email;
+        this.password = password;
+        this.age = age;
+    }
 
     public Long getId() {
         return id;
@@ -42,5 +51,9 @@ public class Member {
 
     public String getPassword() {
         return password;
+    }
+
+    public void changePassword(String password) {
+        this.password = password;
     }
 }

@@ -21,7 +21,9 @@ public class Favorite {
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 
-    public Favorite() {
+    protected Favorite() {
+        this.createdDate = LocalDateTime.now();
+        this.modifiedDate = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -35,4 +37,9 @@ public class Favorite {
     public LocalDateTime getModifiedDate() {
         return modifiedDate;
     }
+
+    public void update() {
+        this.modifiedDate = LocalDateTime.now();
+    }
+
 }

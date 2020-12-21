@@ -20,7 +20,7 @@ public class Station {
     @Column(unique = true)
     private String name;
 
-    public Station() {
+    protected Station() {
     }
 
     public Station(String name) {
@@ -41,5 +41,9 @@ public class Station {
 
     public String getName() {
         return name;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
     }
 }
