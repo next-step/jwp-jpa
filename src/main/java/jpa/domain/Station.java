@@ -18,7 +18,7 @@ public class Station extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "upStation")
-    private List<LineStation> lineStations = new ArrayList<>();
+    private List<Section> sections = new ArrayList<>();
 
     protected Station() {
     }
@@ -40,9 +40,9 @@ public class Station extends BaseEntity {
         return name;
     }
 
-    public void addLineStation(final LineStation lineStation) {
-        lineStation.updateUpStation(this);
-        this.lineStations.add(lineStation);
+    public void addLineStation(final Section section) {
+        section.updateUpStation(this);
+        this.sections.add(section);
     }
 
     public void updateStation(final Station station) {
@@ -50,13 +50,13 @@ public class Station extends BaseEntity {
     }
 
     public List<Line> getLines() {
-        return this.lineStations.stream()
-                .map(LineStation::getLine)
+        return this.sections.stream()
+                .map(Section::getLine)
                 .collect(Collectors.toList());
     }
 
-    List<LineStation> getLineStations() {
-        return this.lineStations;
+    List<Section> getLineStations() {
+        return this.sections;
     }
 
     @Override

@@ -8,14 +8,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class LineStation extends BaseEntity {
+public class Section extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "line_id")
-    private Line line;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "up_station_id")
@@ -25,48 +21,32 @@ public class LineStation extends BaseEntity {
     @JoinColumn(name = "down_station_id")
     private Station downStation;
 
-    private int distance;
-
-    protected  LineStation() {
+    protected Section() {
     }
 
-    LineStation(final Long id, final Line line, final Station upStation, final Station downStation, final int distance) {
+    Section(final Long id, final Station upStation, final Station downStation) {
         this.id = id;
-        this.line = line;
         this.upStation = upStation;
         this.downStation = downStation;
-        this.distance = distance;
     }
 
-    LineStation(final Line line, final Station upStation, final Station downStation, final int distance) {
-        this(null, line, upStation, downStation, distance);
+    public Section(final Station upStation, final Station downStation) {
+        this(null, upStation, downStation);
     }
 
     public Long getId() {
         return this.id;
     }
 
-    void updateLine(final Line line) {
-        this.line = line;
-    }
-
-    void updateUpStation(final Station station) {
-        this.upStation = station;
-    }
-
     List<Station> getStations() {
         return Arrays.asList(upStation, downStation);
-    }
-
-    Line getLine() {
-        return this.line;
     }
 
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final LineStation that = (LineStation) o;
+        final Section that = (Section) o;
         return Objects.equals(id, that.id);
     }
 

@@ -3,7 +3,6 @@ package jpa.domain;
 import jpa.utils.BaseEntity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,8 +20,8 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "line", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LineStation> lineStations = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Distance> distances = new ArrayList<>();
 
     protected Line() {
     }
@@ -52,27 +51,6 @@ public class Line extends BaseEntity {
     public void updateLine(final Line line) {
         this.color = line.color;
         this.name = line.name;
-    }
-
-    public void addLineStation(final LineStation lineStation) {
-        this.lineStations.add(lineStation);
-        lineStation.updateLine(this);
-    }
-
-    public List<Station> getStations() {
-        Set<Station> dupRemovedStations = this.lineStations.stream().flatMap(it -> it.getStations()
-                .stream())
-                .collect(Collectors.toSet());
-
-        return new ArrayList<>(dupRemovedStations);
-    }
-
-    public void removeLineStation(final LineStation lineStation) {
-        this.lineStations.remove(lineStation);
-    }
-
-    List<LineStation> getLineStations() {
-        return this.lineStations;
     }
 
     @Override
