@@ -3,6 +3,7 @@ package jpa.domain.manyToMany;
 import jpa.utils.BaseEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,7 +15,7 @@ public class ManyToManyStation extends BaseEntity {
     private String name;
 
     @ManyToMany(mappedBy = "stations")
-    private List<ManyToManyLine> lines;
+    private List<ManyToManyLine> lines = new ArrayList<>();
 
     protected ManyToManyStation() {
     }

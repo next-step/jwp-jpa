@@ -3,6 +3,7 @@ package jpa.domain.manyToMany;
 import jpa.utils.BaseEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,9 +16,9 @@ public class ManyToManyLine extends BaseEntity {
 
     private String color;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "station_id")
-    private List<ManyToManyStation> stations;
+    private List<ManyToManyStation> stations = new ArrayList<>();
 
     protected ManyToManyLine() {
     }
@@ -30,6 +31,10 @@ public class ManyToManyLine extends BaseEntity {
 
     public ManyToManyLine(final String name, final String color) {
         this(null, name, color);
+    }
+
+    public void addStation(final ManyToManyStation station) {
+        this.stations.add(station);
     }
 
     public Long getId() {
