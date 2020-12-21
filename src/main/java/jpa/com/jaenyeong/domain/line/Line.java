@@ -2,12 +2,10 @@ package jpa.com.jaenyeong.domain.line;
 
 import jpa.com.jaenyeong.domain.BaseEntity;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Getter
 @Entity
 @Table(name = "LINE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,6 +26,18 @@ public class Line extends BaseEntity {
     public Line(final String name, final String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void changeLineColor(final String color) {
