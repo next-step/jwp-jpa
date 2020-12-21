@@ -1,16 +1,17 @@
 package jpa.com.jaenyeong.domain.station;
 
-import jpa.com.jaenyeong.domain.BaseTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DataJpaTest
 @DisplayName("Station Repository 테스트")
-class StationRepositoryTest extends BaseTest {
+class StationRepositoryTest {
     @Autowired
     private StationRepository stations;
 

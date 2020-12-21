@@ -1,10 +1,10 @@
 package jpa.com.jaenyeong.domain.line;
 
-import jpa.com.jaenyeong.domain.BaseTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
@@ -12,8 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+@DataJpaTest
 @DisplayName("Line Repository 테스트")
-class LineRepositoryTest extends BaseTest {
+class LineRepositoryTest {
     @Autowired
     private LineRepository lines;
 
