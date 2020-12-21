@@ -48,8 +48,7 @@ public class ManyToManyTest {
         LINE_SAVED_WITH_STATION(stationName, lineName, lineColor);
 
         // when
-        ManyToManyLine foundLine = lineRepository.findByName(lineName).orElse(null);
-        assertThat(foundLine).isNotNull();
+        ManyToManyLine foundLine = LINE_EXIST(lineName);
 
         // then
         assertThat(foundLine.getStations().get(0).getName()).contains(stationName);
@@ -86,8 +85,7 @@ public class ManyToManyTest {
         line.addStation(new ManyToManyStation("sindorim"));
 
         // then
-        ManyToManyLine foundLine = lineRepository.findByName(lineName).orElse(null);
-        assertThat(foundLine).isNotNull();
+        ManyToManyLine foundLine = LINE_EXIST(lineName);
         assertThat(foundLine.getStations()).hasSize(expectedSize);
     }
 
@@ -125,5 +123,12 @@ public class ManyToManyTest {
         assertThat(foundStation).isNotNull();
 
         return foundStation;
+    }
+
+    private ManyToManyLine LINE_EXIST(final String lineName) {
+        ManyToManyLine foundLine = lineRepository.findByName(lineName).orElse(null);
+        assertThat(foundLine).isNotNull();
+
+        return foundLine;
     }
 }
