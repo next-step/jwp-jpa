@@ -1,16 +1,21 @@
 package jpa;
 
+import jpa.domain.Line;
 import jpa.domain.Station;
 import jpa.repository.StationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 class StationRepositoryTest {
+
 	@Autowired
 	private StationRepository stations;
 
@@ -31,4 +36,31 @@ class StationRepositoryTest {
 		String actual = stations.findByName(expected).getName();
 		assertThat(actual).isEqualTo(expected);
 	}
+
+	@Test
+	void 지하철역은_여러_노선에_소속될_수_있다(){
+		List<Line> lineList = new ArrayList<>();
+		lineList.add(new Line("연두색", "2호선"));
+		lineList.add(new Line("보라색", "5호선"));
+
+		stations.save(new Station("왕십리역", lineList));
+
+		assertThat(stations.findByName("왕십리역").getLineList().size()).isEqualTo(2);
+
+	}
+
+	@Test
+	void 지하철역_조회_시_어느_노선에_속한지_볼_수_있다(){
+		List<Line> lineList = new ArrayList<>();
+		lineList.add(new Line("연두색", "2호선"));
+		lineList.add(new Line("보라색", "5호선"));
+
+		stations.save(new Station("왕십리역", lineList));
+		Station findStation = stations.findByName("왕십리역");
+		assertAll(
+				() -> assertThat(findStation.getLineList().contains(new Line("연두색", "2호선"))),
+				() -> assertThat(findStation.getLineList().contains(new Line("보라색", "5호선")))
+		);
+	}
+
 }
