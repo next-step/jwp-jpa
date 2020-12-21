@@ -1,11 +1,12 @@
 package jpa.domain;
 
 import java.util.Objects;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,20 +14,23 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Station extends BaseTimeEntity {
+public class LineStation extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "station_id")
+    private Station station;
 
-    public Station(String name) {
-        this.name = name;
-    }
+    @ManyToOne
+    @JoinColumn(name = "line_id")
+    private Line line;
 
-    public void changeName(String name) {
-        this.name = name;
+    public LineStation(Station station, Line line) {
+        this.station = station;
+        this.line = line;
     }
 
     @Override
@@ -37,13 +41,14 @@ public class Station extends BaseTimeEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Station station = (Station) o;
-        return Objects.equals(id, station.id) &&
-              Objects.equals(name, station.name);
+        LineStation that = (LineStation) o;
+        return Objects.equals(id, that.id) &&
+              Objects.equals(station, that.station) &&
+              Objects.equals(line, that.line);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, station, line);
     }
 }

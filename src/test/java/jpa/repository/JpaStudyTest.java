@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import jpa.domain.Line;
@@ -31,7 +30,7 @@ public class JpaStudyTest {
     @Test
     void save() {
         //given
-        Station expected = Station.builder().name("잠실역").build();
+        Station expected = new Station("잠실역");
 
         //when
         Station actual = stationRepository.save(expected);
@@ -48,9 +47,7 @@ public class JpaStudyTest {
     void findByName() {
         //given
         String expected = "잠실역";
-        stationRepository.save(Station.builder()
-              .name(expected)
-              .build());
+        stationRepository.save(new Station(expected));
 
         //when
         String actual = stationRepository.findByName(expected).getName();
@@ -63,11 +60,11 @@ public class JpaStudyTest {
     @Test
     void findAllByAge() {
         //when
-        Optional<List<Member>> maybeMemberList = memberRepository.findAllByAge(10);
+        List<Member> maybeMemberList = memberRepository.findAllByAge(10);
 
         //then
-        assertThat(maybeMemberList.isPresent()).isTrue();
-        assertThat(maybeMemberList.get()).hasSize(2);
+        assertThat(maybeMemberList).isNotEmpty();
+        assertThat(maybeMemberList).hasSize(2);
     }
 
     @DisplayName("이메일이 dev.com 으로 끝나는 회원목록")
@@ -97,7 +94,7 @@ public class JpaStudyTest {
     void deleteInBatch() {
         //given
         List<Member> members = IntStream.rangeClosed(1, 1_000)
-              .mapToObj(age -> Member.builder().age(age).email("test@batch.com").build())
+              .mapToObj(age -> new Member(age, "test" + age + "@batch.com"))
               .collect(Collectors.toList());
         List<Member> savedMembers = memberRepository.saveAll(members);
         memberRepository.flush();
@@ -114,12 +111,12 @@ public class JpaStudyTest {
     void deleteByQuery() {
         //given
         List<Member> members = IntStream.rangeClosed(1, 50)
-              .mapToObj(age -> Member.builder().age(age).email("test@batch.com").build())
+              .mapToObj(age -> new Member(age, "test" + age + "@batch.com"))
               .collect(Collectors.toList());
         memberRepository.saveAll(members);
 
         //when
-        memberRepository.deleteByEmailInQuery("test@batch.com");
+        memberRepository.deleteByEmailLikeInQuery("%@batch.com");
 
         //then
         assertThat(memberRepository.findAllByEmailEndsWith("batch.com")).isEmpty();
@@ -129,7 +126,7 @@ public class JpaStudyTest {
     @Test
     void identity() {
         //given
-        Station station1 = stationRepository.save(Station.builder().name("잠실역").build());
+        Station station1 = stationRepository.save(new Station("잠실역"));
 
         //when
         Station station2 = stationRepository.findById(station1.getId()).get();
@@ -142,7 +139,7 @@ public class JpaStudyTest {
     @Test
     void dateTime() {
         //given
-        Member member = Member.builder().age(10).build();
+        Member member = new Member(10);
 
         //when
         Member actual = memberRepository.save(member);
@@ -156,8 +153,8 @@ public class JpaStudyTest {
     @Test
     void nameDuplicateTest() {
         //given
-        Line line1 = Line.builder().name("line2").color("green").build();
-        Line line2 = Line.builder().name("line2").color("blue").build();
+        Line line1 = new Line("line2", "green");
+        Line line2 = new Line("line2", "blue");
 
         lineRepository.save(line1);
 
@@ -170,7 +167,7 @@ public class JpaStudyTest {
     @Test
     void transaction() {
         System.out.println("===== [station1] save ====");
-        Station station1 = stationRepository.save(Station.builder().name("잠실역").build());
+        Station station1 = stationRepository.save(new Station("잠실역"));
         System.out.println("===== [station1] change name ====");
         station1.changeName("발산역");
 
