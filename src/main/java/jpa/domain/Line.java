@@ -10,16 +10,18 @@ public class Line extends BaseEntity{
     @Column(unique = true)
     private String name;
     private String color;
+    @ManyToMany
+    private List<Station> stations = new ArrayList<>();
 
     protected Line() {}
-
-    public Line(String name) {
-        this.name = name;
-    }
 
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public void addStation(Station station) {
+        stations.add(station);
     }
 
     public String getName() {
@@ -28,5 +30,9 @@ public class Line extends BaseEntity{
 
     public String getColor() {
         return color;
+    }
+
+    public List<Station> getStations() {
+        return stations;
     }
 }

@@ -1,12 +1,16 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "station")
 public class Station extends BaseEntity{
     @Column(unique = true)
     private String name;
+    @ManyToMany
+    private List<Line> lines = new ArrayList<>();
 
     protected Station() {}
 
@@ -14,7 +18,15 @@ public class Station extends BaseEntity{
         this.name = name;
     }
 
+    public void addLine(Line line) {
+        lines.add(line);
+    }
+
     public String getName() {
         return name;
+    }
+
+    public List<Line> getLines() {
+        return lines;
     }
 }
