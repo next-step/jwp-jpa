@@ -31,7 +31,10 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("멤버 id로 조회 테스트")
     public void findById() throws Exception {
-        Member expected1 = new Member(25, "email1@woowa.com", "0000");
+        Member expected1 = new Member
+                .Builder("email1@woowa.com", "0000")
+                .age(25)
+                .build();
         Member expected2 = members.save(expected1);
         Optional<Member> byId = members.findById(expected1.getId());
 
@@ -48,8 +51,14 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("멤버 age로 조회 테스트")
     public void findByAge() throws Exception {
-        Member member1 = new Member(25, "email1@woowa.com", "0000");
-        Member member2 = new Member(25, "email2@woowa.com", "0000");
+        Member member1 = new Member
+                .Builder("email1@woowa.com", "0000")
+                .age(25)
+                .build();
+        Member member2 = new Member
+                .Builder("email2@woowa.com", "0000")
+                .age(25)
+                .build();
         members.save(member1);
         members.save(member2);
 
@@ -67,8 +76,14 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("멤버 email 로 조회 테스트")
     public void findByEmail() throws Exception {
-        Member member1 = new Member(25, "email1@woowa.com", "0000");
-        Member member2 = new Member(25, "email2@woowa.com", "0000");
+        Member member1 = new Member
+                .Builder("email1@woowa.com", "0000")
+                .age(25)
+                .build();
+        Member member2 = new Member
+                .Builder("email2@woowa.com", "0000")
+                .age(25)
+                .build();
         members.save(member1);
         members.save(member2);
 
