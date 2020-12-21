@@ -26,8 +26,8 @@ class LineRepositoryTest {
     final Line actual = lines.save(expected);
     assertAll(
         () -> assertThat(actual.getId()).isNotNull(),
-        () -> assertThat(actual.getName()).isEqualTo("2호선"),
-        () -> assertThat(actual.getColor()).isEqualTo("GREEN"),
+        () -> assertThat(actual.getName()).isEqualTo("8호선"),
+        () -> assertThat(actual.getColor()).isEqualTo("PINK"),
         () -> assertThat(actual.getCreatedDate()).isNotNull(),
         () -> assertThat(actual.getModifiedDate()).isNotNull()
     );
@@ -38,9 +38,8 @@ class LineRepositoryTest {
     final Line expected = getLineSampleData();
     lines.save(expected);
 
-    final Line actual = lines.findByName("2호선");
-
-    assertThat(actual.getName()).isEqualTo("2호선");
+    final Line actual = lines.findByName("8호선");
+    assertThat(actual.getName()).isEqualTo("8호선");
   }
 
   @Test
@@ -81,7 +80,7 @@ class LineRepositoryTest {
 
   @Test
   void saveWithStations() {
-    Line expected = new Line("8호선", "PINK");
+    Line expected = getLineSampleData();
     expected.addStation(stations.save(new Station("복정역")));
     lines.save(expected);
     lines.flush(); // transaction commit
@@ -90,6 +89,6 @@ class LineRepositoryTest {
   }
 
   private Line getLineSampleData() {
-    return new Line("2호선", "GREEN");
+    return new Line("8호선", "PINK");
   }
 }

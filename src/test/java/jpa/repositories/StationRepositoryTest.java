@@ -77,30 +77,27 @@ class StationRepositoryTest {
   @Test
   void saveWithLine() {
     Station station = stations.save(getStationSampleData());
-    station.setLine(lines.save(new Line("2호선", "GREEN")));
+    station.setLine(lines.save(getLineSampleData()));
     Station actual = stations.save(station);
     stations.flush();
 
-    assertThat(actual.getLine().getName()).isEqualTo("2호선");
+    assertThat(actual.getLine().getName()).isEqualTo("8호선");
   }
 
   @Test
   void updateWithLine() {
     Station station = stations.save(getStationSampleData());
-    station.setLine(lines.save(new Line("2호선", "GREEN")));
+    station.setLine(lines.save(getLineSampleData()));
     stations.flush();
 
-    assertThat(station.getLine().getName()).isEqualTo("2호선");
-  }
-
-  @Test
-  void deleteLine() {
-    Station expected = stations.findByName("교대역");
-    expected.setLine(null);
-    stations.flush(); // transaction commit
+    assertThat(station.getLine().getName()).isEqualTo("8호선");
   }
 
   private Station getStationSampleData() {
     return new Station("잠실역");
+  }
+
+  private Line getLineSampleData() {
+    return new Line("8호선", "PINK");
   }
 }
