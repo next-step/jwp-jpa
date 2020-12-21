@@ -24,12 +24,24 @@ public class Favorite extends BaseEntity {
     @JoinColumn(name = "arrival_station_id")
     private Station arrivalStation;
 
+    protected Favorite() {
+    }
+
+    public Favorite(Station departureStation, Station arrivalStation) {
+        this.departureStation = departureStation;
+        this.arrivalStation = arrivalStation;
+    }
+
     public Long getId() {
         return id;
     }
 
     public Member getMember() {
         return member;
+    }
+
+    public void changeMember(Member member) {
+        this.member = member;
     }
 
     public Station getDepartureStation() {

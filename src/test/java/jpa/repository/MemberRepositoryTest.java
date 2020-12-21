@@ -35,4 +35,5 @@ class MemberRepositoryTest {
         List<Member> memberList = memberRepository.findByEmail(expected);
         assertThat(memberList.size()).isEqualTo(1);
     }
+
 }
