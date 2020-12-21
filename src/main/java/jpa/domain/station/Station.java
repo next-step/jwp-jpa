@@ -38,4 +38,8 @@ public class Station extends BaseEntity {
     public Station(String name) {
         this.name = name;
     }
+
+    public void addLine(Line line) {
+        lines.add(line);
+    }
 }

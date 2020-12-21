@@ -52,7 +52,7 @@ class LineRepositoryTest {
         stationRepository.save(station2);
         stationRepository.save(station3);
 
-        Line line1 = new Line("군청색", "1호선");
+        Line line1 = new Line("0D3692", "1호선");
         line1.addStation(station1);
         line1.addStation(station2);
         line1.addStation(station3);
