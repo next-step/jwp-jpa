@@ -1,4 +1,19 @@
 spring:
+  profiles:
+    active: prod
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        ddl-auto: validate
+    show-sql: true
+
+
+---
+
+spring:
+  profiles:
+    active: local
   jpa:
     properties:
       hibernate:
