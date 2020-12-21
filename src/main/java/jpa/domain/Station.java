@@ -24,20 +24,29 @@ public class Station {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
+	@Column(nullable = false)
 	private String name;
 
 	@ManyToMany
 	@JoinColumn(name = "line_id")
-	private List<Line> line;
+	private List<Line> lines;
 
-	@Column
 	@CreationTimestamp
 	private LocalDateTime createdDate;
 
-	@Column
 	@UpdateTimestamp
 	private LocalDateTime modifiedDate;
+
+	@Override
+	public String toString() {
+		return "Station{" +
+			"id=" + id +
+			", name='" + name + '\'' +
+			", line=" + lines +
+			", createdDate=" + createdDate +
+			", modifiedDate=" + modifiedDate +
+			'}';
+	}
 
 	protected Station() {
 
@@ -47,8 +56,9 @@ public class Station {
 		this.name = name;
 	}
 
-	public void setLine(List<Line> line) {
-		this.line = line;
+	public Station(String name, List<Line> line) {
+		this.name = name;
+		this.lines = line;
 	}
 
 	public Long getId() {
@@ -59,8 +69,8 @@ public class Station {
 		return name;
 	}
 
-	public List<Line> getLine() {
-		return line;
+	public List<Line> getLines() {
+		return lines;
 	}
 
 	public LocalDateTime getCreatedDate() {
@@ -71,18 +81,21 @@ public class Station {
 		return modifiedDate;
 	}
 
-	@Override
-	public String toString() {
-		return "Station{" +
-			"id=" + id +
-			", name='" + name + '\'' +
-			", line=" + line +
-			", createdDate=" + createdDate +
-			", modifiedDate=" + modifiedDate +
-			'}';
+	public void setLines(List<Line> line) {
+		this.lines = line;
 	}
 
-	public void changeName(String name) {
+	public void changeName(final String name) {
 		this.name = name;
+	}
+
+	public void changeId(final Long id) {
+		this.id = id;
+	}
+
+	public Line getFirstLine() {
+		return this.lines.stream()
+			.findFirst()
+			.orElse(null);
 	}
 }
