@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.PATH;
 
 @DataJpaTest
 public class ManyToManyTest {
@@ -33,5 +34,25 @@ public class ManyToManyTest {
         // then
         ManyToManyStation foundStation = stationRepository.findByName(station.getName()).orElse(null);
         assertThat(foundStation).isNotNull();
+    }
+
+    @DisplayName("Line에서 Station을 조회할 수 있다.")
+    @Test
+    void getStationAtLineTest() {
+        String stationName = "gangnam";
+        String lineColor = "green";
+        String lineName = "lineNumber2";
+        // given
+        ManyToManyStation station = new ManyToManyStation(stationName);
+        ManyToManyLine line = new ManyToManyLine(lineName, lineColor);
+        line.addStation(station);
+        lineRepository.save(line);
+
+        // when
+        ManyToManyLine foundLine = lineRepository.findByName(line.getName()).orElse(null);
+        assertThat(foundLine).isNotNull();
+
+        // then
+        assertThat(foundLine.getStations()).contains(station);
     }
 }

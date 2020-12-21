@@ -29,11 +29,20 @@ public class ManyToManyStation extends BaseEntity {
         this(null, name);
     }
 
+    public void addLines(final ManyToManyLine line) {
+        this.lines.add(line);
+        line.getStations().add(this);
+    }
+
     public Long getId() {
         return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    List<ManyToManyLine> getLines() {
+        return lines;
     }
 }

@@ -35,6 +35,7 @@ public class ManyToManyLine extends BaseEntity {
 
     public void addStation(final ManyToManyStation station) {
         this.stations.add(station);
+        station.getLines().add(this);
     }
 
     public Long getId() {
@@ -47,5 +48,9 @@ public class ManyToManyLine extends BaseEntity {
 
     public String getColor() {
         return color;
+    }
+
+    public List<ManyToManyStation> getStations() {
+        return stations;
     }
 }
