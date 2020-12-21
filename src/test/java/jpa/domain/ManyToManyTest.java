@@ -35,8 +35,7 @@ public class ManyToManyTest {
         LINE_SAVED_WITH_STATION(stationName, lineName, lineColor);
 
         // then
-        ManyToManyStation foundStation = stationRepository.findByName(stationName).orElse(null);
-        assertThat(foundStation).isNotNull();
+        STATION_EXIST(stationName);
     }
 
     @DisplayName("Line에서 Station을 조회할 수 있다.")
@@ -66,8 +65,7 @@ public class ManyToManyTest {
         ManyToManyLine line = LINE_SAVED_WITH_STATION(stationName, lineName, lineColor);
 
         // when
-        ManyToManyStation foundStation = stationRepository.findByName(stationName).orElse(null);
-        assertThat(foundStation).isNotNull();
+        ManyToManyStation foundStation = STATION_EXIST(stationName);
 
         // then
         assertThat(foundStation.getLines()).contains(line);
@@ -102,16 +100,14 @@ public class ManyToManyTest {
 
         // given
         ManyToManyLine line = LINE_SAVED_WITH_STATION(stationName, lineName, lineColor);
-        ManyToManyStation foundStationBeforeDelete = stationRepository.findByName(stationName).orElse(null);
-        assertThat(foundStationBeforeDelete).isNotNull();
+        STATION_EXIST(stationName);
 
         // when
         lineRepository.deleteById(line.getId());
         entityManager.flush();
 
         // then
-        ManyToManyStation foundStationAfterDelete = stationRepository.findByName(stationName).orElse(null);
-        assertThat(foundStationAfterDelete).isNotNull();
+        STATION_EXIST(stationName);
     }
 
     private ManyToManyLine LINE_SAVED_WITH_STATION(
@@ -122,5 +118,12 @@ public class ManyToManyTest {
         line.addStation(station);
 
         return lineRepository.save(line);
+    }
+
+    private ManyToManyStation STATION_EXIST(final String stationName) {
+        ManyToManyStation foundStation = stationRepository.findByName(stationName).orElse(null);
+        assertThat(foundStation).isNotNull();
+
+        return foundStation;
     }
 }
