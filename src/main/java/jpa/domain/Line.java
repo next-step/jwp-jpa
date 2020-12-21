@@ -12,9 +12,9 @@ public class Line {
     @Column(nullable = false)
     private Long id;
 
-    private Date created_date;
+    private Timestamp created_date;
 
-    private Date modified_date;
+    private Timestamp modified_date;
 
     private String color;
 
@@ -33,19 +33,19 @@ public class Line {
         this.id = id;
     }
 
-    public Date getCreated_date() {
+    public Timestamp getCreated_date() {
         return created_date;
     }
 
-    public void setCreated_date(Date created_date) {
+    public void setCreated_date(Timestamp created_date) {
         this.created_date = created_date;
     }
 
-    public java.util.Date getModified_date() {
+    public Timestamp getModified_date() {
         return modified_date;
     }
 
-    public void setModified_date(Date modified_date) {
+    public void setModified_date(Timestamp modified_date) {
         this.modified_date = modified_date;
     }
 
