@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.persistence.EntityManager;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,5 +56,26 @@ public class ManyToManyRefactorTest {
         // then
         Distance foundDistance = distanceRepository.findById(distance.getId()).orElse(null);
         assertThat(foundDistance).isNotNull();
+    }
+
+    @DisplayName("생성된 라인에 속한 역들을 볼 수 있다.")
+    @Test
+    void getStationsFromLineTest() {
+        String color = "녹색";
+        String name = "2호선";
+        int distanceValue = 5;
+
+        // given
+        Line line = new Line(color, name);
+        Distance distance = new Distance(distanceValue, new Section(gangnam, jamsil));
+        line.addDistance(distance);
+        lineRepository.save(line);
+        entityManager.flush();
+
+        // when
+        List<Station> stations = line.getStations();
+
+        // then
+        assertThat(stations).contains(gangnam, jamsil);
     }
 }

@@ -57,6 +57,14 @@ public class Line extends BaseEntity {
         this.distances.add(distance);
     }
 
+    public List<Station> getStations() {
+        Set<Station> dupRemovedStations = distances.stream()
+                .flatMap(it -> it.getStations().stream())
+                .collect(Collectors.toSet());
+
+        return new ArrayList<>(dupRemovedStations);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

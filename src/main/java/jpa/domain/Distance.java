@@ -3,6 +3,7 @@ package jpa.domain;
 import jpa.utils.BaseEntity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Distance extends BaseEntity {
@@ -26,6 +27,10 @@ public class Distance extends BaseEntity {
 
     public Distance(final int distance, final Section section) {
         this(null, distance, section);
+    }
+
+    public List<Station> getStations() {
+        return this.section.getStations();
     }
 
     public Long getId() {
