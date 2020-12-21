@@ -129,14 +129,16 @@ class LineRepositoryTest {
         em.persist(line1);
 
         // 지하철역 저장
+        Station gyodae = new Station("교대역");
         Station gangnam = new Station("강남역");
         Station hapjeong = new Station("합정역");
+        em.persist(gyodae);
         em.persist(gangnam);
         em.persist(hapjeong);
 
         // 지하철역 노선 저장
-        em.persist(new LineStation(gangnam, line1));
-        em.persist(new LineStation(hapjeong, line1));
+        line1.addLineStation(gyodae, gangnam, Distance.ofMeter(100L));
+        line1.addLineStation(gyodae, hapjeong, Distance.ofMeter(200L));
 
         // when
         Line line = lines.findByName(lineName).get();
@@ -147,5 +149,73 @@ class LineRepositoryTest {
                 () -> assertThat(stations).isNotNull(),
                 () -> assertThat(stations).contains(gangnam, hapjeong)
         );
+    }
+
+    @DisplayName("노선에 역을 추가할 때는 이전 역과 얼마나 차이가 나는지 길이(distance)를 알고 있어야 한다.")
+    @Test
+    void lineStationDistance() {
+        // given
+        Line line1 = new Line("1호선", Color.BLUE);
+
+        Station station1 = new Station("관악역");
+        Station station2 = new Station("안양역");
+        em.persist(station1);
+        em.persist(station2);
+
+        Distance distance = Distance.ofMeter(10L);
+
+        line1.addLineStation(station1, station2, distance);
+
+        Line savedLine = lines.save(line1);
+
+        // when
+        Line actual = lines.findByName(savedLine.getName()).get();
+        LineStation lineStation = actual.getLineStation(station2);
+
+        // then
+        assertThat(distance).isEqualTo(lineStation.getDistance());
+    }
+
+    @DisplayName("노선에 역을 중복으로 추가 할 수 없다.")
+    @Test
+    void nonDuplicateLineStation() {
+        // given
+        Line line1 = new Line("1호선", Color.BLUE);
+
+        Station station1 = new Station("관악역");
+        Station station2 = new Station("안양역");
+        em.persist(station1);
+        em.persist(station2);
+
+        Distance distance = Distance.ofMeter(10L);
+
+        line1.addLineStation(station1, station2, distance);
+
+        Line savedLine = lines.save(line1);
+
+        // when / then
+        assertThrows(IllegalArgumentException.class,
+                () -> savedLine.addLineStation(station1, station2, Distance.ofMeter(10L)));
+    }
+
+    @DisplayName("노선에서 지하철 역을 제거할 수 있다.")
+    @Test
+    void test() {
+        // given
+        Line line1 = new Line("1호선", Color.BLUE);
+
+        Station station1 = new Station("관악역");
+        Station station2 = new Station("안양역");
+        em.persist(station1);
+        em.persist(station2);
+
+        line1.addLineStation(station1, station2, Distance.ofMeter(10L));
+        Line savedLine = lines.save(line1);
+
+        // when
+        savedLine.removeLineStation(station2);
+
+        // then
+        assertThat(savedLine.getLineStations().size()).isEqualTo(0);
     }
 }

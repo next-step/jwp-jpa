@@ -1,11 +1,13 @@
 package jpa.domain;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(of = {"line", "station"}, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -18,17 +20,28 @@ public class LineStation extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "station_id")
-    private Station station;
-
-    @ManyToOne
     @JoinColumn(name = "line_id")
     private Line line;
 
-    public LineStation(final Station station, final Line line) {
-        this.station = station;
-        station.getLineStations().add(this);
+    @ManyToOne
+    @JoinColumn(name = "pre_station_id")
+    private Station preStation;
+
+    @ManyToOne
+    @JoinColumn(name = "station_id")
+    private Station station;
+
+    @Embedded
+    private Distance distance;
+
+    public LineStation(final Line line, final Station preStation, final Station station, final Distance distance) {
         this.line = line;
-        line.getLineStations().add(this);
+        this.preStation = preStation;
+        this.station = station;
+        this.distance = distance;
+    }
+
+    public boolean isStation(final Station station) {
+        return this.station.equals(station);
     }
 }

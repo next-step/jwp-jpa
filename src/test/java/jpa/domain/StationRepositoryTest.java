@@ -96,14 +96,14 @@ class StationRepositoryTest {
         Station savedStation = stations.save(new Station("서울역"));
 
         // when
-        Station expected = savedStation.changeName("잠실역");
-        Station actual = stations.findByName(expected.getName()).get();
+        savedStation.changeName("잠실역");
+        Station actual = stations.findByName(savedStation.getName()).get();
 
         // then
         assertAll(
                 () -> assertThat(actual).isNotNull(),
                 () -> assertThat(actual.getModifiedDate()).isNotNull(),
-                () -> assertThat(actual).isEqualTo(expected)
+                () -> assertThat(actual).isEqualTo(savedStation)
         );
     }
 
@@ -122,20 +122,22 @@ class StationRepositoryTest {
     @Test
     void checkLines() {
         // given
+        // 지하철역 저장
+        String stationName = "금정역";
+        Station station1 = new Station("당정역");
+        Station station2 = new Station(stationName);
+        em.persist(station1);
+        em.persist(station2);
+
         // 지하철 노선 저장
         Line line1 = new Line("1호선", Color.BLUE);
         Line line4 = new Line("4호선", Color.GREEN);
         em.persist(line1);
         em.persist(line4);
 
-        // 지하철역 저장
-        String stationName = "금정역";
-        Station geumjeong = new Station(stationName);
-        em.persist(geumjeong);
-
         // 지하철역 노선 저장
-        em.persist(new LineStation(geumjeong, line1));
-        em.persist(new LineStation(geumjeong, line4));
+        line1.addLineStation(station1, station2, Distance.ofMeter(10L));
+        line4.addLineStation(station1, station2, Distance.ofMeter(20L));
 
         // when
         Station station = stations.findByName(stationName).get();

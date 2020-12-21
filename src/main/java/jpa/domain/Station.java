@@ -7,12 +7,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -28,18 +27,17 @@ public class Station extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "station")
-    private Set<LineStation> lineStations = new HashSet<>();
+    private List<LineStation> lineStations = new ArrayList<>();
 
     public Station(final String name) {
         this.name = name;
     }
 
-    public Station changeName(final String name) {
+    public void changeName(final String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("옯바른 역 이름이 아닙니다.");
         }
         this.name = name;
-        return this;
     }
 
     public List<Line> lines() {

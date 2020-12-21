@@ -7,9 +7,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -40,12 +38,11 @@ public class Member extends BaseEntity {
         this.password = password;
     }
 
-    public Member changeEmail(String email) {
+    public void changeEmail(String email) {
         if (!StringUtils.hasText(email)) {
             throw new IllegalArgumentException("올바른 이메일이 아닙니다");
         }
         this.email = email;
-        return this;
     }
 
     public void addFavorite(Favorite favorite) {
@@ -53,9 +50,9 @@ public class Member extends BaseEntity {
         favorite.changeMember(this);
     }
 
-    public Favorite getFavorite(final String favoriteName) {
+    public Favorite getFavorite(final Long favoriteId) {
         return favorites.stream()
-                .filter(favorite -> favorite.isName(favoriteName))
+                .filter(favorite -> favorite.isId(favoriteId))
                 .findFirst()
                 .orElse(null);
     }
