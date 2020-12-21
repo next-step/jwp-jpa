@@ -2,9 +2,14 @@ package jpa.repository;
 
 import jpa.domain.line.Line;
 import jpa.domain.line.LineRepository;
+import jpa.domain.station.Station;
+import jpa.domain.station.StationRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -13,6 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class LineRepositoryTest {
     @Autowired
     private LineRepository lineRepository;
+
+    @Autowired
+    private StationRepository stationRepository;
 
     @Test
     void save() {
@@ -31,5 +39,26 @@ class LineRepositoryTest {
         lineRepository.save(new Line("군청색", expected));
         String actual = lineRepository.findByName(expected).getName();
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("노선 조회 시 속한 지하철역을 볼 수 있다.")
+    void findStationByLine() {
+        Station station1 = new Station("의정부역");
+        Station station2 = new Station("회룡역");
+        Station station3 = new Station("망월사역");
+
+        stationRepository.save(station1);
+        stationRepository.save(station2);
+        stationRepository.save(station3);
+
+        Line line1 = new Line("군청색", "1호선");
+        line1.addStation(station1);
+        line1.addStation(station2);
+        line1.addStation(station3);
+        Line savedLine = lineRepository.save(line1);
+
+        Line findLine = lineRepository.findById(savedLine.getId()).get();
+        assertThat(findLine.getStations().size()).isEqualTo(3);
     }
 }
