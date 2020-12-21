@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -50,5 +52,44 @@ class StationRepositoryTest {
 				() -> assertThat(actual.getId()).isEqualTo(expected.getId()),
 				() -> assertThat(actual.getName()).isEqualTo("잠실역")
 		);
+	}
+
+	@Test
+	@DisplayName("createdDate 테스트")
+	void createdDate() {
+		Station station = new Station("잠실역");
+		assertThat(station.getCreatedDate()).isNull();
+
+		station = stations.save(station);
+		assertThat(station.getCreatedDate()).isNotNull();
+		assertThat(stations.findByName(station.getName()).getCreatedDate()).isNotNull();
+	}
+
+	@Test
+	@DisplayName("modifiedDate 테스트")
+	void modifiedDate() {
+		Station station = new Station("잠실역");
+		assertThat(station.getModifiedDate()).isNull();
+
+		station = stations.save(station);
+		assertThat(station.getModifiedDate()).isNotNull();
+		assertThat(stations.findByName(station.getName()).getModifiedDate()).isNotNull();
+	}
+
+	@Test
+	@DisplayName("modifiedDate 테스트")
+	void modifiedDate_change() throws InterruptedException {
+		Station station = new Station("잠실역");
+		assertThat(station.getModifiedDate()).isNull();
+
+		station = stations.save(station);
+		LocalDateTime firstModifiedDate = station.getModifiedDate();
+		assertThat(firstModifiedDate).isNotNull();
+		assertThat(firstModifiedDate).isEqualTo(station.getCreatedDate());
+
+		Thread.sleep(2000);
+		station.setName("삼성역");
+		Station station2 = stations.findByName("삼성역");
+		assertThat(station2.getModifiedDate()).isAfter(firstModifiedDate);
 	}
 }
