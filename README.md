@@ -121,3 +121,6 @@ create table favorite (
 - [X] IdentifiedValueObject를 좀더 적합한 이름으로 변경
 - [X] 매핑시 불필요한 기본 옵션 제거
 - [X] 지나치게 장황한 테스트 메서드에서 공통 부분 추출하기
+
+## Step3. 다대다 연관 관계 리팩토링
+- [ ] @ManyToMany로 `Station`, `Line` 구성해보기
