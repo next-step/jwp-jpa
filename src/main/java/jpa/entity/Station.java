@@ -1,11 +1,13 @@
 package jpa.entity;
 
 
+import jpa.FromTo;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Getter
@@ -18,7 +20,20 @@ public class Station extends BaseEntity {
 
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "favorite_id")
+    private Favorite favorite;
+
     public Station(String name) {
         this.name = name;
+    }
+
+    public void setFavorite(Favorite favorite, FromTo fromTo) {
+        if(Objects.nonNull(this.favorite)
+                && this.favorite.getFromToStations().containsKey(fromTo)) {
+            this.favorite.getFromToStations().remove(fromTo);
+        }
+        this.favorite = favorite;
+        favorite.getFromToStations().put(fromTo, this);
     }
 }

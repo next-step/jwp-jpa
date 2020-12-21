@@ -1,7 +1,9 @@
 package jpa.repository;
 
+import jpa.FromTo;
 import jpa.entity.Favorite;
 import jpa.entity.Member;
+import jpa.entity.Station;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class FavoriteRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private StationRepository stationRepository;
 
     @Test
     void save() {
@@ -35,7 +40,7 @@ public class FavoriteRepositoryTest {
     }
 
     @Test
-    @DisplayName("즐겨찾기 멤버 연관관계 테스트")
+    @DisplayName("즐겨찾기 & 멤버 연관관계 테스트")
     void saveMember() {
         Member member = new Member(29);
         memberRepository.save(member);
@@ -43,5 +48,17 @@ public class FavoriteRepositoryTest {
         favorite1.setMember(member);
         favoriteRepository.flush();
         assertThat(favorite1.getMember().getAge()).isEqualTo(29);
+    }
+
+    @Test
+    @DisplayName("즐겨찾기 & 역 연관관계 테스트")
+    void saveStations() {
+        Favorite favorite = favoriteRepository.save(new Favorite());
+        Station startStation = stationRepository.save(new Station("잠실역"));
+        Station endStation = stationRepository.save(new Station("홍대입구역"));
+        favorite.addFromToStations(startStation, FromTo.START);
+        favorite.addFromToStations(endStation, FromTo.START);
+        Favorite result = favoriteRepository.findById(1L).get();
+        assertThat(result.getFromToStations().get(FromTo.START).getName()).isEqualTo("홍대입구역");
     }
 }
