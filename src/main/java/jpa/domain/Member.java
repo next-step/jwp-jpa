@@ -9,7 +9,7 @@ public class Member extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer age;
+    private int age;
 
     private String email;
 
@@ -17,7 +17,7 @@ public class Member extends BaseEntity{
 
     protected Member() {}
 
-    public Member(Integer age, String email, String password) {
+    public Member(int age, String email, String password) {
         this.age = age;
         this.email = email;
         this.password = password;
