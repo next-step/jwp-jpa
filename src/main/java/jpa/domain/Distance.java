@@ -27,4 +27,8 @@ public class Distance extends BaseEntity {
     public Distance(final int distance, final Section section) {
         this(null, distance, section);
     }
+
+    public Long getId() {
+        return this.id;
+    }
 }

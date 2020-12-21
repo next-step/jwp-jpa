@@ -53,6 +53,10 @@ public class Line extends BaseEntity {
         this.name = line.name;
     }
 
+    public void addDistance(final Distance distance) {
+        this.distances.add(distance);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

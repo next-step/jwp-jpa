@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 public class Station extends BaseEntity {
@@ -36,27 +35,8 @@ public class Station extends BaseEntity {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void addLineStation(final Section section) {
-        section.updateUpStation(this);
-        this.sections.add(section);
-    }
-
     public void updateStation(final Station station) {
         this.name = station.name;
-    }
-
-    public List<Line> getLines() {
-        return this.sections.stream()
-                .map(Section::getLine)
-                .collect(Collectors.toList());
-    }
-
-    List<Section> getLineStations() {
-        return this.sections;
     }
 
     @Override
