@@ -65,6 +65,10 @@ public class Line extends BaseEntity {
         return new ArrayList<>(dupRemovedStations);
     }
 
+    public List<Distance> getDistances() {
+        return this.distances;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

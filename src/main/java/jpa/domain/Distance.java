@@ -33,6 +33,14 @@ public class Distance extends BaseEntity {
         return this.section.getStations();
     }
 
+    public Station getUpStation() {
+        return this.section.getUpStation();
+    }
+
+    public Section getSection() {
+        return this.section;
+    }
+
     public Long getId() {
         return this.id;
     }
