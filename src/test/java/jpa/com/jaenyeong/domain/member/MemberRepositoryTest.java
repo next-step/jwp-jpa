@@ -34,18 +34,25 @@ class MemberRepositoryTest {
     private Favorite secondFavorite;
     private Favorite thirdFavorite;
 
+    private Station kkachisan;
+    private Station gangnam;
+    private Station yongsan;
+    private Station jamsil;
+    private Station gimpoAirport;
+    private Station yangjae;
+
     @BeforeEach
     void setUp() {
         firstMember = new Member();
         secondMember = new Member();
         thirdMember = new Member();
 
-        final Station kkachisan = new Station("까치산역");
-        final Station gangnam = new Station("강남역");
-        final Station yongsan = new Station("용산역");
-        final Station jamsil = new Station("잠실역");
-        final Station gimpoAirport = new Station("김포공항역");
-        final Station yangjae = new Station("양재역");
+        kkachisan = new Station("까치산역");
+        gangnam = new Station("강남역");
+        yongsan = new Station("용산역");
+        jamsil = new Station("잠실역");
+        gimpoAirport = new Station("김포공항역");
+        yangjae = new Station("양재역");
         stations.save(kkachisan);
         stations.save(gangnam);
         stations.save(yongsan);
@@ -63,7 +70,6 @@ class MemberRepositoryTest {
         firstMember.addFavorite(firstFavorite);
         secondMember.addFavorite(secondFavorite);
         thirdMember.addFavorite(thirdFavorite);
-
         members.save(firstMember);
         members.save(secondMember);
         members.save(thirdMember);
@@ -122,5 +128,25 @@ class MemberRepositoryTest {
         final List<Member> afterSave = members.findByAge(18);
 
         assertSame(afterSave.size(), 2);
+    }
+
+    @Test
+    @DisplayName("멤버별 즐겨찾기 수 테스트")
+    void numberOfFavorites() {
+        assertSame(firstMember.getFavoritesSize(), 1);
+        assertSame(secondMember.getFavoritesSize(), 1);
+        assertSame(thirdMember.getFavoritesSize(), 1);
+    }
+
+    @Test
+    @DisplayName("즐겨찾기 추가 테스트")
+    void addFavorites() {
+        final List<Favorite> newFavorites = new ArrayList<>();
+        newFavorites.add(new Favorite(new Station("당산역"), new Station("사당역")));
+        newFavorites.add(new Favorite(new Station("신정네거리역"), new Station("수원역")));
+
+        firstMember.addFavorites(newFavorites);
+
+        assertSame(firstMember.getFavoritesSize(), 3);
     }
 }
