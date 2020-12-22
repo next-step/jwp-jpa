@@ -1,14 +1,12 @@
 package jpa.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "member")
 class Member extends BaseEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
 	@Column(name = "age", nullable = false)
 	private int age;
@@ -23,10 +21,6 @@ class Member extends BaseEntity {
 		this.age = age;
 		this.email = email;
 		this.password = password;
-	}
-
-	Long getId() {
-		return id;
 	}
 
 	int getAge() {
