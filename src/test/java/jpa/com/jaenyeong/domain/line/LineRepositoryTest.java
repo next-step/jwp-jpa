@@ -24,9 +24,9 @@ class LineRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        greenLine = new Line("2호선", "Green");
-        blueLine = new Line("1호선", "Blue");
-        purpleLIne = new Line("5호선", "Purple");
+        greenLine = new Line("2호선", "green");
+        blueLine = new Line("1호선", "blue");
+        purpleLIne = new Line("5호선", "purple");
     }
 
     @Test
@@ -76,12 +76,12 @@ class LineRepositoryTest {
     @DisplayName("객체 수정 테스트")
     void update() {
         final Line savedGreenLine = lines.save(greenLine);
-        assertSame(savedGreenLine.getColor(), "Green");
-        assertSame(lines.findByColor("Green").size(), 1);
+        assertSame(savedGreenLine.getColor(), "green");
+        assertSame(lines.findByColor(LineColor.getColor("green")).size(), 1);
 
-        savedGreenLine.changeLineColor("Red");
-        assertSame(lines.findByColor("Red").size(), 1);
-        assertSame(lines.findByColor("Green").size(), 0);
+        savedGreenLine.changeLineColor("skyBlue");
+        assertSame(lines.findByColor(LineColor.getColor("skyBlue")).size(), 1);
+        assertSame(lines.findByColor(LineColor.getColor("green")).size(), 0);
     }
 
     @Test

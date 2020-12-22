@@ -1,6 +1,7 @@
 package jpa.com.jaenyeong.domain.mapping;
 
 import jpa.com.jaenyeong.domain.BaseEntity;
+import jpa.com.jaenyeong.domain.distance.Distance;
 import jpa.com.jaenyeong.domain.line.Line;
 import jpa.com.jaenyeong.domain.station.Station;
 import lombok.AccessLevel;
@@ -24,11 +25,31 @@ public class LineStation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Station station;
 
-    public LineStation(final Line line, final Station station) {
+    @Embedded
+    private Distance distance;
+
+//    public LineStation(final Line line, final Station station) {
+////        this(line, station, null);
+//        this.line = line;
+//        this.station = station;
+//        this.line.add(this);
+//        this.station.add(this);
+//    }
+
+    public LineStation(final Line line, final Station station, final Distance distance) {
+        if (line == null || station == null) {
+            throw new IllegalArgumentException("invalid parameter");
+        }
+
         this.line = line;
         this.station = station;
+        this.distance = distance;
         this.line.add(this);
         this.station.add(this);
+    }
+
+    public void changeDistance(final Distance distance) {
+        this.distance = distance;
     }
 
     public String getLineName() {
@@ -37,5 +58,21 @@ public class LineStation extends BaseEntity {
 
     public String getStationName() {
         return station.getName();
+    }
+
+    public long getDistanceFromPreviousStation() {
+        if (distance == null) {
+            return 0;
+        }
+
+        return distance.getDistanceForMeter();
+    }
+
+    public String getPreviousStationName() {
+        if (distance == null) {
+            return "";
+        }
+
+        return distance.getPreviousStationName();
     }
 }
