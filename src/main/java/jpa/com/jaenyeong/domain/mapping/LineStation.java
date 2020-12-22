@@ -25,6 +25,10 @@ public class LineStation extends BaseEntity {
     private Station station;
 
     public LineStation(final Line line, final Station station) {
+        if (line == null || station == null) {
+            throw new IllegalArgumentException("invalid parameter");
+        }
+
         this.line = line;
         this.station = station;
         this.line.add(this);
