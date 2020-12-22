@@ -21,15 +21,17 @@ public class MemberRepositoryTest {
 	@Autowired
 	private MemberRepository members;
 
-	private static Member PRESET_MEMBER = new Member("email@email.com", "pwd", 30);
-
 	@Test
 	void save() {
-		Member actual = members.save(PRESET_MEMBER);
+		String email = "email@email.com";
+		String password = "pwd";
+		int age = 30;
+
+		Member actual = members.save(new Member(email, password, age));
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(PRESET_MEMBER.getEmail()),
-			() -> assertThat(actual.getPassword()).isEqualTo(PRESET_MEMBER.getPassword()),
+			() -> assertThat(actual.getEmail()).isEqualTo(email),
+			() -> assertThat(actual.getPassword()).isEqualTo(password),
 			() -> assertThat(actual.getCreateDate()).isNotNull(),
 			() -> assertThat(actual.getModifiedDate()).isNotNull()
 		);
@@ -37,30 +39,38 @@ public class MemberRepositoryTest {
 
 	@Test
 	void findByEmail() {
-		Member savedMember = members.save(PRESET_MEMBER);
+		String email = "email@email.com";
+		String password = "pwd";
+		int age = 30;
 
-		Member actual = members.findByEmail(savedMember.getEmail());
+		members.save(new Member(email, password, age));
+
+		Member actual = members.findByEmail(email);
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(PRESET_MEMBER.getEmail()),
-			() -> assertThat(actual.getPassword()).isEqualTo(PRESET_MEMBER.getPassword()),
-			() -> assertThat(actual.getAge()).isEqualTo(PRESET_MEMBER.getAge())
+			() -> assertThat(actual.getEmail()).isEqualTo(email),
+			() -> assertThat(actual.getPassword()).isEqualTo(password),
+			() -> assertThat(actual.getAge()).isEqualTo(age)
 		);
 	}
 
 	@Test
 	void update() {
-		Member savedMember = members.save(PRESET_MEMBER);
+		String email = "email@email.com";
+		String password = "pwd";
+		int age = 30;
+
+		Member savedMember = members.save(new Member(email, password, age));
 
 		String expectedPassword = "changePwd";
 		int expectedAge = 40;
 		savedMember.changePassword(expectedPassword);
 		savedMember.changeAge(expectedAge);
 
-		Member actual = members.findByEmail(savedMember.getEmail());
+		Member actual = members.findByEmail(email);
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(savedMember.getEmail()),
+			() -> assertThat(actual.getEmail()).isEqualTo(email),
 			() -> assertThat(actual.getPassword()).isEqualTo(expectedPassword),
 			() -> assertThat(actual.getAge()).isEqualTo(expectedAge)
 		);
@@ -68,17 +78,25 @@ public class MemberRepositoryTest {
 
 	@Test
 	void delete() {
-		Member savedMember = members.save(PRESET_MEMBER);
+		String email = "email@email.com";
+		String password = "pwd";
+		int age = 30;
+
+		Member savedMember = members.save(new Member(email, password, age));
 
 		members.delete(savedMember);
-		Member actual = members.findByEmail(PRESET_MEMBER.getEmail());
+		Member actual = members.findByEmail(email);
 
 		assertThat(actual).isNull();
 	}
 
 	@Test
 	void memberHasAnyFavorites() {
-		Member savedMember = members.save(PRESET_MEMBER);
+		String email = "email@email.com";
+		String password = "pwd";
+		int age = 30;
+
+		Member savedMember = members.save(new Member(email, password, age));
 
 		Favorite favorite = new Favorite();
 		savedMember.addFavorites(favorite);
@@ -87,8 +105,9 @@ public class MemberRepositoryTest {
 
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(savedMember.getEmail()),
-			() -> assertThat(actual.getAge()).isEqualTo(savedMember.getAge()),
+			() -> assertThat(actual.getEmail()).isEqualTo(email),
+			() -> assertThat(actual.getPassword()).isEqualTo(password),
+			() -> assertThat(actual.getAge()).isEqualTo(age),
 			() -> assertThat(actual.getFavorites()).contains(favorite)
 		);
 
