@@ -37,6 +37,10 @@ public class Distance extends BaseEntity {
         return this.section.getUpStation();
     }
 
+    public Station getDownStation() {
+        return this.section.getDownStation();
+    }
+
     public Section getSection() {
         return this.section;
     }

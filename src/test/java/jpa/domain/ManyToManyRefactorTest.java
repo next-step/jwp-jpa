@@ -52,6 +52,7 @@ public class ManyToManyRefactorTest {
         // then
         Line foundLine = LINE_FOUND(line);
         assertThat(foundLine.getDistances()).hasSize(expectedSize);
+        assertThat(foundLine.getStations()).contains(gangnam, jamsil);
     }
 
     @DisplayName("생성된 라인에 속한 역들을 볼 수 있다.")

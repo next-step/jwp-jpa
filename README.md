@@ -129,5 +129,6 @@ create table favorite (
     - 마찬가지로 자동으로 생성하기 때문에 연관되는 오브젝트끼리 다른 의미를 갖고 여러개의 참조를 만들 수 없다.
   
 ## Step3. 피드백 반영
-- [ ] 관계 테이블(Station, Station)은 관계 테이블로만 두기
-- [ ] Line 추가 시 길이 정보를 명시적으로 알 수 있도록 구현하기
+- [X] 관계 테이블(Station, Station)은 관계 테이블로만 두기
+- [X] Line 추가 시 길이 정보를 명시적으로 알 수 있도록 구현하기
+- [ ] ManyToMany를 통해 LineStation 간 관계를 만들어주기

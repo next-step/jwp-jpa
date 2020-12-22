@@ -23,6 +23,10 @@ public class Line extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Distance> distances = new ArrayList<>();
 
+    @ManyToMany
+    @JoinColumn(name = "station_id")
+    private List<Station> stations = new ArrayList<>();
+
     protected Line() {
     }
 
@@ -54,15 +58,22 @@ public class Line extends BaseEntity {
     }
 
     public void addDistance(final Distance distance) {
+        if (!this.stations.contains(distance.getUpStation())) {
+            this.addStation(distance.getUpStation());
+        }
+        if (!this.stations.contains(distance.getDownStation())) {
+            this.addStation(distance.getDownStation());
+        }
         this.distances.add(distance);
     }
 
-    public List<Station> getStations() {
-        Set<Station> dupRemovedStations = distances.stream()
-                .flatMap(it -> it.getStations().stream())
-                .collect(Collectors.toSet());
+    public void addStation(final Station station) {
+        this.stations.add(station);
+        station.getLines().add(this);
+    }
 
-        return new ArrayList<>(dupRemovedStations);
+    public List<Station> getStations() {
+        return this.stations;
     }
 
     public List<Distance> getDistances() {
