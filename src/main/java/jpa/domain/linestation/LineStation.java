@@ -13,7 +13,6 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "id", column = @Column(name = "lineStationId"))
 @Table(name = "line_station")
 @Entity
 public class LineStation extends BaseEntity {
