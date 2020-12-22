@@ -1,5 +1,9 @@
 package jpa.domain.favorite;
 
+import jpa.domain.member.Member;
+import jpa.domain.member.MemberRepository;
+import jpa.domain.station.Station;
+import jpa.domain.station.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,22 +23,55 @@ class FavoriteRepositoryTest {
     @Autowired
     private FavoriteRepository favoriteRepository;
 
+    @Autowired
+    private StationRepository stationRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
     @BeforeEach
     void setup() {
-        favoriteRepository.save(new Favorite());
-        favoriteRepository.save(new Favorite());
+        Member member = Member.builder()
+                .age(20)
+                .email("pobi@test.com")
+                .password("12345")
+                .build();
+
+        Station gangnam_station = stationRepository.save(Station.builder()
+                .name("강남역")
+                .build());
+        Station jamsil_station = stationRepository.save(Station.builder()
+                .name("잠실역")
+                .build());
+        Station pangyo_station = stationRepository.save(Station.builder()
+                .name("판교역")
+                .build());
+
+        favoriteRepository.save(Favorite.builder()
+                .departure(gangnam_station)
+                .arrival(jamsil_station)
+                .member(member)
+                .build());
+        favoriteRepository.save(Favorite.builder()
+                .departure(jamsil_station)
+                .arrival(pangyo_station)
+                .member(member)
+                .build());
     }
 
     @Test
-    @DisplayName("Favorite 조회 테스트")
-    void select_favorite_test() {
+    @DisplayName("사용자로 Favorite 리스트 조회 테스트")
+    void get_favorite_by_member_test() {
         // given
-        Favorite favorite = favoriteRepository.findById(1L).get();
+        Member member = memberRepository.findByEmail("pobi@test.com");
 
-        // when & then
+        // when
+        List<Favorite> favorites = favoriteRepository.findByMember(member);
+
+        // then
         assertAll(
-                () -> assertThat(favorite.getId()).isNotNull(),
-                () -> assertThat(favorite).isNotNull()
+                () -> assertThat(favorites).isNotNull(),
+                () -> assertThat(favorites).hasSize(2)
         );
     }
 
@@ -43,21 +79,28 @@ class FavoriteRepositoryTest {
     @DisplayName("Favorite 전체 조회 테스트")
     void select_all_favorite_test() {
         // given
-        Favorite favorite = new Favorite();
-        favoriteRepository.save(favorite);
+        int expected = 2;
 
         // when
-        List<Favorite> favorites = favoriteRepository.findAll();
+        List<Favorite> actual = favoriteRepository.findAll();
 
         // then
-        assertThat(favorites.size()).isEqualTo(3);
+        assertThat(actual).hasSize(expected);
     }
 
     @Test
     @DisplayName("Favorite 추가 테스트")
     void insert_favorite_test() {
         // given
-        Favorite favorite = new Favorite();
+        Member member = memberRepository.findByEmail("pobi@test.com");
+        Station gangnam_station = stationRepository.findByName("강남역");
+        Station jamsil_station = stationRepository.findByName("잠실역");
+
+        Favorite favorite = Favorite.builder()
+                .departure(gangnam_station)
+                .arrival(jamsil_station)
+                .member(member)
+                .build();
 
         // when
         Favorite persistFavorite = favoriteRepository.save(favorite);
@@ -71,16 +114,16 @@ class FavoriteRepositoryTest {
     }
 
     @Test
-    @DisplayName("Favorite 삭제 테스트")
-    void delete_favorite_test() {
+    @DisplayName("사용자가 삭제되면 저장된 Favorite 삭제 테스트")
+    void delete_favorite_by_member_test() {
         // given
-        Favorite favorite =  favoriteRepository.findById(1L).orElseThrow(EntityNotFoundException::new);
+        Member member = memberRepository.findByEmail("pobi@test.com");
 
         // when
-        favoriteRepository.delete(favorite);
-        List<Favorite> favorites = favoriteRepository.findAll();
+        memberRepository.delete(member);
 
         // then
-        assertThat(favorites).hasSize(1);
+        assertThat(favoriteRepository.findByMember(member)).isEmpty();
     }
+
 }
