@@ -1,5 +1,6 @@
 package jpa.repository;
 
+import jpa.entity.Favorite;
 import jpa.entity.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    FavoriteRepository favoriteRepository;
 
     @Test
     void save() {
@@ -49,13 +53,15 @@ public class MemberRepositoryTest {
         Member member = new Member("test@naver.com");
         Member result = memberRepository.save(member);
         assertThat(result.getEmail()).isEqualTo("test@naver.com");
+    }
 
-        member.setEmail("member@gmail.com");
+    @Test
+    @DisplayName("즐겨찾기 추가 테스트")
+    void saveFavorite() {
+        Member member = new Member("test@naver.com");
+        member.addFavorite(favoriteRepository.save(new Favorite(member)));
+        Member result = memberRepository.save(member);
         memberRepository.flush();
-        assertThat(result.getEmail()).isEqualTo("member@gmail.com");
-
-        member.setEmail("member2@gmail.com");
-        Member member2 = memberRepository.findByEmail("member2@gmail.com");
-        assertThat(result.getEmail()).isEqualTo(member2.getEmail());
+        assertThat(result.getFavorites().get(0).getId()).isEqualTo(1L);
     }
 }

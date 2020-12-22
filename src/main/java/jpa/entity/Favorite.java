@@ -1,13 +1,42 @@
 package jpa.entity;
 
-import lombok.Data;
+import jpa.FromTo;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.*;
 
 
-@Data
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Favorite extends BaseEntity {
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @OneToMany(mappedBy = "favorite")
+    private Map<FromTo, Station> fromToStations = new HashMap<>();
+
+    public Favorite(Member member) {
+        this.member = member;
+    }
+
+    public void setMember(Member member) {
+        if(Objects.nonNull(this.member)) {
+            this.member.getFavorites().remove(this);
+        }
+        this.member = member;
+        member.getFavorites().add(this);
+    }
+
+    public void addFromToStations(Station station, FromTo fromTo) {
+        fromToStations.put(fromTo, station);
+        if(station.getFavorite() != this) {
+            station.setFavorite(this, fromTo);
+        }
+    }
 }
