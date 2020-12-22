@@ -1,11 +1,15 @@
 package jpa.domain.member;
 
 import jpa.domain.base.BaseEntity;
+import jpa.domain.favorite.Favorite;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -21,18 +25,22 @@ public class Member extends BaseEntity {
     @Column(name = "password")
     private String password;
 
+    @OneToMany(mappedBy = "member" , fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favorite = new ArrayList<>();
+
+    @Builder
     private Member(int age, String email, String password) {
         this.age = age;
         this.email = email;
         this.password = password;
     }
 
-    public static Member of(int age, String email, String password) {
-        return new Member(age, email, password);
-    }
-
     public Member updateEmail(String email) {
         this.email = email;
         return this;
+    }
+
+    public void addFavorite(Favorite favorite) {
+        this.favorite.add(favorite);
     }
 }
