@@ -65,9 +65,19 @@ create table favorite (
 * 즐겨찾기에는 출발역과 도착역이 포함되어 있다.
 
 ### 구현 내용 정리
-* station <-> line (다대다 양방향) : jpa 책 보면서 실습해보기!
+* station <-> line (다대다 양방향) 
 * favorite <-> member (다대일 양방향) : 테스트 & repository
-* favorite <-> station (일대다 단방향) => station <-> favorite (다대일 양방향) : 테스트 & repository  
+* favorite -> station (일대일 단방향) : 테스트 & repository  
 * favorite : 속성 - 출발역, 도착역 
 * 노선 조회시 속한 지하철역 확인
 * 지하철역 조회시 속한 노선 확인
+---
+## STEP3
+### 요구사항 정리
+* 환승역 고려해서 manytomany 관계 맺기
+* 노선에 역을 추가할 때 길이 값 입력
+
+### 구현 내용 정리
+* station <-> line (다대다 양방향) : 연결 엔티티를 사용.
+* 추가적인 길이를 필드값으로 입력해서 매핑시 받아주도록 처리. 
+

@@ -37,4 +37,21 @@ public class StationLineRepositoryTest {
         List<StationLine> stationLineList = stationLineRepository.findByStation(station);
         assertThat(stationLineList).hasSize(2);
     }
+
+    @Test
+    @DisplayName("매핑저장")
+    void save() {
+        Station station1 = stationRepository.save(new Station("오금역"));
+        Station station2 = stationRepository.save(new Station("거여역"));
+        Station station3 = stationRepository.save(new Station("양재역"));
+        Line line1 = lineRepository.save(new Line("보라색","5호선"));
+        Line line2 = lineRepository.save(new Line("주황색","3호선"));
+        stationRepository.flush();
+        lineRepository.flush();
+        stationLineRepository.save(new StationLine(station1, line1, 0));
+        stationLineRepository.save(new StationLine(station2, line1, 7));
+        stationLineRepository.save(new StationLine(station1, line2, 0));
+        stationLineRepository.save(new StationLine(station3, line2, 8));
+        stationLineRepository.flush();
+    }
 }
