@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 public class Station extends BaseEntity {
@@ -18,7 +17,10 @@ public class Station extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "upStation")
-    private List<LineStation> lineStations = new ArrayList<>();
+    private List<Section> sections = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "stations")
+    private List<Line> lines = new ArrayList<>();
 
     protected Station() {
     }
@@ -36,27 +38,21 @@ public class Station extends BaseEntity {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void addLineStation(final LineStation lineStation) {
-        lineStation.updateUpStation(this);
-        this.lineStations.add(lineStation);
-    }
-
     public void updateStation(final Station station) {
         this.name = station.name;
     }
 
-    public List<Line> getLines() {
-        return this.lineStations.stream()
-                .map(LineStation::getLine)
-                .collect(Collectors.toList());
+    public void addLine(final Line line) {
+        this.lines.add(line);
+        line.getStations().add(this);
     }
 
-    List<LineStation> getLineStations() {
-        return this.lineStations;
+    public String getName() {
+        return name;
+    }
+
+    List<Line> getLines() {
+        return this.lines;
     }
 
     @Override

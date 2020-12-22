@@ -121,3 +121,14 @@ create table favorite (
 - [X] IdentifiedValueObject를 좀더 적합한 이름으로 변경
 - [X] 매핑시 불필요한 기본 옵션 제거
 - [X] 지나치게 장황한 테스트 메서드에서 공통 부분 추출하기
+
+## Step3. 다대다 연관 관계 리팩토링
+- [X] @ManyToMany로 `Station`, `Line` 구성해보기
+  - 배운점
+    - ManyToMany는 자동으로 테이블을 구성하기 때문에 둘의 연관관계를 맺는 개념에 별도의 속성을 부여할 수 없다.
+    - 마찬가지로 자동으로 생성하기 때문에 연관되는 오브젝트끼리 다른 의미를 갖고 여러개의 참조를 만들 수 없다.
+  
+## Step3. 피드백 반영
+- [X] 관계 테이블(Station, Station)은 관계 테이블로만 두기
+- [X] Line 추가 시 길이 정보를 명시적으로 알 수 있도록 구현하기
+- [ ] ManyToMany를 통해 LineStation 간 관계를 만들어주기
