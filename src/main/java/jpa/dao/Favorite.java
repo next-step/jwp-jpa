@@ -1,15 +1,16 @@
 package jpa.dao;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 @Entity
 public class Favorite extends DefaultEntity {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Station departure;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Station arrival;
 
     protected Favorite(){}
