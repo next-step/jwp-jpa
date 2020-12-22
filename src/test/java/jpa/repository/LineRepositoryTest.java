@@ -3,11 +3,14 @@ package jpa.repository;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import jpa.domain.Line;
+import jpa.domain.Station;
 
 /**
  * @author : byungkyu
@@ -21,12 +24,15 @@ public class LineRepositoryTest {
 
 	@Test
 	void save() {
-		Line expected = new Line("2호선", "green");
-		Line actual = lines.save(expected);
+		String lineName = "2호선";
+		String lineColor = "green";
+
+		Line actual = lines.save(new Line(lineName,lineColor));
+
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(expected.getName()),
-			() -> assertThat(actual.getColor()).isEqualTo(expected.getColor()),
+			() -> assertThat(actual.getName()).isEqualTo(lineName),
+			() -> assertThat(actual.getColor()).isEqualTo(lineColor),
 			() -> assertThat(actual.getCreateDate()).isNotNull(),
 			() -> assertThat(actual.getModifiedDate()).isNotNull()
 		);
@@ -34,47 +40,66 @@ public class LineRepositoryTest {
 
 	@Test
 	void findByName() {
-		String expectedName = "2호선";
-		String expectedColor = "green";
-		lines.save(new Line(expectedName, expectedColor));
-		Line actual = lines.findByName(expectedName);
+		String lineName = "2호선";
+		String lineColor = "green";
+
+		lines.save(new Line(lineName,lineColor));
+		Line actual = lines.findByName(lineName);
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(expectedName),
-			() -> assertThat(actual.getColor()).isEqualTo(expectedColor)
+			() -> assertThat(actual.getName()).isEqualTo(lineName),
+			() -> assertThat(actual.getColor()).isEqualTo(lineColor)
 
 		);
 	}
 
 	@Test
 	void update() {
-		String name = "2호선";
-		String color = "green";
+		String lineName = "2호선";
+		String lineColor = "green";
 
-		Line origin = lines.save(new Line(name, color));
-
+		Line savedLine = lines.save(new Line(lineName, lineColor));
 		String expectedColor = "blue";
-		origin.changeColor(expectedColor);
+		savedLine.changeColor(expectedColor);
 
-		Line actual = lines.findByName(name);
+		Line actual = lines.findByName(lineName);
 
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(name),
+			() -> assertThat(actual.getName()).isEqualTo(lineName),
 			() -> assertThat(actual.getColor()).isEqualTo(expectedColor)
 		);
 	}
 
 	@Test
 	void delete() {
-		String name = "2호선";
-		String color = "green";
+		String lineName = "2호선";
+		String lineColor = "green";
 
-		Line origin = lines.save(new Line(name, color));
-
-		lines.delete(origin);
-		Line deletedLine = lines.findByName(name);
+		Line savedLine = lines.save(new Line(lineName, lineColor));
+		lines.delete(savedLine);
+		Line deletedLine = lines.findByName(lineName);
 
 		assertThat(deletedLine).isNull();
+	}
+
+	@DisplayName("노선 조회 시 속한 지하철 역을 볼 수 있다.")
+	@Test
+	void addLineWithStation() {
+		String lineName = "2호선";
+		String lineColor = "green";
+
+		Line savedLine = lines.save(new Line(lineName, lineColor));
+		Station station = new Station("강남역");
+		savedLine.addStation(station);
+		Line actual = lines.findByName(savedLine.getName());
+
+		assertAll(
+			() -> assertThat(actual.getId()).isNotNull(),
+			() -> assertThat(actual.getName()).isEqualTo(lineName),
+			() -> assertThat(actual.getColor()).isEqualTo(lineColor),
+			() -> assertThat(actual.getStations()).contains(station)
+		);
+
 	}
 }
