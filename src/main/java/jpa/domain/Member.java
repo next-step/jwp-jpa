@@ -20,7 +20,7 @@ public class Member {
     @Column(name = "password")
     private String password;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(Integer age, String email) {

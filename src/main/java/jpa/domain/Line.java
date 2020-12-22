@@ -18,7 +18,7 @@ public class Line {
     @Column(name = "name", unique = true)
     private String name;
 
-    public Line() {
+    protected Line() {
     }
 
     public Long getId() {
