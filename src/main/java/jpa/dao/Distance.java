@@ -1,16 +1,13 @@
 package jpa.dao;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 @Entity
 @Table(uniqueConstraints={@UniqueConstraint(columnNames={"line_id","station_id"})})
 public class Distance extends DefaultEntity {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Line line;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Station station;
     private Integer stationOrder;
     private Integer nextDistance;
