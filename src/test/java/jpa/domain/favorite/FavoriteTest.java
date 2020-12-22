@@ -32,7 +32,7 @@ public class FavoriteTest {
     private EntityManager em;
 
     private void saveFavoriteMember(int age, String email, String password, Favorite favorite) {
-        Member member = new Member(30, "white@github.com", "red_white");
+        Member member = new Member(age, email, password);
         memberRepository.save(member);
 
         favorite.setMember(member);
@@ -68,8 +68,8 @@ public class FavoriteTest {
         Favorite favorite = new Favorite();
         FavoriteStation favoriteStation1 = new FavoriteStation(saveStation("왕십리"));
         FavoriteStation favoriteStation2 = new FavoriteStation(saveStation("수원"));
-        favorite.addFavoriteStations(favoriteStation1);
-        favorite.addFavoriteStations(favoriteStation2);
+        favorite.addFavoriteStation(favoriteStation1);
+        favorite.addFavoriteStation(favoriteStation2);
         saveFavoriteMember(30, "white@github.com", "red_white", favorite);
 
         em.clear();
@@ -83,9 +83,11 @@ public class FavoriteTest {
         assertThat(findFavorite.getFavoriteStations()).containsExactly(favoriteStation1, favoriteStation2)
                 .extracting(f -> f.getStation().getName()).containsExactly("왕십리", "수원");
 
-
+        // when
         findFavorite.removeFavoriteStation(favoriteStation1);
         em.flush();
+
+        // then
         assertThat(findFavorite.getFavoriteStations().size()).isEqualTo(1);
     }
 }

@@ -1,6 +1,7 @@
-package jpa.repository;
+package jpa.domain.member;
 
-import jpa.domain.Member;
+import jpa.domain.favorite.Favorite;
+import jpa.domain.favorite.FavoriteRepository;
 
 import java.util.List;
 
@@ -19,10 +20,13 @@ public class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private FavoriteRepository favoriteRepository;
+
     @PersistenceContext
     private EntityManager em;
 
-    private Member saveMember(Integer age, String email, String password) {
+    private Member saveMember(int age, String email, String password) {
         return memberRepository.save(new Member(age, email, password));
     }
 
@@ -63,5 +67,22 @@ public class MemberRepositoryTest {
 
         assertThat(findMember).extracting("email", "password")
                 .containsExactly("black@gmail.com", "red_white");
+    }
+
+    @Test
+    @DisplayName("사용자를 통해 즐겨찾기 조회 테스트")
+    void findFavoriteByMember() {
+        // given
+        Member member = saveMember(20, "black@gmail.com", "red_black");
+
+        // when
+        favoriteRepository.save(new Favorite(member));
+        favoriteRepository.save(new Favorite(member));
+
+        em.clear();
+
+        // then
+        Member findMember = memberRepository.findById(member.getId()).get();
+        assertThat(findMember.getFavorites().size()).isEqualTo(2);
     }
 }

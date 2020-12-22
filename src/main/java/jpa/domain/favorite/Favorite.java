@@ -45,14 +45,14 @@ public class Favorite extends BaseDateTimeEntity {
 
     public void setMember(Member member) {
         this.member = member;
-        member.getFavorites().add(this);
+        member.addFavorite(this);
     }
 
     public List<FavoriteStation> getFavoriteStations() {
         return favoriteStations;
     }
 
-    public void addFavoriteStations(FavoriteStation favoriteStation) {
+    public void addFavoriteStation(FavoriteStation favoriteStation) {
         favoriteStations.add(favoriteStation);
         favoriteStation.setFavorite(this);
     }
