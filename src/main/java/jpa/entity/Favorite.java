@@ -1,6 +1,5 @@
 package jpa.entity;
 
-import jpa.FromTo;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +17,13 @@ public class Favorite extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "favorite")
-    private Map<FromTo, Station> fromToStations = new HashMap<>();
+    @OneToOne
+    @JoinColumn(name = "from_station_id")
+    private Station fromStation;
+
+    @OneToOne
+    @JoinColumn(name = "to_station_id")
+    private Station toStation;
 
     public Favorite(Member member) {
         this.member = member;
@@ -33,10 +37,8 @@ public class Favorite extends BaseEntity {
         member.getFavorites().add(this);
     }
 
-    public void addFromToStations(Station station, FromTo fromTo) {
-        fromToStations.put(fromTo, station);
-        if(station.getFavorite() != this) {
-            station.setFavorite(this, fromTo);
-        }
+    public void addStations(Station fromStation, Station toStation) {
+        this.fromStation = fromStation;
+        this.toStation = toStation;
     }
 }

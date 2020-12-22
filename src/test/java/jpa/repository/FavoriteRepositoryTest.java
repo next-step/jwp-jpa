@@ -1,6 +1,5 @@
 package jpa.repository;
 
-import jpa.FromTo;
 import jpa.entity.Favorite;
 import jpa.entity.Member;
 import jpa.entity.Station;
@@ -53,11 +52,11 @@ public class FavoriteRepositoryTest {
     @DisplayName("즐겨찾기 & 역 연관관계 테스트")
     void saveStations() {
         Favorite favorite = favoriteRepository.save(new Favorite(new Member(31)));
-        Station startStation = stationRepository.save(new Station("잠실역"));
-        Station endStation = stationRepository.save(new Station("홍대입구역"));
-        favorite.addFromToStations(startStation, FromTo.START);
-        favorite.addFromToStations(endStation, FromTo.START);
+        Station fromStation = stationRepository.save(new Station("잠실역"));
+        Station toStation = stationRepository.save(new Station("홍대입구역"));
+        favorite.addStations(fromStation, toStation);
         Favorite result = favoriteRepository.findById(1L).get();
-        assertThat(result.getFromToStations().get(FromTo.START).getName()).isEqualTo("홍대입구역");
+        assertThat(result.getFromStation().getName()).isEqualTo("잠실역");
+        assertThat(result.getToStation().getName()).isEqualTo("홍대입구역");
     }
 }
