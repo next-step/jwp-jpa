@@ -1,5 +1,6 @@
 package jpa.domain;
 
+import jpa.common.JpaAuditingDate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "line")
-public class Line {
+public class Line extends JpaAuditingDate {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -34,14 +35,6 @@ public class Line {
 
     public Long getId() {
         return this.id;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return this.createdDate;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return this.modifiedDate;
     }
 
     public String getColor() {

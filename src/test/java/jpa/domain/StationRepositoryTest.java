@@ -1,15 +1,22 @@
 package jpa.domain;
 
+import jpa.common.JpaAuditingDate;
+import jpa.config.JpaAuditingConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DataJpaTest
+@DataJpaTest(includeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE
+        , classes = {JpaAuditingConfig.class, JpaAuditingDate.class}
+))
 public class StationRepositoryTest {
 
     @Autowired
@@ -27,7 +34,8 @@ public class StationRepositoryTest {
         // then
         assertAll(
                 () -> assertThat(saveStation.getId()).isNotNull(),
-                () -> assertEquals(saveStation, station)
+                () -> assertEquals(saveStation, station),
+                () -> assertThat(saveStation.getCreatedDate()).isNotNull()
         );
     }
 
