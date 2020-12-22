@@ -19,7 +19,7 @@ public class Line extends BaseEntity {
     private String color;
     private String name;
 
-    @OneToMany(mappedBy = "line")
+    @OneToMany(mappedBy = "line", fetch = FetchType.LAZY)
     private List<StationLine> stationLines = new ArrayList<>();
 
     public Line(String color, String name) {

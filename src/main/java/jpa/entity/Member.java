@@ -16,7 +16,7 @@ public class Member extends BaseEntity {
     private int age;
     private String email;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Favorite> favorites = new ArrayList<>();
 
 
