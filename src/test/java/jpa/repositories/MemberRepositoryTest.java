@@ -41,9 +41,11 @@ class MemberRepositoryTest {
   void update() {
     // given
     final Member member = members.save(getMemberSampleData());
+
     // when
     member.changeAge(35);
     members.flush();
+
     // then
     assertThat(member.getAge()).isEqualTo(35);
     assertThatThrownBy(() -> {
@@ -67,8 +69,10 @@ class MemberRepositoryTest {
     member.addFavorite(favorite);
     members.save(member);
     members.flush();
+
     // when
     final Member expected = members.findById(member.getId()).get();
+
     // then
     assertThat(expected.getFavorites().size()).isEqualTo(1);
     assertThat(expected.getFavorites()).contains(favorite);
