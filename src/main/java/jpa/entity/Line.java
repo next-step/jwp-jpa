@@ -27,7 +27,6 @@ public class Line extends BaseEntity {
         this.name = name;
     }
 
-
     public void changeColor(String color) {
         this.color = color;
     }
