@@ -27,7 +27,7 @@ DDL(Data Definition Language)을 보고 유추하여 엔티티 클래스와 리�
 #### 기능 요구사항
 도메인 설명을 보고 엔티티 클래스의 연관 관계를 매핑해 본다.
 
-- [ ] 지하철역(Station) 과 노선(Line)
+- [X] 지하철역(Station) 과 노선(Line)
 * Many to Many
     * 지하철역은 여러 노선에 소속될 수 있다.
     * 환승역을 고려한다.
@@ -36,10 +36,10 @@ DDL(Data Definition Language)을 보고 유추하여 엔티티 클래스와 리�
     * 노선 조회 시 속한 지하철역을 볼 수 있다.
 
 
-- [ ] 사용자(Member) 와 즐겨찾기(Favorite)
+- [X] 사용자(Member) 와 즐겨찾기(Favorite)
 * One to Many
     * 사용자는 여러 즐겨찾기를 가질 수 있다.
 
-- [ ] 즐겨찾기(Favorite) 와 출발역(Station), 도착역(Station)
+- [X] 즐겨찾기(Favorite) 와 출발역(Station), 도착역(Station)
 * 각각 Many to One
     * 즐겨찾기에는 출발역과 도착역이 포함되어 있다.
