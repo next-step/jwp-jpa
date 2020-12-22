@@ -22,19 +22,17 @@ public class LineRepositoryTest {
 	@Autowired
 	private LineRepository lines;
 
-	private static Line PRESET_LINE = new Line("2호선", "green");
-
-	private static Station PRESET_STATION = new Station("강남역");
-
-
-
 	@Test
 	void save() {
-		Line actual = lines.save(PRESET_LINE);
+		String lineName = "2호선";
+		String lineColor = "green";
+
+		Line actual = lines.save(new Line(lineName,lineColor));
+
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(PRESET_LINE.getName()),
-			() -> assertThat(actual.getColor()).isEqualTo(PRESET_LINE.getColor()),
+			() -> assertThat(actual.getName()).isEqualTo(lineName),
+			() -> assertThat(actual.getColor()).isEqualTo(lineColor),
 			() -> assertThat(actual.getCreateDate()).isNotNull(),
 			() -> assertThat(actual.getModifiedDate()).isNotNull()
 		);
@@ -42,38 +40,45 @@ public class LineRepositoryTest {
 
 	@Test
 	void findByName() {
-		Line savedLine = lines.save(PRESET_LINE);
-		Line actual = lines.findByName(savedLine.getName());
+		String lineName = "2호선";
+		String lineColor = "green";
+
+		lines.save(new Line(lineName,lineColor));
+		Line actual = lines.findByName(lineName);
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(savedLine.getName()),
-			() -> assertThat(actual.getColor()).isEqualTo(savedLine.getColor())
+			() -> assertThat(actual.getName()).isEqualTo(lineName),
+			() -> assertThat(actual.getColor()).isEqualTo(lineColor)
 
 		);
 	}
 
 	@Test
 	void update() {
-		Line savedLine = lines.save(PRESET_LINE);
+		String lineName = "2호선";
+		String lineColor = "green";
 
+		Line savedLine = lines.save(new Line(lineName, lineColor));
 		String expectedColor = "blue";
 		savedLine.changeColor(expectedColor);
 
-		Line actual = lines.findByName(savedLine.getName());
+		Line actual = lines.findByName(lineName);
 
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(savedLine.getName()),
+			() -> assertThat(actual.getName()).isEqualTo(lineName),
 			() -> assertThat(actual.getColor()).isEqualTo(expectedColor)
 		);
 	}
 
 	@Test
 	void delete() {
-		Line savedLine = lines.save(PRESET_LINE);
+		String lineName = "2호선";
+		String lineColor = "green";
 
+		Line savedLine = lines.save(new Line(lineName, lineColor));
 		lines.delete(savedLine);
-		Line deletedLine = lines.findByName(PRESET_LINE.getName());
+		Line deletedLine = lines.findByName(lineName);
 
 		assertThat(deletedLine).isNull();
 	}
@@ -81,16 +86,19 @@ public class LineRepositoryTest {
 	@DisplayName("노선 조회 시 속한 지하철 역을 볼 수 있다.")
 	@Test
 	void addLineWithStation() {
-		Line savedLine = lines.save(PRESET_LINE);
+		String lineName = "2호선";
+		String lineColor = "green";
 
-		savedLine.addStation(PRESET_STATION);
+		Line savedLine = lines.save(new Line(lineName, lineColor));
+		Station station = new Station("강남역");
+		savedLine.addStation(station);
 		Line actual = lines.findByName(savedLine.getName());
 
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(savedLine.getName()),
-			() -> assertThat(actual.getColor()).isEqualTo(savedLine.getColor()),
-			() -> assertThat(actual.getStations()).contains(PRESET_STATION)
+			() -> assertThat(actual.getName()).isEqualTo(lineName),
+			() -> assertThat(actual.getColor()).isEqualTo(lineColor),
+			() -> assertThat(actual.getStations()).contains(station)
 		);
 
 	}
