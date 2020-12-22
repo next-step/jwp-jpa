@@ -1,30 +1,52 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "member")
 public class Member extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Integer age;
-
+    private int age;
     private String email;
-
     private String password;
+    @OneToMany
+    private List<Favorite> favorites = new ArrayList<>();
+
+    public static class Builder {
+        private final String email;
+        private final String password;
+
+        private int age = 0;
+        private List<Favorite> favorites = new ArrayList<>();
+
+        public Builder(String email, String password) {
+            this.email = email;
+            this.password = password;
+        }
+
+        public Builder age(int val) {
+            age = val;
+            return this;
+        }
+
+        public Builder addFavorites(Favorite val) {
+            favorites.add(val);
+            return this;
+        }
+
+        public Member build() {
+            return new Member(this);
+        }
+    }
 
     protected Member() {}
 
-    public Member(Integer age, String email, String password) {
-        this.age = age;
-        this.email = email;
-        this.password = password;
-    }
-
-    public Long getId() {
-        return id;
+    private Member(Builder builder) {
+        age       = builder.age;
+        email     = builder.email;
+        password  = builder.password;
+        favorites = builder.favorites;
     }
 
     public int getAge() {
@@ -37,5 +59,9 @@ public class Member extends BaseEntity{
 
     public String getPassword() {
         return password;
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites;
     }
 }

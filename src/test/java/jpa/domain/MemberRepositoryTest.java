@@ -31,7 +31,10 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("멤버 id로 조회 테스트")
     public void findById() throws Exception {
-        Member expected1 = new Member(25, "email1@woowa.com", "0000");
+        Member expected1 = new Member
+                .Builder("email1@woowa.com", "0000")
+                .age(25)
+                .build();
         Member expected2 = members.save(expected1);
         Optional<Member> byId = members.findById(expected1.getId());
 
@@ -48,8 +51,14 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("멤버 age로 조회 테스트")
     public void findByAge() throws Exception {
-        Member member1 = new Member(25, "email1@woowa.com", "0000");
-        Member member2 = new Member(25, "email2@woowa.com", "0000");
+        Member member1 = new Member
+                .Builder("email1@woowa.com", "0000")
+                .age(25)
+                .build();
+        Member member2 = new Member
+                .Builder("email2@woowa.com", "0000")
+                .age(25)
+                .build();
         members.save(member1);
         members.save(member2);
 
@@ -67,8 +76,14 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("멤버 email 로 조회 테스트")
     public void findByEmail() throws Exception {
-        Member member1 = new Member(25, "email1@woowa.com", "0000");
-        Member member2 = new Member(25, "email2@woowa.com", "0000");
+        Member member1 = new Member
+                .Builder("email1@woowa.com", "0000")
+                .age(25)
+                .build();
+        Member member2 = new Member
+                .Builder("email2@woowa.com", "0000")
+                .age(25)
+                .build();
         members.save(member1);
         members.save(member2);
 
@@ -80,6 +95,31 @@ class MemberRepositoryTest {
                 () -> assertThat(byEmail.get(0).getAge()).isEqualTo(25),
                 () -> assertThat(byEmail.get(0).getEmail()).isEqualTo("email1@woowa.com"),
                 () -> assertThat(byEmail.get(0).getPassword()).isEqualTo("0000")
+        );
+    }
+
+    @Test
+    @DisplayName("사용자는 여러 즐겨찾기를 가질 수 있다.")
+    public void findMemberWithFavorite() throws Exception {
+        Favorite favorite1 = new Favorite(new Station("화정역"), new Station("잠실역"));
+        Favorite favorite2 = new Favorite(new Station("잠실역"), new Station("강남역"));
+        Member member1 = new Member
+                .Builder("email1@woowa.com", "0000")
+                .age(25)
+                .addFavorites(favorite1)
+                .addFavorites(favorite2)
+                .build();
+        members.save(member1);
+
+        Member expected = members.findById(member1.getId()).get();
+
+        assertAll(
+                () -> assertThat(expected).isNotNull(),
+                () -> assertThat(expected.getFavorites()).hasSize(2),
+                () -> assertThat(expected.getFavorites().get(0).getFromStation()).isEqualTo(favorite1.getFromStation()),
+                () -> assertThat(expected.getFavorites().get(0).getToStation()).isEqualTo(favorite1.getToStation()),
+                () -> assertThat(expected.getFavorites().get(1).getFromStation()).isEqualTo(favorite2.getFromStation()),
+                () -> assertThat(expected.getFavorites().get(1).getToStation()).isEqualTo(favorite2.getToStation())
         );
     }
 }

@@ -52,4 +52,23 @@ class StationRepositoryTest {
                 () -> assertThat(byName.getName()).isEqualTo(expected.getName())
         );
     }
+
+    @Test
+    @DisplayName("지하철역 조회 시 어느 노선에 속한지 볼 수 있다.")
+    public void findStationWithLine() throws Exception {
+        Station savedStation = stations.save(new Station("화정역"));
+        Line line = new Line("3호선", "주황");
+
+        savedStation.addLine(line);
+
+        Station expected = stations.findByName(savedStation.getName());
+
+        assertAll(
+                () -> assertThat(expected.getId()).isNotNull(),
+                () -> assertThat(expected.getName()).isEqualTo(savedStation.getName()),
+                () -> assertThat(expected.getLines().contains(line)).isTrue(),
+                () -> expected.getLines().forEach( l -> assertThat(l.getName()).isEqualTo(line.getName())),
+                () -> expected.getLines().forEach( l -> assertThat(l.getColor()).isEqualTo(line.getColor()))
+        );
+    }
 }

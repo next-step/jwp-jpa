@@ -1,35 +1,27 @@
 package jpa.domain;
 
-import jdk.internal.jline.internal.Nullable;
-
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "line")
 public class Line extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = true)
     private String name;
-
     private String color;
+    @ManyToMany
+    private List<Station> stations = new ArrayList<>();
 
-    protected Line() {
-    }
-
-    public Line(String name) {
-        this.name = name;
-    }
+    protected Line() {}
 
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
     }
 
-    public Long getId() {
-        return id;
+    public void addStation(Station station) {
+        stations.add(station);
     }
 
     public String getName() {
@@ -38,5 +30,9 @@ public class Line extends BaseEntity{
 
     public String getColor() {
         return color;
+    }
+
+    public List<Station> getStations() {
+        return stations;
     }
 }
