@@ -14,7 +14,7 @@ public class Line extends BaseEntity {
 	@Column(unique = true, nullable = false)
 	private String name;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@OneToMany
 	private List<Station> stationList = new ArrayList<>();
 
 	public Line() {

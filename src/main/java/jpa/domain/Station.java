@@ -11,7 +11,7 @@ public class Station extends BaseEntity {
 	@Column(unique = true, nullable = false)
 	private String name;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@OneToMany
 	private List<Line> lineList = new ArrayList<>();
 
 	@Embedded
