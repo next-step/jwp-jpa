@@ -1,8 +1,12 @@
 package jpa.domain;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "favorite")
@@ -12,31 +16,22 @@ public class Favorite {
     @Column(nullable = false)
     private Long id;
 
-    private Timestamp created_date;
+    private LocalDateTime createdDate;
 
-    private Timestamp modified_date;
+    private LocalDateTime modifiedDate;
+
+    public Favorite() {
+    }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public LocalDateTime getCreatedDate() {
+        return this.createdDate;
     }
 
-    public Timestamp getCreated_date() {
-        return created_date;
-    }
-
-    public void setCreated_date(Timestamp created_date) {
-        this.created_date = created_date;
-    }
-
-    public Timestamp getModified_date() {
-        return modified_date;
-    }
-
-    public void setModified_date(Timestamp modified_date) {
-        this.modified_date = modified_date;
+    public LocalDateTime getModifiedDate() {
+        return this.modifiedDate;
     }
 }

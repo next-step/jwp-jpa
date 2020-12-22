@@ -4,10 +4,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import java.util.Optional;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 public class FavoriteRepositoryTest {
@@ -25,20 +25,23 @@ public class FavoriteRepositoryTest {
         Favorite saveFavorite = this.favoriteRepository.save(favorite);
 
         // then
-        assertThat(saveFavorite).isEqualTo(favorite);
+        assertAll(
+                () -> assertThat(saveFavorite.getId()).isNotNull(),
+                () -> assertEquals(saveFavorite, favorite)
+        );
     }
 
     @Test
-    @DisplayName("이름으로 favorite 조회 테스트")
+    @DisplayName("아이디로 favorite 조회 테스트")
     public void findById() {
         // given
         Favorite favorite = favoriteRepository.save(new Favorite());
         Long favoriteId = favorite.getId();
 
         // when
-        Optional<Favorite> favoriteFindById = this.favoriteRepository.findById(favoriteId);
+        Favorite favoriteFound = this.favoriteRepository.findById(favoriteId).get();
 
         // then
-        assertThat(favoriteFindById.get().getId()).isEqualTo(favoriteId);
+        assertThat(favoriteFound.getId()).isEqualTo(favoriteId);
     }
 }

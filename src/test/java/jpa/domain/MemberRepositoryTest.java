@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 public class MemberRepositoryTest {
@@ -25,7 +27,10 @@ public class MemberRepositoryTest {
         Member saveMember = this.memberRepository.save(member);
 
         // then
-        assertThat(saveMember).isEqualTo(member);
+        assertAll(
+                () -> assertThat(saveMember.getId()).isNotNull(),
+                () -> assertEquals(saveMember, member)
+        );
     }
 
     @Test
