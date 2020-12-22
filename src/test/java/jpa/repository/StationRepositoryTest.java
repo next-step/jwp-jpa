@@ -24,39 +24,17 @@ public class StationRepositoryTest {
 	@Autowired
 	private LineRepository lines;
 
-	private static Station PRESET_STATION = new Station("잠실역");
 
-
-	@DisplayName("지하철 역 조회시 어느 노선에 속한지 볼 수 있다.")
-	@Test
-	void checkLineWithFindingStation() {
-		String lineName = "2호선";
-		String lineColor = "green";
-
-		Station savedStation = stations.save(new Station("잠실역"));
-		Line line = lines.save(new Line(lineName, lineColor));
-		savedStation.changeLine(line);
-
-		Station actual = stations.findByName(savedStation.getName());
-
-		assertAll(
-			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(savedStation.getName()),
-			() -> assertThat(actual.getLine()).isEqualTo(line),
-			() -> assertThat(actual.getLine().getName()).isEqualTo(lineName),
-			() -> assertThat(actual.getLine().getColor()).isEqualTo(lineColor)
-		);
-
-	}
 
 	@Test
 	void save() {
+		String stationName = "잠실역";
 
-		Station actual = stations.save(PRESET_STATION);
+		Station actual = stations.save(new Station(stationName));
 
 		assertAll(
 			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(PRESET_STATION.getName()),
+			() -> assertThat(actual.getName()).isEqualTo(stationName),
 			() -> assertThat(actual.getCreateDate()).isNotNull(),
 			() -> assertThat(actual.getModifiedDate()).isNotNull()
 		);
@@ -64,19 +42,21 @@ public class StationRepositoryTest {
 
 	@Test
 	void findByName() {
-		Station savedStation = stations.save(PRESET_STATION);
+		String stationName = "잠실역";
+		stations.save(new Station(stationName));
 
-		Station actual = stations.findByName(savedStation.getName());
+		Station actual = stations.findByName(stationName);
 
-		assertThat(actual).isEqualTo(savedStation);
+		assertThat(actual.getName()).isEqualTo(stationName);
 	}
 
 	@Test
 	void update() {
-		Station station = stations.save(PRESET_STATION);
+		String stationName = "잠실역";
+		Station savedStation = stations.save(new Station(stationName));
 
 		String expectedName = "몽촌토성역";
-		station.changeName(expectedName);
+		savedStation.changeName(expectedName);
 
 		Station actual = stations.findByName(expectedName);
 		assertAll(
@@ -87,14 +67,46 @@ public class StationRepositoryTest {
 
 	@Test
 	void delete() {
-		Station savedStation = stations.save(PRESET_STATION);
+		String stationName = "잠실역";
+		Station savedStation = stations.save(new Station(stationName));
 
 		stations.delete(savedStation);
 
-		Station actual = stations.findByName(PRESET_STATION.getName());
+		Station actual = stations.findByName(stationName);
 
 		assertThat(actual).isNull();
 
 	}
 
+	@DisplayName("지하철 역 조회시 어느 노선에 속한지 볼 수 있다.")
+	@Test
+	void checkLineWithFindingStation() {
+		String lineName = "2호선";
+		String lineColor = "green";
+		String stationName = "잠실역";
+
+
+		Station savedStation = saveStation(stationName);
+		Line savedLine = saveLine(lineName, lineColor);
+		savedStation.changeLine(savedLine);
+
+		Station actual = stations.findByName(savedStation.getName());
+
+		assertAll(
+			() -> assertThat(actual.getId()).isNotNull(),
+			() -> assertThat(actual.getName()).isEqualTo(stationName),
+			() -> assertThat(actual.getLine()).isEqualTo(savedLine),
+			() -> assertThat(actual.getLine().getName()).isEqualTo(lineName),
+			() -> assertThat(actual.getLine().getColor()).isEqualTo(lineColor)
+		);
+
+	}
+
+	private Station saveStation(String stationName) {
+		return stations.save(new Station(stationName));
+	}
+
+	private Line saveLine(String lineName, String lineColor) {
+		return lines.save(new Line(lineName, lineColor));
+	}
 }
