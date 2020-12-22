@@ -16,7 +16,7 @@ public class Line extends BaseEntity {
 	@Column(name = "color", nullable = false, length = 255)
 	private String color;
 
-	public Line(String name, String color) {
+	Line(String name, String color) {
 		this.name = name;
 		this.color = color;
 	}
