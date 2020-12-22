@@ -1,12 +1,19 @@
 package jpa.dao;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member extends DefaultEntity {
     private Integer age;
+    @Column(unique = true)
     private String email;
     private String password;
+    @OneToMany(mappedBy = "member")
+    private List<Favorite> favorites = new ArrayList<>();
 
     protected Member(){}
 
@@ -14,6 +21,10 @@ public class Member extends DefaultEntity {
         this.age = age;
         this.email = email;
         this.password = password;
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites;
     }
 
     @Override
