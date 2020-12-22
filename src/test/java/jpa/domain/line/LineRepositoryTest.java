@@ -1,8 +1,12 @@
-package jpa.repository;
+package jpa.domain.line;
 
-import jpa.domain.Line;
+import jpa.domain.station.Station;
+import jpa.domain.station.StationRepository;
 
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,8 +20,18 @@ public class LineRepositoryTest {
     @Autowired
     private LineRepository lineRepository;
 
+    @Autowired
+    private StationRepository stationRepository;
+
+    @PersistenceContext
+    private EntityManager em;
+
     private Line saveLine(String color, String name) {
         return lineRepository.save(new Line(color, name));
+    }
+
+    private Station saveStation(String name) {
+        return stationRepository.save(new Station(name));
     }
 
     @Test
@@ -50,5 +64,28 @@ public class LineRepositoryTest {
 
         List<Line> result = lineRepository.findByColor("YELLOW");
         assertThat(result.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("지하철역 조회 테스트")
+    void findStationByLine() {
+        // given
+        Line line = saveLine("YELLOW", "분당선");
+        Station station1 = saveStation("모란");
+        Station station2 = saveStation("죽전");
+        line.addStation(station1);
+        line.addStation(station2);
+
+        em.flush();
+        em.clear();
+
+        // when
+        Line findLine = lineRepository.findByName("분당선");
+
+        // then
+        assertThat(findLine.getStations().size()).isEqualTo(2);
+        assertThat(findLine.getStations()).containsExactly(station1, station2)
+                .extracting("name")
+                .containsExactly("모란", "죽전");
     }
 }
