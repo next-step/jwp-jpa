@@ -35,18 +35,6 @@ public class Line extends BaseEntity {
         this.color = color;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public void changeLineColor(final String color) {
         this.color = color;
     }
@@ -63,5 +51,17 @@ public class Line extends BaseEntity {
         return stations.stream()
             .map(LineStation::getStationName)
             .collect(Collectors.toList());
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getName() {
+        return name;
     }
 }
