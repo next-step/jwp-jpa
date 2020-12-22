@@ -83,7 +83,7 @@ class LineRepositoryTest {
     Line expected = getLineSampleData();
     expected.addStation(stations.save(new Station("복정역")));
     lines.save(expected);
-    lines.flush(); // transaction commit
+    lines.flush();
 
     assertThat(expected.getStations().get(0).getName()).isEqualTo("복정역");
   }
