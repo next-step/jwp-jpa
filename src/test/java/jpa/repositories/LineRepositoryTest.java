@@ -1,9 +1,7 @@
 package jpa.repositories;
 
 import jpa.domain.Line;
-import jpa.domain.Station;
 import jpa.domain.repositories.LineRepository;
-import jpa.domain.repositories.StationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -13,10 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 class LineRepositoryTest {
+
   @Autowired
   private LineRepository lines;
-  @Autowired
-  private StationRepository stations;
 
   @Test
   void save() {
@@ -39,6 +36,7 @@ class LineRepositoryTest {
     lines.save(expected);
 
     final Line actual = lines.findByName("8호선");
+
     assertThat(actual.getName()).isEqualTo("8호선");
   }
 
@@ -65,27 +63,6 @@ class LineRepositoryTest {
     lines.delete(line);
 
     assertThat(lines.findById(line.getId()).orElse(null)).isNull();
-  }
-
-  @Test
-  void selectWithStations() {
-    Line line = lines.findByName("1호선");
-
-    assertAll(
-        () -> assertThat(line.getStations().get(0).getName()).isEqualTo("시청역"),
-        () -> assertThat(line.getStations().get(1).getName()).isEqualTo("종각역"),
-        () -> assertThat(line.getStations().get(2).getName()).isEqualTo("종로3가역")
-    );
-  }
-
-  @Test
-  void saveWithStations() {
-    Line expected = getLineSampleData();
-    expected.addStation(stations.save(new Station("복정역")));
-    lines.save(expected);
-    lines.flush();
-
-    assertThat(expected.getStations().get(0).getName()).isEqualTo("복정역");
   }
 
   private Line getLineSampleData() {

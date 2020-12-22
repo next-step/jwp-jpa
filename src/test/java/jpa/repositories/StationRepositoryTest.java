@@ -2,7 +2,6 @@ package jpa.repositories;
 
 import jpa.domain.Line;
 import jpa.domain.Station;
-import jpa.domain.repositories.LineRepository;
 import jpa.domain.repositories.StationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ class StationRepositoryTest {
 
   @Autowired
   private StationRepository stations;
-  @Autowired
-  private LineRepository lines;
 
   @Test
   void save() {
@@ -66,31 +63,6 @@ class StationRepositoryTest {
     stations.delete(station);
 
     assertThat(stations.findById(station.getId()).orElse(null)).isNull();
-  }
-
-  @Test
-  void selectWithLine() {
-    Station station = stations.findByName("종각역");
-    assertThat(station.getLine().getName()).isEqualTo("1호선");
-  }
-
-  @Test
-  void saveWithLine() {
-    Station station = stations.save(getStationSampleData());
-    station.setLine(lines.save(getLineSampleData()));
-    Station actual = stations.save(station);
-    stations.flush();
-
-    assertThat(actual.getLine().getName()).isEqualTo("8호선");
-  }
-
-  @Test
-  void updateWithLine() {
-    Station station = stations.save(getStationSampleData());
-    station.setLine(lines.save(getLineSampleData()));
-    stations.flush();
-
-    assertThat(station.getLine().getName()).isEqualTo("8호선");
   }
 
   private Station getStationSampleData() {

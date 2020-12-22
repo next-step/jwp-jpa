@@ -68,7 +68,6 @@ class MemberRepositoryTest {
     final Favorite favorite = favorites.save(getFavoriteSampleData());
     member.addFavorite(favorite);
     members.save(member);
-    members.flush();
 
     // when
     final Member expected = members.findById(member.getId()).get();

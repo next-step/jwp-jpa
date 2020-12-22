@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,9 +20,8 @@ public class Station extends BaseEntity {
   @Column(nullable = false, unique = true)
   private String name;
 
-  @ManyToOne
-  @JoinColumn(name = "line_id")
-  private Line line;
+  @OneToMany(mappedBy = "station", fetch = FetchType.LAZY)
+  private List<LineStation> lineStations = new ArrayList<>();
 
   public Station(final String name) {
     this.name = name;
@@ -31,11 +31,7 @@ public class Station extends BaseEntity {
     this.name = name;
   }
 
-  public void setLine(final Line line) {
-    if (Objects.nonNull(this.line)) {
-      this.line.getStations().remove(this);
-    }
-    this.line = line;
-    line.getStations().add(this);
+  public void add(final LineStation lineStation) {
+    this.lineStations.add(lineStation);
   }
 }
