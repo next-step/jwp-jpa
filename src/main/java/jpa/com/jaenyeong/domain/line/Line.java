@@ -18,7 +18,8 @@ public class Line extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String color;
+    @Enumerated(value = EnumType.STRING)
+    private LineColor color;
 
     @Column(unique = true)
     private String name;
@@ -26,17 +27,17 @@ public class Line extends BaseEntity {
     @OneToMany(mappedBy = "line", orphanRemoval = true)
     private List<LineStation> stations = new ArrayList<>();
 
-    public Line(final String name) {
-        this.name = name;
-    }
-
     public Line(final String name, final String color) {
         this.name = name;
-        this.color = color;
+        this.color = getColor(color);
+    }
+
+    private LineColor getColor(final String color) {
+        return LineColor.getColor(color);
     }
 
     public void changeLineColor(final String color) {
-        this.color = color;
+        this.color = getColor(color);
     }
 
     public void add(final LineStation lineStation) {
@@ -58,7 +59,7 @@ public class Line extends BaseEntity {
     }
 
     public String getColor() {
-        return color;
+        return color.getColorName();
     }
 
     public String getName() {
