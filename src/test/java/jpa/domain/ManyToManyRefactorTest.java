@@ -72,6 +72,24 @@ public class ManyToManyRefactorTest {
         assertThat(stations).contains(gangnam, jamsil);
     }
 
+    @DisplayName("라인을 생성하면 연관된 역들에서도 해당 라인을 조회할 수 있다.")
+    @Test
+    void getLinesFromStationTest() {
+        String color = "녹색";
+        String name = "2호선";
+        int distanceValue = 5;
+
+        // given
+        Line line = LINE_CREATED(color, name, distanceValue, gangnam, jamsil);
+
+        // when
+        Station foundGangnam = stationRepository.findByName(gangnam.getName()).orElse(null);
+        assertThat(foundGangnam).isNotNull();
+
+        // then
+        assertThat(foundGangnam.getLines()).contains(line);
+    }
+
     @DisplayName("라인을 변경 시 더티 체킹을 통한 자동 업데이트가 된다.")
     @Test
     void dirtyCheckTest() {

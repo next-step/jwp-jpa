@@ -47,6 +47,10 @@ public class Station extends BaseEntity {
         line.getStations().add(this);
     }
 
+    public String getName() {
+        return name;
+    }
+
     List<Line> getLines() {
         return this.lines;
     }
