@@ -101,8 +101,14 @@ class MemberRepositoryTest {
     @Test
     @DisplayName("사용자는 여러 즐겨찾기를 가질 수 있다.")
     public void findMemberWithFavorite() throws Exception {
-        Favorite favorite1 = new Favorite(new Station("화정역"), new Station("잠실역"));
-        Favorite favorite2 = new Favorite(new Station("잠실역"), new Station("강남역"));
+        Favorite favorite1 = new Favorite.Builder()
+                                         .fromStation(new Station("화정역"))
+                                         .toStation(new Station("잠실역"))
+                                         .build();
+        Favorite favorite2 = new Favorite.Builder()
+                                         .fromStation(new Station("잠실역"))
+                                         .toStation(new Station("강남역"))
+                                         .build();
         Member member1 = new Member
                 .Builder("email1@woowa.com", "0000")
                 .age(25)

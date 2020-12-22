@@ -20,7 +20,7 @@ public class Line extends BaseEntity{
         this.color = color;
     }
 
-    public void addStation(Station station) {
+    public void add(Station station) {
         stations.add(station);
     }
 

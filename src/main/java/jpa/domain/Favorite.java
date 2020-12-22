@@ -10,11 +10,32 @@ public class Favorite extends BaseEntity{
     @OneToOne
     private Station toStation;
 
+    public static class Builder {
+        private Station fromStation;
+        private Station toStation;
+
+        public Builder() {}
+
+        public Builder fromStation(Station fromStation) {
+            this.fromStation = fromStation;
+            return this;
+        }
+
+        public Builder toStation(Station toStation) {
+            this.toStation = toStation;
+            return this;
+        }
+
+        public Favorite build() {
+            return new Favorite(this);
+        }
+    }
+
     protected Favorite() {}
 
-    public Favorite(Station from, Station to) {
-        this.fromStation = from;
-        this.toStation = to;
+    private Favorite(Builder builder) {
+        fromStation = builder.fromStation;
+        toStation   = builder.toStation;
     }
 
     public Station getFromStation() {

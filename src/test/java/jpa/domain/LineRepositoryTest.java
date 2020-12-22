@@ -72,7 +72,7 @@ class LineRepositoryTest {
         Line savedLine = lines.save(new Line("3호선", "주황"));
         Station station = new Station("화정역");
 
-        savedLine.addStation(station);
+        savedLine.add(station);
         Line expected = lines.findByName(savedLine.getName());
 
         assertAll(

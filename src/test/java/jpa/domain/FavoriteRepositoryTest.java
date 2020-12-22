@@ -23,8 +23,12 @@ class FavoriteRepositoryTest {
     public void save() throws Exception {
         Station fromStation = stations.save(new Station("화정역"));
         Station toStation = stations.save(new Station("잠실역"));
+        Favorite favorite = new Favorite.Builder()
+                .fromStation(fromStation)
+                .toStation(toStation)
+                .build();
 
-        Favorite expected = favorites.save(new Favorite(fromStation, toStation));
+        Favorite expected = favorites.save(favorite);
         Favorite byFromStation = favorites.findByFromStation(fromStation);
         Favorite byToStation = favorites.findByToStation(toStation);
 

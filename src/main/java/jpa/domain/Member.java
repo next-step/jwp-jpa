@@ -25,13 +25,13 @@ public class Member extends BaseEntity{
             this.password = password;
         }
 
-        public Builder age(int val) {
-            age = val;
+        public Builder age(int age) {
+            this.age = age;
             return this;
         }
 
-        public Builder addFavorites(Favorite val) {
-            favorites.add(val);
+        public Builder addFavorites(Favorite favorite) {
+            favorites.add(favorite);
             return this;
         }
 
