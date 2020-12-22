@@ -1,11 +1,16 @@
 package jpa.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +29,9 @@ public class Line extends BaseTimeEntity {
     @Column(unique = true)
     private String name;
 
+    @ManyToMany(mappedBy = "lines")
+    private List<Station> stations = new ArrayList<>();
+
     public Line(String name) {
         this(name, null);
     }
@@ -31,6 +39,10 @@ public class Line extends BaseTimeEntity {
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public void addByStation(Station station) {
+        this.stations.add(station);
     }
 
     @Override
@@ -42,13 +54,11 @@ public class Line extends BaseTimeEntity {
             return false;
         }
         Line line = (Line) o;
-        return Objects.equals(id, line.id) &&
-              Objects.equals(color, line.color) &&
-              Objects.equals(name, line.name);
+        return Objects.equals(id, line.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, color, name);
+        return Objects.hash(id);
     }
 }
