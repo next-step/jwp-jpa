@@ -43,6 +43,9 @@ public class Favorite extends BaseEntity{
     private Favorite(Builder builder) {
         fromStation = builder.fromStation;
         toStation   = builder.toStation;
+        if (fromStation.equals(toStation) || fromStation.getName().equals(toStation.getName())) {
+            throw new IllegalArgumentException("출발역과 도착역은 같을 수 없습니다.");
+        }
     }
 
     public String getFromStationName() {
