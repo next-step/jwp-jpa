@@ -33,11 +33,11 @@ public class Station extends BaseTimeEntity {
         return line;
     }
 
-    public void setName(String name) {
+    public void changeName(String name) {
         this.name = name;
     }
 
-    public void setLine(final Line line) {
+    public void changeLine(final Line line) {
         this.line = line;
     }
 }

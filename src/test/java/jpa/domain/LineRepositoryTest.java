@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -45,7 +47,7 @@ class LineRepositoryTest {
         Line line = lineRepository.findByName("1호선");
         assertThat(line.getColor()).isNull();
 
-        line.setColor("파랑");
+        line.changeColor("파랑");
         Line actual = lineRepository.findByName("1호선");
 
         assertThat(actual.getColor()).isEqualTo("파랑");
@@ -69,8 +71,11 @@ class LineRepositoryTest {
         Line line = lineRepository.findByName("2호선");
         line.addStation(station);
 
-        Line actual = lineRepository.findByName("2호선");
-        assertThat(actual.getStations()).hasSize(1);
-        assertThat(actual.isContainStation(station)).isTrue();
+        List<Station> stations = lineRepository.findByName("2호선").getStations();
+        assertAll(
+                () -> assertThat(stations).hasSize(1),
+                () -> assertThat(stations.contains(station)).isTrue(),
+                () -> assertThat(stations.get(0).getLine()).isEqualTo(line)
+        );
     }
 }

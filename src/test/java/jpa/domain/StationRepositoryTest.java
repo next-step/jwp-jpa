@@ -38,7 +38,7 @@ class StationRepositoryTest {
     void update_name() {
         Station station = stationRepository.findByName("강남");
 
-        station.setName("역삼");
+        station.changeName("역삼");
         Station actual = stationRepository.getOne(station.getId());
 
         assertThat(actual.getName()).isEqualTo("역삼");

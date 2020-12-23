@@ -15,7 +15,7 @@ public class Line extends BaseTimeEntity {
     private String color;
 
     @OneToMany(mappedBy = "line")
-    private List<Station> stations = new ArrayList<>();
+    private final List<Station> stations = new ArrayList<>();
 
     protected Line() {
     }
@@ -29,12 +29,9 @@ public class Line extends BaseTimeEntity {
         this.color = color;
     }
 
-    public void addStation(final Station station) {
+    public void addStation(Station station) {
         stations.add(station);
-    }
-
-    public boolean isContainStation(final Station station) {
-        return stations.contains(station);
+        station.changeLine(this);
     }
 
     public Long getId() {
@@ -53,7 +50,7 @@ public class Line extends BaseTimeEntity {
         return stations;
     }
 
-    public void setColor(String color) {
+    public void changeColor(String color) {
         this.color = color;
     }
 }
