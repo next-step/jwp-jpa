@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.member;
 
 import java.time.LocalDateTime;
 
@@ -12,15 +12,24 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-public class Favorite {
+public class Member {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column
+	private Integer age;
+
+	@Column
+	private String email;
+
+	@Column(nullable = false)
+	private String password;
+
+	@Column
 	@CreationTimestamp
-	private LocalDateTime createDate;
+	private LocalDateTime createdDate;
 
 	@Column
 	@UpdateTimestamp

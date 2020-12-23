@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.station;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import jpa.line.Line;
 
 @Entity
 @Table(indexes = @Index(name = "unique_station_name", columnList = "name", unique = true))

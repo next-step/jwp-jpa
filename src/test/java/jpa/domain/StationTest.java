@@ -13,8 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.dao.LineRepository;
-import jpa.dao.StationRepository;
+import jpa.line.Line;
+import jpa.line.LineRepository;
+import jpa.station.Station;
+import jpa.station.StationRepository;
 
 @DataJpaTest
 class StationTest {
@@ -62,8 +64,11 @@ class StationTest {
 		Station expected = stationRepository.save(new Station("잠실역"));
 		expected.changeId(3L);
 
-		assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(
-			() -> stationRepository.findById(expected.getId()).get());
+		assertThatExceptionOfType(NoSuchElementException.class)
+			.isThrownBy(() -> {
+					stationRepository.findById(expected.getId());
+				}
+			);
 	}
 
 	@Test
