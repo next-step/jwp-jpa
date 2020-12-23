@@ -6,9 +6,6 @@ import java.util.List;
 
 @Entity
 public class Line extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = true, nullable = false)
     private String name;
 
@@ -32,10 +29,6 @@ public class Line extends BaseTimeEntity {
     public void addStation(Station station) {
         stations.add(station);
         station.changeLine(this);
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getColor() {
