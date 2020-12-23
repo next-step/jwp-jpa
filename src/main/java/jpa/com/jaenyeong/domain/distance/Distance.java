@@ -32,10 +32,6 @@ public class Distance {
     }
 
     public String getPreviousStationName() {
-        if (previous == null) {
-            return "";
-        }
-
         return previous.getName();
     }
 }

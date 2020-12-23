@@ -2,6 +2,7 @@ package jpa.com.jaenyeong.domain.mapping;
 
 import jpa.com.jaenyeong.domain.BaseEntity;
 import jpa.com.jaenyeong.domain.distance.Distance;
+import jpa.com.jaenyeong.domain.distance.EmptyDistance;
 import jpa.com.jaenyeong.domain.line.Line;
 import jpa.com.jaenyeong.domain.station.Station;
 import lombok.AccessLevel;
@@ -29,7 +30,7 @@ public class LineStation extends BaseEntity {
     private Distance distance;
 
     public LineStation(final Line line, final Station station) {
-        this(line, station, new Distance(null, 0));
+        this(line, station, new EmptyDistance());
     }
 
     public LineStation(final Line line, final Station station, final Distance distance) {
