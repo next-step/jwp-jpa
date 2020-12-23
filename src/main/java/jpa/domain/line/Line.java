@@ -1,8 +1,10 @@
 package jpa.domain.line;
 
 import jpa.domain.base.BaseTimeEntity;
+import jpa.domain.linestation.LineStation;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Line extends BaseTimeEntity {
@@ -14,6 +16,9 @@ public class Line extends BaseTimeEntity {
     private String name;
 
     private String color;
+
+    @OneToMany(mappedBy = "line")
+    private List<LineStation> station;
 
     protected Line() {
     }

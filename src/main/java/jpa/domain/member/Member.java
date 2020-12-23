@@ -4,7 +4,6 @@ import jpa.domain.base.BaseTimeEntity;
 import jpa.domain.favorite.Favorite;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,6 +15,9 @@ public class Member extends BaseTimeEntity {
     private int age;
     private String email;
     private String password;
+
+    @OneToMany(mappedBy = "member")
+    private List<Favorite> favorites;
 
     public Member(String name) {
         this.name = name;
