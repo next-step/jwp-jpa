@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import jpa.common.BaseTime;
 import jpa.station.Station;
+import lombok.Getter;
 
 @Entity
 @Table(indexes = @Index(name = "unique_line_name", columnList = "name", unique = true))
@@ -24,17 +25,19 @@ public class Line extends BaseTime {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Getter
 	@Column(nullable = false)
 	private Color color;
 
+	@Getter
 	@Column(nullable = false)
 	private String name;
 
+	@Getter
 	@ManyToMany(mappedBy = "lines")
 	private List<Station> stations = new ArrayList<>();
 
 	protected Line() {
-
 	}
 
 	public Line(Color color, String name) {
@@ -42,23 +45,11 @@ public class Line extends BaseTime {
 		this.name = name;
 	}
 
-	@Override
-	public String toString() {
-		return "Line{" +
-			"id=" + id +
-			", color=" + color +
-			", name='" + name + '\'' +
-			", stations=" + stations +
-			", createdDate=" + getCreatedDate() +
-			", modifiedDate=" + getModifiedDate() +
-			'}';
+	public void addStation(Station station) {
+		station.addLine(this);
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public List<Station> getStations() {
-		return this.stations;
+	public void clearStation(Station station) {
+		station.clearLine(this);
 	}
 }

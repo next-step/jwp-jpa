@@ -1,5 +1,6 @@
 package jpa.station;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -14,73 +15,51 @@ import javax.persistence.Table;
 
 import jpa.common.BaseTime;
 import jpa.line.Line;
+import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Entity
 @Table(indexes = @Index(name = "unique_station_name", columnList = "name", unique = true))
 public class Station extends BaseTime {
 
+	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Getter
 	@Column(nullable = false)
 	private String name;
 
+	@Getter
 	@ManyToMany
-	@JoinColumn(name = "line_id")
-	private List<Line> lines;
-
-	@Override
-	public String toString() {
-		return "Station{" +
-			"id=" + id +
-			", name='" + name + '\'' +
-			", line=" + lines +
-			", createdDate=" + getCreatedDate() +
-			", modifiedDate=" + getModifiedDate() +
-			'}';
-	}
+	@JoinColumn
+	private List<Line> lines = new ArrayList<>();
 
 	protected Station() {
-
 	}
 
 	public Station(String name) {
 		this.name = name;
 	}
 
-	public Station(String name, List<Line> line) {
-		this.name = name;
-		this.lines = line;
+	/**
+	 * 연관관계 편의 메서드
+	 * @param line: 라인 추가
+	 */
+	public void addLine(final Line line) {
+		line.getStations().add(this);
+		this.lines.add(line);
 	}
 
-	public Long getId() {
-		return id;
+	/**
+	 * 연관관계 편의 메서드
+	 * @param line: 라인 제거
+	 */
+	public void clearLine(final Line line) {
+		line.getStations().remove(this);
+		this.lines.remove(line);
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public List<Line> getLines() {
-		return lines;
-	}
-
-	public void setLines(List<Line> line) {
-		this.lines = line;
-	}
-
-	public void changeName(final String name) {
-		this.name = name;
-	}
-
-	public void changeId(final Long id) {
-		this.id = id;
-	}
-
-	public Line getFirstLine() {
-		return this.lines.stream()
-			.findFirst()
-			.orElse(null);
-	}
 }
