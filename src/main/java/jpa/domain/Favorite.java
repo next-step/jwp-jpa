@@ -1,38 +1,48 @@
 package jpa.domain;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-public class Favorite {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Favorite extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @CreationTimestamp
-  private LocalDateTime createdDate;
+  @Column
+  private String name;
 
-  @UpdateTimestamp
-  private LocalDateTime modifiedDate;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "start_station_id")
+  private Station startStation;
 
-  public Long getId() {
-    return id;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "end_station_id")
+  private Station endStation;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id")
+  private Member member;
+
+  public Favorite(final String name, final Station startStation, final Station endStation) {
+    this.name = name;
+    this.startStation = startStation;
+    this.endStation = endStation;
   }
 
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public LocalDateTime getModifiedDate() {
-    return modifiedDate;
-  }
-
-  public Favorite() {
+  public void setMember(final Member member) {
+    if (Objects.nonNull(this.member)) {
+      this.member.getFavorites().remove(this);
+    }
+    if (!member.getFavorites().contains(this)) {
+      member.getFavorites().add(this);
+    }
+    this.member = member;
   }
 }

@@ -1,5 +1,6 @@
 package jpa.repositories;
 
+import jpa.domain.Line;
 import jpa.domain.Station;
 import jpa.domain.repositories.StationRepository;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,7 @@ class StationRepositoryTest {
     // id를 기반으로 같은 entity에 대해 동일성을 보장해준다.
     final Station station1 = stations.save(getStationSampleData());
     final Station station2 = stations.findById(station1.getId()).get();
+
     assertThat(station1 == station2).isTrue();
   }
 
@@ -51,6 +53,7 @@ class StationRepositoryTest {
     final Station station = stations.save(getStationSampleData());
     station.changeName("잠실나루역");
     stations.flush();
+
     assertThat(station.getName()).isEqualTo("잠실나루역");
   }
 
@@ -58,10 +61,15 @@ class StationRepositoryTest {
   void delete() {
     final Station station = stations.save(getStationSampleData());
     stations.delete(station);
+
     assertThat(stations.findById(station.getId()).orElse(null)).isNull();
   }
 
   private Station getStationSampleData() {
     return new Station("잠실역");
+  }
+
+  private Line getLineSampleData() {
+    return new Line("8호선", "PINK");
   }
 }

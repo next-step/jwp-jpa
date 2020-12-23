@@ -1,13 +1,17 @@
 package jpa.domain;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Line {
+public class Line extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -18,41 +22,19 @@ public class Line {
   @Column(nullable = false)
   private String color;
 
-  @CreationTimestamp
-  private LocalDateTime createdDate;
+  @OneToMany(mappedBy = "line", fetch = FetchType.LAZY)
+  private List<LineStation> lineStations = new ArrayList<>();
 
-  @UpdateTimestamp
-  private LocalDateTime modifiedDate;
+  public Line(final String name, final String color) {
+    this.name = name;
+    this.color = color;
+  }
 
   public void changeName(final String name) {
     this.name = name;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getColor() {
-    return color;
-  }
-
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public LocalDateTime getModifiedDate() {
-    return modifiedDate;
-  }
-
-  protected Line() {
-  }
-
-  public Line(final String name, final String color) {
-    this.name = name;
-    this.color = color;
+  public void add(final LineStation lineStation) {
+    this.lineStations.add(lineStation);
   }
 }

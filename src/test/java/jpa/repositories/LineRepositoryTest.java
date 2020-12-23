@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 class LineRepositoryTest {
+
   @Autowired
   private LineRepository lines;
 
@@ -22,8 +23,8 @@ class LineRepositoryTest {
     final Line actual = lines.save(expected);
     assertAll(
         () -> assertThat(actual.getId()).isNotNull(),
-        () -> assertThat(actual.getName()).isEqualTo("2호선"),
-        () -> assertThat(actual.getColor()).isEqualTo("GREEN"),
+        () -> assertThat(actual.getName()).isEqualTo("8호선"),
+        () -> assertThat(actual.getColor()).isEqualTo("PINK"),
         () -> assertThat(actual.getCreatedDate()).isNotNull(),
         () -> assertThat(actual.getModifiedDate()).isNotNull()
     );
@@ -34,14 +35,16 @@ class LineRepositoryTest {
     final Line expected = getLineSampleData();
     lines.save(expected);
 
-    final Line actual = lines.findByName("2호선");
-    assertThat(actual.getName()).isEqualTo("2호선");
+    final Line actual = lines.findByName("8호선");
+
+    assertThat(actual.getName()).isEqualTo("8호선");
   }
 
   @Test
   void identity() {
     final Line line1 = lines.save(getLineSampleData());
     final Line line2 = lines.findById(line1.getId()).get();
+
     assertThat(line1 == line2).isTrue();
   }
 
@@ -50,6 +53,7 @@ class LineRepositoryTest {
     final Line line = lines.save(getLineSampleData());
     line.changeName("3호선");
     lines.flush();
+
     assertThat(line.getName()).isEqualTo("3호선");
   }
 
@@ -57,10 +61,11 @@ class LineRepositoryTest {
   void delete() {
     final Line line = lines.save(getLineSampleData());
     lines.delete(line);
+
     assertThat(lines.findById(line.getId()).orElse(null)).isNull();
   }
 
   private Line getLineSampleData() {
-    return new Line("2호선", "GREEN");
+    return new Line("8호선", "PINK");
   }
 }

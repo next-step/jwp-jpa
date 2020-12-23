@@ -1,13 +1,17 @@
 package jpa.domain;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Member {
+public class Member extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -21,11 +25,14 @@ public class Member {
   @Column
   private String password;
 
-  @CreationTimestamp
-  private LocalDateTime createdDate;
+  @OneToMany(mappedBy = "member")
+  private List<Favorite> favorites = new ArrayList<>();
 
-  @UpdateTimestamp
-  private LocalDateTime modifiedDate;
+  public Member(final String email, final int age, final String password) {
+    this.email = email;
+    this.age = age;
+    this.password = password;
+  }
 
   public void changeAge(final int age) {
     if (age < 0) {
@@ -34,36 +41,9 @@ public class Member {
     this.age = age;
   }
 
-  protected Member() {
+  public void addFavorite(final Favorite favorite) {
+    this.favorites.add(favorite);
+    favorite.setMember(this);
   }
 
-  public Member(final String email, final int age, final String password) {
-    this.email = email;
-    this.age = age;
-    this.password = password;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public int getAge() {
-    return age;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public LocalDateTime getModifiedDate() {
-    return modifiedDate;
-  }
 }

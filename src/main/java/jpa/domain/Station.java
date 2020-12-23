@@ -1,51 +1,37 @@
 package jpa.domain;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity(name = "station")
-public class Station {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+public class Station extends BaseEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false, unique = true)
   private String name;
 
-  @CreationTimestamp
-  private LocalDateTime createdDate;
-
-  @UpdateTimestamp
-  private LocalDateTime modifiedDate;
-
-  protected Station() {
-  }
+  @OneToMany(mappedBy = "station", fetch = FetchType.LAZY)
+  private List<LineStation> lineStations = new ArrayList<>();
 
   public Station(final String name) {
     this.name = name;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public LocalDateTime getModifiedDate() {
-    return modifiedDate;
-  }
-
   public void changeName(String name) {
     this.name = name;
+  }
+
+  public void add(final LineStation lineStation) {
+    this.lineStations.add(lineStation);
   }
 }
