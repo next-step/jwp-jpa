@@ -3,6 +3,7 @@ package jpa.line;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,5 +62,11 @@ public class Line extends BaseTime {
 
 	public int getLocation(Station station) {
 		return station.getLocation(this);
+	}
+
+	public List<String> getStationsName() {
+		return this.stations.stream()
+			.map(Station::getName)
+			.collect(Collectors.toList());
 	}
 }
