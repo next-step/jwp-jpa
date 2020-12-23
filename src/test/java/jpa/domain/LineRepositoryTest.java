@@ -79,7 +79,7 @@ class LineRepositoryTest {
                 () -> assertThat(expected.getId()).isNotNull(),
                 () -> assertThat(expected.getName()).isEqualTo(savedLine.getName()),
                 () -> assertThat(expected.getColor()).isEqualTo(savedLine.getColor()),
-                () -> assertThat(expected.getStations()).contains(station)
+                () -> expected.getLineStations().forEach( l -> assertThat(l.getStation()).isEqualTo(station))
         );
     }
 }

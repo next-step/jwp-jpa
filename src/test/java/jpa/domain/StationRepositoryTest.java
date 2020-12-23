@@ -59,16 +59,16 @@ class StationRepositoryTest {
         Station savedStation = stations.save(new Station("화정역"));
         Line line = new Line("3호선", "주황");
 
-        savedStation.addLine(line);
+        savedStation.add(line);
 
         Station expected = stations.findByName(savedStation.getName());
 
         assertAll(
                 () -> assertThat(expected.getId()).isNotNull(),
                 () -> assertThat(expected.getName()).isEqualTo(savedStation.getName()),
-                () -> assertThat(expected.getLines().contains(line)).isTrue(),
-                () -> expected.getLines().forEach( l -> assertThat(l.getName()).isEqualTo(line.getName())),
-                () -> expected.getLines().forEach( l -> assertThat(l.getColor()).isEqualTo(line.getColor()))
+                () -> expected.getLineStations().forEach( l -> assertThat(l.getLine()).isEqualTo(line)),
+                () -> expected.getLineStations().forEach( l -> assertThat(l.getLine().getName()).isEqualTo(line.getName())),
+                () -> expected.getLineStations().forEach( l -> assertThat(l.getLine().getColor()).isEqualTo(line.getColor()))
         );
     }
 }

@@ -10,11 +10,15 @@ public class Line extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String name;
+
+    @OneToMany
+    @JoinColumn(name = "line")
+    private List<LineStation> lineStations = new ArrayList<>();
+
     private String color;
-    @ManyToMany
-    private List<Station> stations = new ArrayList<>();
 
     protected Line() {}
 
@@ -24,7 +28,11 @@ public class Line extends BaseEntity{
     }
 
     public void add(Station station) {
-        stations.add(station);
+        lineStations.add(new LineStation(this, station, null, 0));
+    }
+
+    public void addLineStation(LineStation lineStation) {
+        lineStations.add(lineStation);
     }
 
     public String getName() {
@@ -35,8 +43,8 @@ public class Line extends BaseEntity{
         return color;
     }
 
-    public List<Station> getStations() {
-        return stations;
+    public List<LineStation> getLineStations() {
+        return lineStations;
     }
 
     public Long getId() {
