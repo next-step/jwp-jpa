@@ -1,9 +1,16 @@
 package jpa.station;
 
 import jpa.core.BaseEntity;
+import jpa.line.Line;
+import jpa.section.Section;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -16,6 +23,14 @@ public class Station extends BaseEntity {
 
     @Column(unique = true)
     private String name;
+
+    @OneToMany
+    @JoinColumn(name = "start")
+    private List<Section> startSections;
+
+    @OneToMany
+    @JoinColumn(name = "end")
+    private List<Section> endSections;
 
     public Station() {
     }
@@ -39,4 +54,35 @@ public class Station extends BaseEntity {
     public String getName() {
         return name;
     }
+
+    public List<Line> getLines() {
+        Set<Line> lines = new HashSet<Line>() {{
+            if (startSections != null) {
+                addAll(startSections.stream()
+                        .map(Section::getLine)
+                        .collect(Collectors.toList()));
+            }
+            if (endSections != null) {
+                addAll(endSections.stream()
+                        .map(Section::getLine)
+                        .collect(Collectors.toList()));
+            }
+        }};
+        return new ArrayList<>(lines);
+    }
+
+    public void addEndSection(Section section) {
+        if(this.endSections == null){
+            this.endSections = new ArrayList<>();
+        }
+        this.endSections.add(section);
+    }
+
+    public void addStartSection(Section section) {
+        if(this.startSections == null){
+            this.startSections = new ArrayList<>();
+        }
+        this.startSections.add(section);
+    }
+
 }
