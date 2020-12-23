@@ -1,5 +1,7 @@
 package jpa.line;
 
+import jpa.core.BaseEntity;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -18,24 +20,16 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "line")
-public class Line {
+public class Line extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private long id;
 
-    @Column(unique = true, name = "name")
+    @Column(unique = true)
     private String name;
 
-    @Column(name = "color")
     private String color;
-
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
 
     public Line() {
     }
