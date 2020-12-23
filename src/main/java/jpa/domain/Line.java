@@ -8,9 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +27,8 @@ public class Line extends BaseTimeEntity {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "lines")
-    private List<Station> stations = new ArrayList<>();
+    @OneToMany(mappedBy = "line")
+    private List<LineStation> lineStations = new ArrayList<>();
 
     public Line(String name) {
         this(name, null);
@@ -41,8 +39,8 @@ public class Line extends BaseTimeEntity {
         this.color = color;
     }
 
-    public void addByStation(Station station) {
-        this.stations.add(station);
+    public void addByLineStation(LineStation lineStation) {
+        this.lineStations.add(lineStation);
     }
 
     @Override
