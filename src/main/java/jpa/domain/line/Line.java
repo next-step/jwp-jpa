@@ -1,6 +1,7 @@
 package jpa.domain.line;
 
 import jpa.domain.BaseEntity;
+import jpa.domain.linestation.LineStation;
 import jpa.domain.station.Station;
 
 import javax.persistence.*;
@@ -18,12 +19,8 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "line_station",
-            joinColumns = @JoinColumn(name = "line_id"),
-            inverseJoinColumns =  @JoinColumn(name = "station_id")
-    )
-    private final List<Station> stations = new ArrayList<>();
+    @OneToMany(mappedBy = "line")
+    private final List<LineStation> lineStations = new ArrayList<>();
 
     protected Line() {
     }
@@ -45,11 +42,12 @@ public class Line extends BaseEntity {
         return name;
     }
 
-    public List<Station> getStations() {
-        return stations;
+    public List<LineStation> getLineStations() {
+        return lineStations;
     }
 
-    public void addStation(Station station) {
-        stations.add(station);
+    public void addLineStation(LineStation lineStation) {
+        lineStations.add(lineStation);
     }
+
 }

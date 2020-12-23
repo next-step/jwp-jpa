@@ -2,6 +2,7 @@ package jpa.repository;
 
 import jpa.domain.line.Line;
 import jpa.domain.line.LineRepository;
+import jpa.domain.linestation.LineStation;
 import jpa.domain.station.Station;
 import jpa.domain.station.StationRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -47,15 +48,17 @@ class LineRepositoryTest {
         Station station1 = new Station("의정부역");
         Station station2 = new Station("회룡역");
         Station station3 = new Station("망월사역");
+
+        LineStation lineStation1 = new LineStation(station1, station2, 10);
+        LineStation lineStation2 = new LineStation(station2, station3, 15);
         stationRepository.saveAll(Arrays.asList(station1, station2, station3));
 
         Line line1 = new Line("0D3692", "1호선");
-        line1.addStation(station1);
-        line1.addStation(station2);
-        line1.addStation(station3);
+        line1.addLineStation(lineStation1);
+        line1.addLineStation(lineStation2);
         Line savedLine = lineRepository.save(line1);
 
         Line findLine = lineRepository.findById(savedLine.getId()).get();
-        assertThat(findLine.getStations().size()).isEqualTo(3);
+        assertThat(findLine.getLineStations().size()).isEqualTo(2);
     }
 }
