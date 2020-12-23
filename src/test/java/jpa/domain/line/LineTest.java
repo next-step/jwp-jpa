@@ -16,7 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-public class LineRepositoryTest {
+public class LineTest {
     @Autowired
     private LineRepository lineRepository;
 

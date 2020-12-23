@@ -5,6 +5,7 @@ import jpa.domain.station.Station;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,5 +59,18 @@ public class Line extends BaseDateTimeEntity {
     public void addStation(Station station) {
         stations.add(station);
         station.addLine(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Line)) return false;
+        Line line = (Line) o;
+        return id == line.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

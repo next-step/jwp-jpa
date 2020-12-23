@@ -16,7 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-public class MemberRepositoryTest {
+public class MemberTest {
     @Autowired
     private MemberRepository memberRepository;
 
