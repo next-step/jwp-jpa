@@ -3,6 +3,7 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.*;
 
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.NoSuchElementException;
@@ -154,6 +155,9 @@ class StationTest {
 	@Test
 	@DisplayName("JPA Auditing: 자동 시간 생성 엔티티 테스트")
 	void createTimeEntityTest() {
+
+		LocalDateTime now = LocalDateTime.now();
+
 		Station expected = new Station("주안역"); // 영속상태 X
 		assertThat(expected.getCreatedDate()).isNull();
 		assertThat(expected.getModifiedDate()).isNull();
@@ -161,5 +165,8 @@ class StationTest {
 		Station actual = stationRepository.save(expected);
 		assertThat(actual.getCreatedDate()).isNotNull();
 		assertThat(actual.getModifiedDate()).isNotNull();
+
+		assertThat(actual.getCreatedDate()).isAfter(now);
+		assertThat(actual.getModifiedDate()).isAfter(now);
 	}
 }
