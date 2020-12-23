@@ -13,6 +13,9 @@ class LineRepositoryTest {
     @Autowired
     private LineRepository lineRepository;
 
+    @Autowired
+    private StationRepository stationRepository;
+
     @BeforeEach
     void setUp() {
         lineRepository.save(new Line("1호선"));
@@ -57,5 +60,17 @@ class LineRepositoryTest {
 
         Line actual = lineRepository.findByName("1호선");
         assertThat(actual).isNull();
+    }
+
+    @Test
+    void add_stations() {
+        Station station = stationRepository.save(new Station("강남"));
+
+        Line line = lineRepository.findByName("2호선");
+        line.addStation(station);
+
+        Line actual = lineRepository.findByName("2호선");
+        assertThat(actual.getStations()).hasSize(1);
+        assertThat(actual.isContainStation(station)).isTrue();
     }
 }
