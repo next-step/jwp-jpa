@@ -11,20 +11,18 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import jpa.common.BaseTime;
 import jpa.line.Line;
 import jpa.position.Position;
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString
 @Entity
 @Table(indexes = @Index(name = "unique_station_name", columnList = "name", unique = true))
 public class Station extends BaseTime {
 
-	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -37,6 +35,10 @@ public class Station extends BaseTime {
 	@ManyToMany
 	@JoinColumn
 	private final List<Line> lines = new ArrayList<>();
+
+	@Getter
+	@OneToMany(mappedBy = "station")
+	private final List<Position> positions = new ArrayList<>();
 
 	protected Station() {
 	}
@@ -54,11 +56,6 @@ public class Station extends BaseTime {
 		this.lines.add(line);
 	}
 
-	public void addSubway(final Line newLine, final Position position) {
-		this.addLine(newLine);
-		
-	}
-
 	/**
 	 * 연관관계 편의 메서드
 	 * @param line: 라인 제거
@@ -68,4 +65,11 @@ public class Station extends BaseTime {
 		this.lines.remove(line);
 	}
 
+	public int getLocation(Line line) {
+		return positions.stream()
+			.filter(position -> position.getLine() == line)
+			.map(Position::getLocation)
+			.findFirst()
+			.orElse(0);
+	}
 }

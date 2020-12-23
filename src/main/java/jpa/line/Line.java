@@ -40,7 +40,7 @@ public class Line extends BaseTime {
 	private final List<Station> stations = new ArrayList<>();
 
 	@Getter
-	@OneToMany
+	@OneToMany(mappedBy = "line")
 	private final List<Position> positions = new ArrayList<>();
 
 	protected Line() {
@@ -57,5 +57,9 @@ public class Line extends BaseTime {
 
 	public void clearStation(Station station) {
 		station.clearLine(this);
+	}
+
+	public int getLocation(Station station) {
+		return station.getLocation(this);
 	}
 }
