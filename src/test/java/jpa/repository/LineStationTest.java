@@ -48,15 +48,4 @@ class LineStationTest {
         );
     }
 
-    @Test
-    void findByStation() {
-        Station findStation = stations.findByName("회룡");
-
-        assertAll(
-                () -> assertThat(findStation.getId()).isNotNull(),
-                () -> assertThat(findStation.getName()).isEqualTo("회룡"),
-                () -> assertThat(findStation.getLineStations().size()).isEqualTo(1),
-                () -> assertThat(findStation.getLineStations().get(0).getLine().getName()).isEqualTo("1호선")
-        );
-    }
 }

@@ -2,10 +2,10 @@ package jpa.domain.line;
 
 import jpa.domain.BaseEntity;
 import jpa.domain.linestation.LineStation;
-import jpa.domain.station.Station;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -43,7 +43,7 @@ public class Line extends BaseEntity {
     }
 
     public List<LineStation> getLineStations() {
-        return lineStations;
+        return Collections.unmodifiableList(lineStations);
     }
 
     public void addLineStation(LineStation lineStation) {

@@ -15,10 +15,10 @@ public class LineStation {
     private Line line;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    Station preStation;
+    private Station preStation;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    Station station;
+    private Station station;
 
     int distance;
 
@@ -33,12 +33,11 @@ public class LineStation {
 
     public void changeStation(Station station) {
         this.station = station;
-        station.getLineStations().add(this);
     }
 
     public void changeLine(Line line) {
         this.line = line;
-        line.getLineStations().add(this);
+        line.addLineStation(this);
     }
 
     public Long getId() {

@@ -56,9 +56,6 @@ class StationRepositoryTest {
         lineStations.saveAll(Arrays.asList(lineStation3, lineStation7, lineStation9));
 
         Station findStation = stations.findById(station.getId()).get();
-        assertAll(
-                () -> assertThat(findStation.getName()).isEqualTo("고속터미널"),
-                () -> assertThat(findStation.getLineStations().size()).isEqualTo(3)
-        );
+        assertThat(findStation.getName()).isEqualTo("고속터미널");
     }
 }
