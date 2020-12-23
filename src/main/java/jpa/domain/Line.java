@@ -7,14 +7,14 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "line")
-public class Line extends BaseEntity{
-	@Column
+public class Line extends BaseEntity {
+	@Column(nullable = false)
 	private String color;
 
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	private String name;
 
-	@ManyToMany
+	@OneToMany
 	private List<Station> stationList = new ArrayList<>();
 
 	public Line() {

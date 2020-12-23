@@ -1,5 +1,6 @@
 package jpa;
 
+import jpa.domain.Distance;
 import jpa.domain.Favorite;
 import jpa.domain.Station;
 import jpa.repository.FavoriteRepository;
@@ -22,8 +23,8 @@ public class FavoriteRepositoryTest {
 
 	@Test
 	void 즐겨찾기에는_출발역과_도착역이_포함되어_있다(){
-		Station departure = new Station("왕십리역");
-		Station arrival = new Station("강남역");
+		Station departure = new Station("왕십리역",new Distance("상왕십리역", 750));
+		Station arrival = new Station("강남역",new Distance("상왕십리역", 750));
 		stationRepository.save(departure);
 		stationRepository.save(arrival);
 

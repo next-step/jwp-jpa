@@ -9,16 +9,16 @@ import java.util.List;
 @Entity
 @Table(name = "member")
 public class Member extends BaseEntity{
-	@Column
+	@Column( nullable = false)
 	private String name;
 
-	@Column(nullable = true)
+	@Column
 	private int age;
 
-	@Column(nullable = true)
+	@Column
 	private String email;
 
-	@Column(nullable = true)
+	@Column
 	private String password;
 
 	@OneToMany

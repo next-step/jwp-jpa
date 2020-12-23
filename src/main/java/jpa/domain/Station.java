@@ -8,22 +8,33 @@ import java.util.Objects;
 @Entity
 @Table(name = "STATION")
 public class Station extends BaseEntity {
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	private String name;
 
-	@ManyToMany
+	@OneToMany
 	private List<Line> lineList = new ArrayList<>();
 
-	public Station() {
-	}
+	@Embedded
+	@Column
+	private Distance distance;
 
 	public Station(String name) {
 		this.name = name;
 	}
 
-	public Station(String name, List<Line> lineList) {
+	public Station(String name,  List<Line> lineList) {
 		this.name = name;
 		this.lineList = lineList;
+	}
+
+	public Station(String name, Distance distanceMeter) {
+		this.name = name;
+		this.distance = distanceMeter;
+	}
+	public Station(String name, List<Line> lineList, Distance distanceMeter) {
+		this.name = name;
+		this.lineList = lineList;
+		this.distance = distanceMeter;
 	}
 
 	public String getName() {
@@ -40,6 +51,10 @@ public class Station extends BaseEntity {
 
 	public void setLineList(List<Line> lineList) {
 		this.lineList = lineList;
+	}
+
+	public Distance getDistance() {
+		return distance;
 	}
 
 	@Override
