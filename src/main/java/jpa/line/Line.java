@@ -1,7 +1,6 @@
 package jpa.line;
 
 import java.awt.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +13,12 @@ import javax.persistence.Index;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
+import jpa.common.BaseTime;
 import jpa.station.Station;
 
 @Entity
 @Table(indexes = @Index(name = "unique_line_name", columnList = "name", unique = true))
-public class Line {
+public class Line extends BaseTime {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,14 +32,6 @@ public class Line {
 
 	@ManyToMany(mappedBy = "lines")
 	private List<Station> stations = new ArrayList<>();
-
-	@Column
-	@CreationTimestamp
-	private LocalDateTime createdDate;
-
-	@Column
-	@UpdateTimestamp
-	private LocalDateTime modifiedDate;
 
 	protected Line() {
 
@@ -60,8 +49,8 @@ public class Line {
 			", color=" + color +
 			", name='" + name + '\'' +
 			", stations=" + stations +
-			", createdDate=" + createdDate +
-			", modifiedDate=" + modifiedDate +
+			", createdDate=" + getCreatedDate() +
+			", modifiedDate=" + getModifiedDate() +
 			'}';
 	}
 

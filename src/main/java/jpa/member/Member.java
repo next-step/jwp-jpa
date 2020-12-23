@@ -1,18 +1,15 @@
 package jpa.member;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import jpa.common.BaseTime;
 
 @Entity
-public class Member {
+public class Member extends BaseTime {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +23,4 @@ public class Member {
 
 	@Column(nullable = false)
 	private String password;
-
-	@Column
-	@CreationTimestamp
-	private LocalDateTime createdDate;
-
-	@Column
-	@UpdateTimestamp
-	private LocalDateTime modifiedDate;
 }
