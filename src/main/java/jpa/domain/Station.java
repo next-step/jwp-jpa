@@ -1,15 +1,16 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Station extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LINE_ID")
-    private Line line;
+    @OneToMany(mappedBy = "station")
+    private final List<StationLine> stationLines = new ArrayList<>();
 
     protected Station() {
     }
@@ -18,19 +19,19 @@ public class Station extends BaseTimeEntity {
         this.name = name;
     }
 
+    public void addStationLine(StationLine stationLine) {
+        stationLines.add(stationLine);
+    }
+
     public String getName() {
         return name;
     }
 
-    public Line getLine() {
-        return line;
+    public List<StationLine> getStationLines() {
+        return stationLines;
     }
 
     public void changeName(String name) {
         this.name = name;
-    }
-
-    public void changeLine(final Line line) {
-        this.line = line;
     }
 }

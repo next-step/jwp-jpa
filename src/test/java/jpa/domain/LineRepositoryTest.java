@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -14,9 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class LineRepositoryTest {
     @Autowired
     private LineRepository lineRepository;
-
-    @Autowired
-    private StationRepository stationRepository;
 
     @BeforeEach
     void setUp() {
@@ -62,20 +57,5 @@ class LineRepositoryTest {
 
         Line actual = lineRepository.findByName("1호선");
         assertThat(actual).isNull();
-    }
-
-    @Test
-    void add_stations() {
-        Station station = stationRepository.save(new Station("강남"));
-
-        Line line = lineRepository.findByName("2호선");
-        line.addStation(station);
-
-        List<Station> stations = lineRepository.findByName("2호선").getStations();
-        assertAll(
-                () -> assertThat(stations).hasSize(1),
-                () -> assertThat(stations.contains(station)).isTrue(),
-                () -> assertThat(stations.get(0).getLine()).isEqualTo(line)
-        );
     }
 }

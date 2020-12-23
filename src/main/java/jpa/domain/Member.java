@@ -16,7 +16,7 @@ public class Member extends BaseTimeEntity {
     private String password;
 
     @OneToMany(mappedBy = "member")
-    private List<Favorite> favorites = new ArrayList<>();
+    private final List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {
     }
