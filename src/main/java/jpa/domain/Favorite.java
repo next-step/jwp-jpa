@@ -17,7 +17,7 @@ public class Favorite extends JpaAuditingDate {
     @Column(nullable = false)
     private Long id;
 
-    public Favorite() {
+    protected Favorite() {
     }
 
     public Long getId() {

@@ -17,17 +17,13 @@ public class Member extends JpaAuditingDate {
     @Column(nullable = false)
     private Long id;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
-
     private Integer age;
 
     private String email;
 
     private String password;
 
-    public Member() {
+    protected Member() {
     }
 
     public Long getId() {

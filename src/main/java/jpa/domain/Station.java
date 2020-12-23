@@ -17,14 +17,10 @@ public class Station extends JpaAuditingDate {
     @Column(nullable = false)
     private Long id;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
-
     @Column(unique = true)
     private String name;
 
-    public Station() {
+    protected Station() {
     }
 
     public Station(String name) {

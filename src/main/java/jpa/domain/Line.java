@@ -17,16 +17,12 @@ public class Line extends JpaAuditingDate {
     @Column(nullable = false)
     private Long id;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime modifiedDate;
-
     private String color;
 
     @Column(unique = true)
     private String name;
 
-    public Line() {
+    protected Line() {
     }
 
     public Line(String name) {
