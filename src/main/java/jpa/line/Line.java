@@ -11,9 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import jpa.common.BaseTime;
+import jpa.position.Position;
 import jpa.station.Station;
 import lombok.Getter;
 
@@ -35,12 +37,16 @@ public class Line extends BaseTime {
 
 	@Getter
 	@ManyToMany(mappedBy = "lines")
-	private List<Station> stations = new ArrayList<>();
+	private final List<Station> stations = new ArrayList<>();
+
+	@Getter
+	@OneToMany
+	private final List<Position> positions = new ArrayList<>();
 
 	protected Line() {
 	}
 
-	public Line(Color color, String name) {
+	public Line(String name, Color color) {
 		this.color = color;
 		this.name = name;
 	}
