@@ -2,12 +2,16 @@ package jpa.domain;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Table(name = "favorite")
 public class Favorite extends BaseEntity{
-    @OneToOne
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "from_station_id")
     private Station fromStation;
-    @OneToOne
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "to_station_id")
     private Station toStation;
 
     public static class Builder {
@@ -38,11 +42,11 @@ public class Favorite extends BaseEntity{
         toStation   = builder.toStation;
     }
 
-    public Station getFromStation() {
-        return fromStation;
+    public String getFromStationName() {
+        return fromStation.getName();
     }
 
-    public Station getToStation() {
-        return toStation;
+    public String getToStationName() {
+        return toStation.getName();
     }
 }
