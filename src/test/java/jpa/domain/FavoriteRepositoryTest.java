@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,6 +23,9 @@ public class FavoriteRepositoryTest {
 
     @Autowired
     FavoriteRepository favoriteRepository;
+
+    @Autowired
+    StationRepository stationRepository;
 
     @Test
     @DisplayName("favorite 저장 테스트")
@@ -51,5 +56,28 @@ public class FavoriteRepositoryTest {
 
         // then
         assertThat(favoriteFound.getId()).isEqualTo(favoriteId);
+    }
+
+    @Test
+    @DisplayName("즐겨찾기에 등록 된 출발,도착 역 조회 테스트")
+    public void findMappedStation() {
+        // given
+        String departureStationName = "강남역";
+        String arrivalStationName = "교대역";
+        Station departureStation = this.stationRepository.save(new Station(departureStationName));
+        Station arrivalStation = this.stationRepository.save(new Station(arrivalStationName));
+        Favorite favorite = new Favorite(departureStation, arrivalStation);
+        this.favoriteRepository.save(favorite);
+        
+        // when
+        Favorite findFavorite = this.favoriteRepository.findById(favorite.getId()).get();
+
+        // then
+        assertAll(
+                () -> assertThat(findFavorite.getDepartureStation()).isNotNull()
+                , () -> assertThat(findFavorite.getArrivalStation()).isNotNull()
+                , () -> assertThat(findFavorite.toString()).contains(departureStationName, arrivalStationName)
+        );
+
     }
 }

@@ -18,11 +18,30 @@ public class Favorite extends JpaAuditingDate {
     @Column(nullable = false)
     private Long id;
 
+    @OneToOne
+    private Station departureStation;
+
+    @OneToOne
+    private Station arrivalStation;
+
     protected Favorite() {
+    }
+
+    public Favorite(Station departureStation, Station arrivalStation) {
+        this.departureStation = departureStation;
+        this.arrivalStation = arrivalStation;
     }
 
     public Long getId() {
         return this.id;
+    }
+
+    public Station getDepartureStation() {
+        return departureStation;
+    }
+
+    public Station getArrivalStation() {
+        return arrivalStation;
     }
 
     @Override
@@ -42,6 +61,8 @@ public class Favorite extends JpaAuditingDate {
     public String toString() {
         return "Favorite{" +
                 "id=" + id +
+                ", departureStation=" + departureStation +
+                ", arrivalStation=" + arrivalStation +
                 '}';
     }
 }
