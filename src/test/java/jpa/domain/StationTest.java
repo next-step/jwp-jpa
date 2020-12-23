@@ -150,4 +150,16 @@ class StationTest {
 
 		assertThat(lineNumber3.getStations()).hasSize(1);
 	}
+
+	@Test
+	@DisplayName("JPA Auditing: 자동 시간 생성 엔티티 테스트")
+	void createTimeEntityTest() {
+		Station expected = new Station("주안역"); // 영속상태 X
+		assertThat(expected.getCreatedDate()).isNull();
+		assertThat(expected.getModifiedDate()).isNull();
+
+		Station actual = stationRepository.save(expected);
+		assertThat(actual.getCreatedDate()).isNotNull();
+		assertThat(actual.getModifiedDate()).isNotNull();
+	}
 }
