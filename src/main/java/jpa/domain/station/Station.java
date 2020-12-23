@@ -1,8 +1,6 @@
 package jpa.domain.station;
 
 import jpa.domain.base.BaseTimeEntity;
-import jpa.domain.favorite.Favorite;
-import jpa.domain.line.Line;
 import jpa.domain.linestation.LineStation;
 
 import javax.persistence.*;
@@ -39,6 +37,10 @@ public class Station extends BaseTimeEntity {
 
     public String getName() {
         return this.name;
+    }
+
+    public Long getId() {
+        return this.id;
     }
 }
 
