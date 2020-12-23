@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.station;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -13,8 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import jpa.line.Line;
 import jpa.line.LineRepository;
-import jpa.station.Station;
-import jpa.station.StationRepository;
 
 @DataJpaTest
 class StationTest {
@@ -26,11 +24,10 @@ class StationTest {
 	private LineRepository lineRepository;
 
 	private Station station;
-	private Line line;
 
 	@BeforeEach
 	void init() {
-		line = lineRepository.save(new Line(Color.ORANGE, "3호선"));
+		Line line = lineRepository.save(new Line("3호선", Color.ORANGE));
 		station = new Station("교대역");
 		station.addLine(line);
 		stationRepository.save(station);
@@ -73,8 +70,8 @@ class StationTest {
 	@DisplayName("양방향 연결편의 메서드: Station Add -> Line 연결편의 메서드 추가 연결 테스트")
 	void stationAddLineTest() {
 		final Station expected = stationRepository.save(new Station("종로3가"));
-		final Line lineNumber1 = lineRepository.save(new Line(Color.BLUE, "1호선"));
-		final Line lineNumber5 = lineRepository.save(new Line(Color.MAGENTA, "5호선"));
+		final Line lineNumber1 = lineRepository.save(new Line("1호선", Color.BLUE));
+		final Line lineNumber5 = lineRepository.save(new Line("5호선", Color.MAGENTA));
 
 		expected.addLine(lineNumber1);
 		expected.addLine(lineNumber5);
@@ -92,8 +89,8 @@ class StationTest {
 	@DisplayName("양방향 연결편의 메서드: Line Add -> Station 연결편의 메서드 추가 연결 테스트")
 	void lineAddStationTest() {
 		final Station expected = stationRepository.save(new Station("종로3가"));
-		final Line lineNumber1 = lineRepository.save(new Line(Color.BLUE, "1호선"));
-		final Line lineNumber5 = lineRepository.save(new Line(Color.MAGENTA, "5호선"));
+		final Line lineNumber1 = lineRepository.save(new Line("1호선", Color.BLUE));
+		final Line lineNumber5 = lineRepository.save(new Line("5호선", Color.MAGENTA));
 
 		lineNumber1.addStation(expected);
 		lineNumber5.addStation(expected);
@@ -111,7 +108,7 @@ class StationTest {
 	@Test
 	@DisplayName("양방향 연결편의 메서드: 연결편의 메서드 추가 연결 테스트")
 	void stationAndLineTest() {
-		final Line newLine = lineRepository.save(new Line(Color.GREEN, "2호선"));
+		final Line newLine = lineRepository.save(new Line("2호선", Color.GREEN));
 		station.addLine(newLine);
 
 		assertThat(station.getLines()).hasSize(2); // 2호선, 3호선
@@ -127,8 +124,8 @@ class StationTest {
 	@DisplayName("양방향 연결편의 메서드: Station clear -> Line 테스트")
 	void stationClearLineTest() {
 		final Station expected = stationRepository.save(new Station("종로3가"));
-		final Line lineNumber1 = lineRepository.save(new Line(Color.BLUE, "1호선"));
-		final Line lineNumber5 = lineRepository.save(new Line(Color.MAGENTA, "5호선"));
+		final Line lineNumber1 = lineRepository.save(new Line("1호선", Color.BLUE));
+		final Line lineNumber5 = lineRepository.save(new Line("5호선", Color.MAGENTA));
 
 		lineNumber1.addStation(expected);
 		lineNumber5.addStation(expected);
@@ -149,8 +146,8 @@ class StationTest {
 	@DisplayName("양방향 연결편의 메서드: Line clear -> Station 테스트")
 	void lineClearStationTest() {
 		final Station expected = stationRepository.save(new Station("종로3가"));
-		final Line lineNumber1 = lineRepository.save(new Line(Color.BLUE, "1호선"));
-		final Line lineNumber5 = lineRepository.save(new Line(Color.MAGENTA, "5호선"));
+		final Line lineNumber1 = lineRepository.save(new Line("1호선", Color.BLUE));
+		final Line lineNumber5 = lineRepository.save(new Line("5호선", Color.MAGENTA));
 
 		lineNumber1.addStation(expected);
 		lineNumber5.addStation(expected);

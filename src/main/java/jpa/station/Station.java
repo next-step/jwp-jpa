@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import jpa.common.BaseTime;
 import jpa.line.Line;
+import jpa.position.Position;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -35,7 +36,7 @@ public class Station extends BaseTime {
 	@Getter
 	@ManyToMany
 	@JoinColumn
-	private List<Line> lines = new ArrayList<>();
+	private final List<Line> lines = new ArrayList<>();
 
 	protected Station() {
 	}
@@ -51,6 +52,11 @@ public class Station extends BaseTime {
 	public void addLine(final Line line) {
 		line.getStations().add(this);
 		this.lines.add(line);
+	}
+
+	public void addSubway(final Line newLine, final Position position) {
+		this.addLine(newLine);
+		
 	}
 
 	/**
