@@ -25,7 +25,7 @@ class LineRepositoryTest {
 
     @Test
     void save() {
-        Line expected = new Line("군청색","1호선");
+        Line expected = new Line("0D3692", "1호선");
         Line actual = lineRepository.save(expected);
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),

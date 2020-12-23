@@ -41,4 +41,23 @@ public class LineStation {
         line.getLineStations().add(this);
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Line getLine() {
+        return line;
+    }
+
+    public Station getPreStation() {
+        return preStation;
+    }
+
+    public Station getStation() {
+        return station;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
 }
