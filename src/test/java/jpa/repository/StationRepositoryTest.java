@@ -3,7 +3,6 @@ package jpa.repository;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,6 @@ public class StationRepositoryTest {
 	private StationRepository stations;
 	@Autowired
 	private LineRepository lines;
-
-
 
 	@Test
 	void save() {
@@ -84,7 +81,6 @@ public class StationRepositoryTest {
 		String lineName = "2호선";
 		String lineColor = "green";
 		String stationName = "잠실역";
-
 
 		Station savedStation = saveStation(stationName);
 		Line savedLine = saveLine(lineName, lineColor);

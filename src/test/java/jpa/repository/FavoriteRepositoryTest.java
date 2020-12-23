@@ -37,7 +37,7 @@ public class FavoriteRepositoryTest {
 			() -> assertThat(expected.getCreateDate()).isNotNull(),
 			() -> assertThat(expected.getModifiedDate()).isNotNull(),
 			() -> assertThat(expected.getStartingStation()).isEqualTo(startingStation),
-			() -> assertThat(expected.getDestinationStation()).isEqualTo(destinationStation)
+			() -> assertThat(expected.getStation()).isEqualTo(destinationStation)
 		);
 	}
 }

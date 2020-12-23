@@ -2,12 +2,15 @@ package jpa.domain;
 
 import static javax.persistence.FetchType.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 /**
  * @author : byungkyu
@@ -22,6 +25,9 @@ public class Station extends BaseEntity {
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "line_id")
 	private Line line;
+
+	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+	private List<LineStation> lineStations = new ArrayList<>();
 
 	public Station() {
 	}
@@ -44,5 +50,9 @@ public class Station extends BaseEntity {
 
 	public void changeLine(Line line) {
 		this.line = line;
+	}
+
+	public List<LineStation> getLineStations() {
+		return lineStations;
 	}
 }
