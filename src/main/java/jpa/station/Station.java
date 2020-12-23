@@ -2,6 +2,7 @@ package jpa.station;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -71,5 +72,11 @@ public class Station extends BaseTime {
 			.map(Position::getLocation)
 			.findFirst()
 			.orElse(0);
+	}
+
+	public List<String> getLinesName() {
+		return lines.stream()
+			.map(Line::getName)
+			.collect(Collectors.toList());
 	}
 }

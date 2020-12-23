@@ -163,4 +163,21 @@ class StationTest {
 		assertThat(actualLine1.getStations()).isEmpty();
 		assertThat(actualLine5.getStations()).hasSize(1);
 	}
+
+	@Test
+	@DisplayName("지하철역 조회 시 어느 노선에 속한지 볼 수 있다.")
+	void getLinesNameTest() {
+		final Station expected = stationRepository.save(new Station("종로3가"));
+		final Line lineNumber1 = lineRepository.save(new Line("1호선", Color.BLUE));
+		final Line lineNumber5 = lineRepository.save(new Line("5호선", Color.MAGENTA));
+
+		lineNumber1.addStation(expected);
+		lineNumber5.addStation(expected);
+		stationRepository.flush();
+
+		Station actual = stationRepository.findByName("종로3가");
+
+		assertThat(actual.getLines()).hasSize(2);
+		System.out.println(actual.getLinesName());
+	}
 }
