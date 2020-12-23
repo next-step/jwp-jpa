@@ -7,6 +7,9 @@ import java.util.List;
 @Entity
 @Table(name = "member")
 public class Member extends BaseEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private int age;
     private String email;
     private String password;
@@ -63,5 +66,9 @@ public class Member extends BaseEntity{
 
     public List<Favorite> getFavorites() {
         return favorites;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

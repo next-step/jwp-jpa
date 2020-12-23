@@ -1,6 +1,5 @@
 package jpa.domain;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,8 @@ class FavoriteRepositoryTest {
                 () -> assertThat(expected.getCreateDate()).isNotNull(),
                 () -> assertThat(expected.getModifiedDate()).isNotNull(),
                 () -> assertThat(expected.getModifiedDate()).isNotNull(),
-                () -> assertThat(expected.getFromStation()).isEqualTo(fromStation),
-                () -> assertThat(expected.getToStation()).isEqualTo(toStation),
+                () -> assertThat(expected.getFromStationName()).isEqualTo(fromStation.getName()),
+                () -> assertThat(expected.getToStationName()).isEqualTo(toStation.getName()),
                 () -> assertThat(byFromStation).isEqualTo(byToStation)
 		);
     }

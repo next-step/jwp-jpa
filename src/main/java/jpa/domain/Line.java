@@ -7,6 +7,9 @@ import java.util.List;
 @Entity
 @Table(name = "line")
 public class Line extends BaseEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(unique = true)
     private String name;
     private String color;
@@ -34,5 +37,9 @@ public class Line extends BaseEntity{
 
     public List<Station> getStations() {
         return stations;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

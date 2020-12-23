@@ -7,6 +7,9 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Table(name = "favorite")
 public class Favorite extends BaseEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "from_station_id")
     private Station fromStation;
@@ -48,5 +51,9 @@ public class Favorite extends BaseEntity{
 
     public String getToStationName() {
         return toStation.getName();
+    }
+
+    public Long getId() {
+        return id;
     }
 }

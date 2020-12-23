@@ -7,6 +7,9 @@ import java.util.List;
 @Entity
 @Table(name = "station")
 public class Station extends BaseEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(unique = true)
     private String name;
     @ManyToMany
@@ -28,5 +31,9 @@ public class Station extends BaseEntity{
 
     public List<Line> getLines() {
         return lines;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
