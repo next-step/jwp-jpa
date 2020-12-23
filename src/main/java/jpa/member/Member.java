@@ -16,7 +16,7 @@ public class Member extends BaseTime {
 	private Long id;
 
 	@Column
-	private Integer age;
+	private int age;
 
 	@Column
 	private String email;
