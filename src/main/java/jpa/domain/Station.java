@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,9 @@ public class Station extends BaseTimeEntity {
     @ManyToMany
     @JoinTable(name = "line_station")
     private List<Line> lines = new ArrayList<>();
+
+    @OneToMany(mappedBy = "current")
+    private List<StationDistance> stationDistances = new ArrayList<>();
 
     public Station(String name) {
         this.name = name;
@@ -55,6 +59,10 @@ public class Station extends BaseTimeEntity {
 
     private void addLines(List<Line> lineList) {
         lineList.forEach(line -> line.addByStation(this));
+    }
+
+    public void addByStationDistance(StationDistance stationDistance) {
+        this.stationDistances.add(stationDistance);
     }
 
     @Override
