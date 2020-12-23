@@ -1,6 +1,5 @@
 package jpa.station;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,14 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
+import jpa.common.BaseTime;
 import jpa.line.Line;
 
 @Entity
 @Table(indexes = @Index(name = "unique_station_name", columnList = "name", unique = true))
-public class Station {
+public class Station extends BaseTime {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,20 +30,14 @@ public class Station {
 	@JoinColumn(name = "line_id")
 	private List<Line> lines;
 
-	@CreationTimestamp
-	private LocalDateTime createdDate;
-
-	@UpdateTimestamp
-	private LocalDateTime modifiedDate;
-
 	@Override
 	public String toString() {
 		return "Station{" +
 			"id=" + id +
 			", name='" + name + '\'' +
 			", line=" + lines +
-			", createdDate=" + createdDate +
-			", modifiedDate=" + modifiedDate +
+			", createdDate=" + getCreatedDate() +
+			", modifiedDate=" + getModifiedDate() +
 			'}';
 	}
 
@@ -73,14 +64,6 @@ public class Station {
 
 	public List<Line> getLines() {
 		return lines;
-	}
-
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public LocalDateTime getModifiedDate() {
-		return modifiedDate;
 	}
 
 	public void setLines(List<Line> line) {
