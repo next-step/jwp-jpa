@@ -28,13 +28,9 @@ public class LineStation extends BaseEntity {
     @Embedded
     private Distance distance;
 
-//    public LineStation(final Line line, final Station station) {
-////        this(line, station, null);
-//        this.line = line;
-//        this.station = station;
-//        this.line.add(this);
-//        this.station.add(this);
-//    }
+    public LineStation(final Line line, final Station station) {
+        this(line, station, new Distance(null, 0));
+    }
 
     public LineStation(final Line line, final Station station, final Distance distance) {
         if (line == null || station == null) {
@@ -61,18 +57,10 @@ public class LineStation extends BaseEntity {
     }
 
     public long getDistanceFromPreviousStation() {
-        if (distance == null) {
-            return 0;
-        }
-
         return distance.getDistanceForMeter();
     }
 
     public String getPreviousStationName() {
-        if (distance == null) {
-            return "";
-        }
-
         return distance.getPreviousStationName();
     }
 }
