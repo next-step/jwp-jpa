@@ -1,8 +1,6 @@
-package jpa.dao;
+package jpa.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import jpa.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 }
