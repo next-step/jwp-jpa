@@ -9,7 +9,8 @@ public class Line extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
-    private String color;
+    @Enumerated(EnumType.STRING)
+    private LineColor lineColor;
 
     @OneToMany(mappedBy = "line")
     private final List<StationLine> stationLines = new ArrayList<>();
@@ -21,17 +22,17 @@ public class Line extends BaseTimeEntity {
         this.name = name;
     }
 
-    public Line(String name, String color) {
+    public Line(String name, LineColor lineColor) {
         this.name = name;
-        this.color = color;
+        this.lineColor = lineColor;
     }
 
     public void addStationLine(StationLine stationLine) {
         stationLines.add(stationLine);
     }
 
-    public String getColor() {
-        return color;
+    public LineColor getColor() {
+        return lineColor;
     }
 
     public String getName() {
@@ -42,7 +43,7 @@ public class Line extends BaseTimeEntity {
         return stationLines;
     }
 
-    public void changeColor(String color) {
-        this.color = color;
+    public void changeColor(LineColor lineColor) {
+        this.lineColor = lineColor;
     }
 }
