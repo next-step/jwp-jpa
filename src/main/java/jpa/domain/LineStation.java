@@ -1,5 +1,6 @@
 package jpa.domain;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +22,8 @@ public class LineStation {
 	@JoinColumn(name = "station_id")
 	private Station station;
 
-	private int distance;
+	@Embedded
+	private Distance distance;
 
 	protected LineStation() {
 	}
@@ -29,7 +31,7 @@ public class LineStation {
 	public LineStation(Line line, Station station, int distance) {
 		this.line = line;
 		this.station = station;
-		this.distance = distance;
+		this.distance = new Distance(distance);
 	}
 
 	public Line getLine() {
@@ -41,6 +43,6 @@ public class LineStation {
 	}
 
 	public int getDistance() {
-		return distance;
+		return distance.getDistance();
 	}
 }
