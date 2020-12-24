@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,6 +23,9 @@ public class StationRepositoryTest {
 
     @Autowired
     StationRepository stationRepository;
+
+    @Autowired
+    LineRepository lineRepository;
 
     @Test
     @DisplayName("station 저장 테스트")
@@ -51,5 +56,34 @@ public class StationRepositoryTest {
 
         // then
         assertThat(stationFindByName.getName()).isEqualTo(name);
+    }
+
+    @Test
+    @DisplayName("지하철역에서 노선(Line)들 조회 테스트")
+    public void findMappedLine() {
+        // given
+        String stationName = "잠실역";
+        String lineName1 = "2호선";
+        String lineName2 = "3호선";
+
+        Station station = new Station(stationName);
+        this.stationRepository.save(station);
+
+        Line line1 = new Line(lineName1);
+        line1.addStation(station);
+        Line line2 = new Line(lineName2);
+        line2.addStation(station);
+        this.lineRepository.save(line1);
+        this.lineRepository.save(line2);
+
+        // when
+        Station stationByName = this.stationRepository.findByName(stationName);
+        List<Line> lines = stationByName.getLines();
+
+        // then
+        assertAll(
+                () -> assertThat(lines.size()).isEqualTo(2)
+                , () -> assertThat(lines.toString()).contains(lineName1, lineName2)
+        );
     }
 }
