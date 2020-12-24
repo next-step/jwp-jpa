@@ -3,6 +3,7 @@ package jpa.domain;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -37,6 +38,11 @@ public class Line extends BaseEntity {
 		if (station == null) {
 			throw new IllegalArgumentException("station cannot be null");
 		}
+
+		if (findLineStation(station).isPresent()) {
+			throw new IllegalArgumentException("duplicated station");
+		}
+
 		LineStation lineStation = new LineStation(this, station);
 		this.getLineStations().add(lineStation);
 		station.getLineStations().add(lineStation);
@@ -47,16 +53,16 @@ public class Line extends BaseEntity {
 			throw new IllegalArgumentException("station cannot be null");
 		}
 
-		LineStation lineStation = findLineStation(station);
+		LineStation lineStation = findLineStation(station)
+				.orElseThrow(() -> new IllegalArgumentException("cannot find station"));
 		this.getLineStations().remove(lineStation);
 		station.getLineStations().remove(lineStation);
 	}
 
-	private LineStation findLineStation(Station station) {
+	private Optional<LineStation> findLineStation(Station station) {
 		return this.getLineStations().stream()
 				.filter(lineStation -> lineStation.getStation().equals(station))
-				.findFirst()
-				.orElseThrow(() -> new IllegalArgumentException("cannot find station"));
+				.findFirst();
 	}
 
 	List<LineStation> getLineStations() {

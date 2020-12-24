@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DataJpaTest
@@ -50,6 +51,20 @@ class LineTest {
 		assertThat(삼성역.getLineStations()).hasSize(1)
 				.first()
 				.extracting(LineStation::getLine).isEqualTo(이호선);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {true, false})
+	void addStation_duplicated(boolean clear) {
+		// given
+		이호선.addStation(삼성역);
+		em.flush();
+		if (clear) em.clear();
+
+		// when & then
+		assertThatThrownBy(() -> 이호선.addStation(삼성역))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessageContaining("duplicated");
 	}
 
 	@ParameterizedTest
@@ -108,7 +123,6 @@ class LineTest {
 				.extracting(Line::getStations)
 				.asList()
 				.hasSize(0);
-//				.containsExactly(잠실역);
 	}
 
 	@ParameterizedTest
