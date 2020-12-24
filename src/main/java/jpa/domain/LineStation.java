@@ -25,13 +25,18 @@ public class LineStation {
 	@Embedded
 	private Distance distance;
 
+	@ManyToOne
+	@JoinColumn(name = "pre_station_id")
+	private Station preStation;
+
 	protected LineStation() {
 	}
 
-	public LineStation(Line line, Station station, int distance) {
+	public LineStation(Line line, Station station, int distance, Station preStation) {
 		this.line = line;
 		this.station = station;
 		this.distance = new Distance(distance);
+		this.preStation = preStation;
 	}
 
 	public Line getLine() {
@@ -44,5 +49,9 @@ public class LineStation {
 
 	public int getDistance() {
 		return distance.getDistance();
+	}
+
+	public Station getPreStation() {
+		return preStation;
 	}
 }

@@ -2,6 +2,7 @@ package jpa.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -43,7 +44,7 @@ public class Station extends BaseEntity{
 		if (isExistLine(line)) {
 			throw new IllegalArgumentException(String.format("%s 노선은 %s 역이 이미 포함된 노선입니다.", line.getName(), this.name));
 		}
-		this.lineStations.add(new LineStation(line, this, distance));
+		this.lineStations.add(new LineStation(line, this, distance, line.lastStation()));
 	}
 
 	public int distanceFromPreviousStation(Line line) {
@@ -59,5 +60,20 @@ public class Station extends BaseEntity{
 	private boolean isExistLine(Line line) {
 		return this.lineStations.stream()
 			.anyMatch(lineStation -> lineStation.getLine().equals(line));
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof Station))
+			return false;
+		Station station = (Station)o;
+		return Objects.equals(name, station.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
 	}
 }

@@ -258,4 +258,30 @@ class LineRepositoryTest {
 		assertThatThrownBy(() -> line.distanceFromPreviousStation(station))
 			.isInstanceOf(IllegalArgumentException.class);
 	}
+
+	@Test
+	@DisplayName("노선에 역을 추가할 때는 노선의 마지막 역 뒤에 추가 되어야 한다.")
+	public void addStationsInLineAtLastTest() {
+		String expectedName = "2호선";
+		Line line = lineRepository.save(new Line(expectedName, "GREEN"));
+
+		Station station1 = stationRepository.save(new Station("문래역"));
+		Station station2 = stationRepository.save(new Station("구로디지털단지역"));
+		Station station3 = stationRepository.save(new Station("잠실역"));
+
+		line.addStation(station1, 0);
+		line.addStation(station2, 3);
+		line.addStation(station3, 2);
+		Line actual = lineRepository.findByName(expectedName);
+
+		assertAll(
+			() -> assertThat(actual.getStations().size()).isEqualTo(3),
+			() -> assertThat(actual.getStations().contains(station1)).isTrue(),
+			() -> assertThat(actual.getStations().contains(station2)).isTrue(),
+			() -> assertThat(actual.getStations().contains(station3)).isTrue(),
+			() -> assertThat(actual.previousStation(station1)).isNull(),
+			() -> assertThat(actual.previousStation(station2)).isEqualTo(station1),
+			() -> assertThat(actual.previousStation(station3)).isEqualTo(station2)
+		);
+	}
 }

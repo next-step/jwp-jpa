@@ -54,7 +54,7 @@ public class Line extends BaseEntity{
 		if (isExistStation(station)) {
 			throw new IllegalArgumentException(String.format("%s 역은 %s 노선에 이미 포함된 역입니다.", station.getName(), this.name));
 		}
-		this.lineStations.add(new LineStation(this, station, distance));
+		this.lineStations.add(new LineStation(this, station, distance, lastStation()));
 	}
 
 	public int distanceFromPreviousStation(Station station) {
@@ -65,6 +65,22 @@ public class Line extends BaseEntity{
 			.orElseThrow(() ->
 				new IllegalArgumentException(String.format("%s 역은 %s 노선에 포함되지 않는 역입니다.", station.getName(), this.name))
 			);
+	}
+
+	public Station previousStation(Station station) {
+		return this.lineStations.stream()
+			.filter(lineStation -> lineStation.getStation().equals(station))
+			.findFirst()
+			.orElseThrow(() ->
+				new IllegalArgumentException(String.format("%s 역은 %s 노선에 포함되지 않는 역입니다.", station.getName(), this.name))
+			).getPreStation();
+	}
+
+	public Station lastStation() {
+		if (this.lineStations.isEmpty()) {
+			return null;
+		}
+		return this.lineStations.get(this.lineStations.size() - 1).getStation();
 	}
 
 	private boolean isExistStation(Station station) {
