@@ -1,5 +1,6 @@
 package jpa.repositories;
 
+import jpa.domain.Distance;
 import jpa.domain.Line;
 import jpa.domain.LineStation;
 import jpa.domain.Station;
@@ -33,10 +34,11 @@ class LineStationRepositoryTest {
     final Line lineSeven = lines.save(new Line("7호선", "BROWN"));
     final Station 군자역 = stations.save(new Station("군자역"));
     final Station 건대역 = stations.save(new Station("건대역"));
+    final Station 강남구청역 = stations.save(new Station("강남구청역"));
 
-    final LineStation lineFive_군자역 = lineStations.save(new LineStation(lineFive, 군자역));
-    final LineStation lineSeven_군자역 = lineStations.save(new LineStation(lineSeven, 군자역));
-    final LineStation lineSeven_건대역 = lineStations.save(new LineStation(lineSeven, 건대역));
+    final LineStation lineFive_군자역 = lineStations.save(new LineStation(lineFive, 건대역, 군자역, new Distance(100L)));
+    final LineStation lineSeven_군자역 = lineStations.save(new LineStation(lineSeven, 건대역, 군자역, new Distance(100L)));
+    final LineStation lineSeven_건대역 = lineStations.save(new LineStation(lineSeven, 강남구청역, 건대역, new Distance(200L)));
   }
 
   @DisplayName("노선 조회 시 여러 지하철역을 조회")
@@ -63,7 +65,16 @@ class LineStationRepositoryTest {
   @Test
   void constructor_exception() {
     assertThatThrownBy(() -> {
-      new LineStation(null, null);
+      new LineStation(null, null, null, null);
     }).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void get_distance_between_station() {
+    final LineStation lineFive_군자역 = lineStations.findByLineNameAndStationName("5호선", "군자역");
+    final LineStation lineSeven_건대역 = lineStations.findByLineNameAndStationName("7호선", "건대역");
+
+    assertThat(lineFive_군자역.getDistance().getDistance()).isEqualTo(100L);
+    assertThat(lineSeven_건대역.getDistance().getDistance()).isEqualTo(200L);
   }
 }
