@@ -1,8 +1,8 @@
 package jpa.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "member")
@@ -17,21 +17,32 @@ class Member extends BaseEntity {
 	@Column(name = "password", nullable = false)
 	private String password;
 
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Favorite> favorites;
+
+	protected Member() {
+	}
+
 	Member(int age, String email, String password) {
 		this.age = age;
 		this.email = email;
 		this.password = password;
+		this.favorites = new ArrayList<>();
 	}
 
 	int getAge() {
-		return age;
+		return this.age;
 	}
 
 	String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	String getPassword() {
-		return password;
+		return this.password;
+	}
+
+	List<Favorite> getFavorites() {
+		return this.favorites;
 	}
 }
