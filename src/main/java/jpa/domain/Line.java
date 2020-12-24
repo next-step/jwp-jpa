@@ -33,5 +33,6 @@ public class Line {
 
     public void addStation(Station station) {
         stations.add(station);
+        station.setLine(this);
     }
 }

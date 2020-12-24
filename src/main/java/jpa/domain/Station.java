@@ -36,6 +36,8 @@ public class Station {
 
     public void setLine(Line line) {
         this.line = line;
+        // addStation을 작성할 경우 무한루프에 빠진다. 주의하여 작성한다.
+        line.getStations().add(this);
     }
 
     public Line getLine() {
