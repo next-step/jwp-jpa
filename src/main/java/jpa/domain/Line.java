@@ -27,18 +27,36 @@ public class Line extends BaseEntity {
 		this.lineStations = new ArrayList<>();
 	}
 
+	List<Station> getStations() {
+		return this.getLineStations().stream()
+				.map(LineStation::getStation)
+				.collect(Collectors.toList());
+	}
+
 	void addStation(Station station) {
 		if (station == null) {
 			throw new IllegalArgumentException("station cannot be null");
 		}
 		LineStation lineStation = new LineStation(this, station);
 		this.getLineStations().add(lineStation);
+		station.getLineStations().add(lineStation);
 	}
 
-	List<Station> getStations() {
+	void removeStation(Station station) {
+		if (station == null) {
+			throw new IllegalArgumentException("station cannot be null");
+		}
+
+		LineStation lineStation = findLineStation(station);
+		this.getLineStations().remove(lineStation);
+		station.getLineStations().remove(lineStation);
+	}
+
+	private LineStation findLineStation(Station station) {
 		return this.getLineStations().stream()
-				.map(LineStation::getStation)
-				.collect(Collectors.toList());
+				.filter(lineStation -> lineStation.getStation().equals(station))
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("cannot find station"));
 	}
 
 	List<LineStation> getLineStations() {

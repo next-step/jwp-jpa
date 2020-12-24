@@ -47,6 +47,30 @@ class LineTest {
 				.first()
 				.extracting(LineStation::getStation).isEqualTo(삼성역)
 				.extracting(Station::getName).isEqualTo("삼성역");
+		assertThat(삼성역.getLineStations()).hasSize(1)
+				.first()
+				.extracting(LineStation::getLine).isEqualTo(이호선);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {true, false})
+	void removeStation(boolean clear) {
+		// given
+		이호선.addStation(삼성역);
+		이호선.addStation(잠실역);
+		em.flush();
+
+		// when
+		이호선.removeStation(삼성역);
+		em.flush();
+		if (clear) em.clear();
+
+		// then
+		assertThat(이호선.getStations())
+				.hasSize(1)
+				.containsExactly(잠실역);
+
+		assertThat(삼성역.getLines()).isEmpty();
 	}
 
 	@ParameterizedTest
