@@ -8,11 +8,11 @@ import javax.persistence.ManyToOne;
 @Entity
 public class StationLine extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATION_ID")
+    @JoinColumn(name = "station_id")
     private Station station;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LINE_ID")
+    @JoinColumn(name = "line_id")
     private Line line;
 
     protected StationLine() {

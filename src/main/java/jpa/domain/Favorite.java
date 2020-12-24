@@ -5,15 +5,15 @@ import javax.persistence.*;
 @Entity
 public class Favorite extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "DEPART_STATION_ID")
+    @JoinColumn(name = "depart_station_id")
     private Station departureStation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ARRIVE_STATION_ID")
+    @JoinColumn(name = "arrive_station_id")
     private Station arrivalStation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     protected Favorite() {
