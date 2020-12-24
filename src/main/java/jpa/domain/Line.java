@@ -22,19 +22,19 @@ public class Line extends BaseEntity {
 	protected Line() {
 	}
 
-	Line(String name, String color) {
+	public Line(String name, String color) {
 		this.name = name;
 		this.color = color;
 		this.lineStations = new ArrayList<>();
 	}
 
-	List<Station> getStations() {
+	public List<Station> getStations() {
 		return this.getLineStations().stream()
 				.map(LineStation::getStation)
 				.collect(Collectors.toList());
 	}
 
-	void addStation(Station station) {
+	public void addStation(Station station) {
 		if (station == null) {
 			throw new IllegalArgumentException("station cannot be null");
 		}
@@ -48,7 +48,7 @@ public class Line extends BaseEntity {
 		station.getLineStations().add(lineStation);
 	}
 
-	void removeStation(Station station) {
+	public void removeStation(Station station) {
 		if (station == null) {
 			throw new IllegalArgumentException("station cannot be null");
 		}

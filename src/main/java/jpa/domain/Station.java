@@ -18,20 +18,20 @@ public class Station extends BaseEntity {
 	protected Station() {
 	}
 
-	Station(String name) {
+	public Station(String name) {
 		this.name = name;
 		this.lineStations = new ArrayList<>();
 	}
 
-	String getName() {
+	public String getName() {
 		return this.name;
 	}
 
-	void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	List<Line> getLines() {
+	public List<Line> getLines() {
 		return this.getLineStations().stream()
 				.map(LineStation::getLine)
 				.collect(Collectors.toList());
