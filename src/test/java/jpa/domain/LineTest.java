@@ -92,6 +92,27 @@ class LineTest {
 
 	@ParameterizedTest
 	@ValueSource(booleans = {true, false})
+	@DisplayName("노선에 있던 기존 역이 remove 됐을때 새로 고침된 stations 가 반환되는지 확인")
+	void getStations_onStationRemoved(boolean clear) {
+		// given
+		이호선.addStation(삼성역);
+		em.flush();
+
+		// when
+		em.remove(삼성역);
+		em.flush();
+		if (clear) em.clear();
+
+		// when
+		assertThat(em.find(Line.class, 이호선.getId()))
+				.extracting(Line::getStations)
+				.asList()
+				.hasSize(0);
+//				.containsExactly(잠실역);
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {true, false})
 	@DisplayName("이호선 이 remove 됐을때 lineStation 또한 remove 되고, Station 은 잘 살아 있는지 확인")
 	void cascade_remove(boolean clear) {
 		// given
