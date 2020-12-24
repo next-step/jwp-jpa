@@ -21,16 +21,26 @@ public class LineStation extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "line_id")
+    private Line line;
+
+    @ManyToOne
     @JoinColumn(name = "station_id")
     private Station station;
 
     @ManyToOne
-    @JoinColumn(name = "line_id")
-    private Line line;
+    @JoinColumn(name = "from_station_id")
+    private Station fromStation;
 
-    public LineStation(Station station, Line line) {
-        this.station = station;
+    private Integer distance;
+
+    public LineStation(Line line, Station station, Station fromStation, Integer distance) {
         this.line = line;
+        this.station = station;
+        this.fromStation = fromStation;
+        this.distance = distance;
+        station.addByLineStation(this);
+        line.addByLineStation(this);
     }
 
     @Override
@@ -42,13 +52,11 @@ public class LineStation extends BaseTimeEntity {
             return false;
         }
         LineStation that = (LineStation) o;
-        return Objects.equals(id, that.id) &&
-              Objects.equals(station, that.station) &&
-              Objects.equals(line, that.line);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, station, line);
+        return Objects.hash(id);
     }
 }

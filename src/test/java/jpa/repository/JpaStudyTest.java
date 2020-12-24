@@ -139,7 +139,7 @@ public class JpaStudyTest {
     @Test
     void dateTime() {
         //given
-        Member member = new Member(10);
+        Member member = new Member(10, "test@dev.com");
 
         //when
         Member actual = memberRepository.save(member);

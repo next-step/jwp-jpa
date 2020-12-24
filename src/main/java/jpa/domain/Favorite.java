@@ -33,10 +33,6 @@ public class Favorite extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public Favorite(Station from, Station to) {
-        this(from, to, null);
-    }
-
     public Favorite(Station from, Station to, Member member) {
         this.from = from;
         this.to = to;
@@ -57,14 +53,11 @@ public class Favorite extends BaseTimeEntity {
             return false;
         }
         Favorite favorite = (Favorite) o;
-        return Objects.equals(id, favorite.id) &&
-              Objects.equals(from, favorite.from) &&
-              Objects.equals(to, favorite.to) &&
-              member.getId() == favorite.getMember().getId();
+        return Objects.equals(id, favorite.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, from, to, member);
+        return Objects.hash(id);
     }
 }
