@@ -46,27 +46,4 @@ class LineRepositoryTest {
         assertTrue(line1 == line2);
     }
 
-    @Test
-    void findById() {
-        Line line = lineRepository.findByName("3호선");
-        assertEquals(line.getStations().size(), 1);
-    }
-
-    @Test
-    void saveWithStationNoPersistence() {
-        Line expected = new Line("2호선");
-        expected.addStation(new Station("잠실역"));
-        lineRepository.save(expected);
-        lineRepository.flush();
-    }
-
-    @Test
-    void saveWithStationPersistence() {
-        Line expeced = new Line("2호선");
-        expeced.addStation(stationRepository.save(new Station("잠실역")));
-        lineRepository.save(expeced);
-        lineRepository.flush();
-    }
-
-
 }
