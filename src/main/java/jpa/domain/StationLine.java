@@ -19,10 +19,18 @@ public class StationLine extends BaseTimeEntity {
     }
 
     public StationLine(Station station, Line line) {
+        validate(station, line);
         this.station = station;
         this.line = line;
+
         station.addStationLine(this);
         line.addStationLine(this);
+    }
+
+    private void validate(Station station, Line line) {
+        if (station == null || line == null) {
+            throw new NullPointerException("Station 또는 Line이 null입니다.");
+        }
     }
 
     public Station getStation() {
