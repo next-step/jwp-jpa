@@ -13,7 +13,8 @@ public class LineStation {
     @JoinColumn(name = "line_id")
     private Line line;
 
-    @OneToOne(mappedBy = "lineStation")
+    @OneToOne
+    @JoinColumn(name = "station_id")
     private Station station;
 
     public LineStation() {
