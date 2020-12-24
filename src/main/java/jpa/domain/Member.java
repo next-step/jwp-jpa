@@ -7,6 +7,9 @@ import java.util.List;
 @Entity
 @Table(name = "member")
 public class Member extends BaseEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private int age;
     private String email;
     private String password;
@@ -25,13 +28,13 @@ public class Member extends BaseEntity{
             this.password = password;
         }
 
-        public Builder age(int val) {
-            age = val;
+        public Builder age(int age) {
+            this.age = age;
             return this;
         }
 
-        public Builder addFavorites(Favorite val) {
-            favorites.add(val);
+        public Builder addFavorites(Favorite favorite) {
+            favorites.add(favorite);
             return this;
         }
 
@@ -63,5 +66,9 @@ public class Member extends BaseEntity{
 
     public List<Favorite> getFavorites() {
         return favorites;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

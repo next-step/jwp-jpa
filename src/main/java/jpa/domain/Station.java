@@ -7,10 +7,15 @@ import java.util.List;
 @Entity
 @Table(name = "station")
 public class Station extends BaseEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToMany(mappedBy = "station")
+    List<LineStation> lineStations = new ArrayList<>();
+
     @Column(unique = true)
     private String name;
-    @ManyToMany
-    private List<Line> lines = new ArrayList<>();
 
     protected Station() {}
 
@@ -18,15 +23,23 @@ public class Station extends BaseEntity{
         this.name = name;
     }
 
-    public void addLine(Line line) {
-        lines.add(line);
+    public void add(Line line) {
+        lineStations.add(new LineStation(line, this, null, 0));
+    }
+
+    public void addLineStation(LineStation lineStation) {
+        lineStations.add(lineStation);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Line> getLines() {
-        return lines;
+    public List<LineStation> getLineStations() {
+        return lineStations;
     }
 }
