@@ -20,10 +20,6 @@ public class Station {
         this.name = name;
     }
 
-    public void setLine(final Line line) {
-        this.line = line;
-    }
-
     public Long getId() {
         return id;
     }
@@ -32,6 +28,7 @@ public class Station {
         return name;
     }
 
-    public void changeName(String 몽촌토성역) {
+    public void changeName(String name) {
+        this.name = name;
     }
 }
