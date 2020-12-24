@@ -3,7 +3,7 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
+import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,8 @@ class StationRepositoryTest {
 	private StationRepository stationRepository;
 	@Autowired
 	private LineRepository lineRepository;
+	@Autowired
+	private EntityManager entityManager;
 
 	@Test
 	void saveTest() {
@@ -99,7 +101,9 @@ class StationRepositoryTest {
 		Line line3 = lineRepository.save(new Line("3호선", "ORANGE"));
 		Line line4 = lineRepository.save(new Line("4호선", "SKYBLUE"));
 
-		station.addLines(Arrays.asList(line1, line2, line3));
+		station.addLine(line1, 1);
+		station.addLine(line2, 2);
+		station.addLine(line3, 3);
 		Station actual = stationRepository.findByName(expectedName);
 
 		assertAll(
@@ -125,9 +129,15 @@ class StationRepositoryTest {
 		assertThat(line1.getStations().size()).isZero();
 		assertThat(line2.getStations().size()).isZero();
 
-		station.addLines(Arrays.asList(line1, line2));
+		station.addLine(line1, 1);
+		station.addLine(line2, 2);
+		// Station을 생성하고 Line 2개를 생성하여 해당 Station에 2개의 Line을 추가했을 때, Line으로 조회해도 해당 Station이 조회되는지 테스트
+		// Line을 2개 생성하는 과정에서 1차 캐시에 등록되고 이후에 수정되는 oneToMany관계에 대해 다시 조회해오지 않음
+		// 강제로 detach 시키니 재조회를 진행하고 테스트 통과
+		entityManager.detach(line1);
+		entityManager.detach(line2);
 
-		Station actualStation = stationRepository.findByName(expectedStationName);
+		Station actualStation = stationRepository.saveAndFlush(station);
 		Line actualLine1 = lineRepository.findByName(expectedLine1Name);
 		Line actualLine2 = lineRepository.findByName(expectedLine2Name);
 
@@ -140,5 +150,54 @@ class StationRepositoryTest {
 			() -> assertThat(actualLine2.getStations().size()).isEqualTo(1),
 			() -> assertThat(actualLine2.getStations().contains(actualStation)).isTrue()
 		);
+	}
+
+	@Test
+	@DisplayName("노선에 역을 추가할 때는 이전 역과 얼마나 차이가 나는지 길이(distance)를 알고 있어야 한다.")
+	public void addStationsInLineWithDistanceTest() {
+		String expectedName = "문래역";
+		Station station = stationRepository.save(new Station(expectedName));
+
+		Line line1 = lineRepository.save(new Line("1호선", "BLUE"));
+		Line line2 = lineRepository.save(new Line("2호선", "GREEN"));
+		Line line3 = lineRepository.save(new Line("3호선", "ORANGE"));
+
+		station.addLine(line1, 4);
+		station.addLine(line2, 2);
+		station.addLine(line3, 3);
+		Station actualStation = stationRepository.saveAndFlush(station);
+
+		assertAll(
+			() -> assertThat(actualStation.getLines().size()).isEqualTo(3),
+			() -> assertThat(actualStation.getLines().contains(line1)).isTrue(),
+			() -> assertThat(actualStation.getLines().contains(line2)).isTrue(),
+			() -> assertThat(actualStation.getLines().contains(line3)).isTrue(),
+			() -> assertThat(actualStation.distanceFromPreviousStation(line1)).isEqualTo(4),
+			() -> assertThat(actualStation.distanceFromPreviousStation(line2)).isEqualTo(2),
+			() -> assertThat(actualStation.distanceFromPreviousStation(line3)).isEqualTo(3)
+		);
+	}
+
+	@Test
+	@DisplayName("지하철역에 이미 존재하는 노선 추가 시, IllegalArgumentException 을 throw 해야한다.")
+	public void addExistLinesTest() {
+		String expectedStation1Name = "문래역";
+		String expectedLineName = "2호선";
+		Station station = stationRepository.save(new Station(expectedStation1Name));
+		Line line = lineRepository.save(new Line(expectedLineName, "GREEN"));
+
+		station.addLine(line, 0);
+		assertThatThrownBy(() -> station.addLine(line, 3))
+			.isInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	@DisplayName("지하철역에 존재하지않는 노선의 이전역과의 거리를 구하려고 하면, IllegalArgumentException 을 throw 해야한다.")
+	public void getNotExistLineDistanceTest() {
+		Station station = stationRepository.save(new Station("문래역"));
+		Line line = lineRepository.save(new Line("2호선", "GREEN"));
+
+		assertThatThrownBy(() -> station.distanceFromPreviousStation(line))
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 }
