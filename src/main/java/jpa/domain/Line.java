@@ -11,4 +11,14 @@ public class Line {
 
     @Column(nullable = false)
     private String name;
+
+    public Line() {}
+
+    public Line(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -13,6 +14,9 @@ public class StationRepositoryTest {
 
     @Autowired
     private StationRepository stations;
+
+    @Autowired
+    private LineRepository lines;
 
     @Test
     void save() {
@@ -55,5 +59,37 @@ public class StationRepositoryTest {
         // 이 전에 flush가 수행되어 "몽촌토성역"이 DB에 반영이 된다. (변경 감지를 통해 반영한다.)
         Station station2 = stations.findByName("몽촌토성역");
         assertThat(station2).isNotNull();
+    }
+
+    @Test
+    @DisplayName("연관관계 설정 실습")
+    void saveWithLine() {
+        // 관계를 맺는 엔티티(Line) 역시 영속성 관리가 되어야 한다.
+        final Line line = lines.save(new Line("2호선"));
+
+        final Station station = new Station("잠실역");
+        station.setLine(line);
+        final Station actual = stations.save(station);
+
+        final Station station2 = stations.findByName("잠실역");
+
+        assertThat(actual.getLine().getName()).isEqualTo("2호선");
+        assertThat(station2.getLine().getName()).isEqualTo("2호선");
+    }
+
+    @Test
+    @DisplayName("data.sql 과 함께 연관관계 실습")
+    void findByNameWithLine() {
+        Station actual = stations.findByName("교대역");
+
+        assertThat(actual).isNotNull();
+        assertThat(actual.getLine().getName()).isEqualTo("3호선");
+    }
+
+    @Test
+    void updateWithLine() {
+        Station expected = stations.findByName("교대역");
+        expected.setLine(lines.save(new Line("2호선")));
+        stations.flush(); // transaction commit
     }
 }

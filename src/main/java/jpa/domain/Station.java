@@ -16,6 +16,8 @@ public class Station {
     @JoinColumn(name = "line_id")
     private Line line;
 
+    public Station() {}
+
     public Station(String name) {
         this.name = name;
     }
@@ -30,5 +32,13 @@ public class Station {
 
     public void changeName(String name) {
         this.name = name;
+    }
+
+    public void setLine(Line line) {
+        this.line = line;
+    }
+
+    public Line getLine() {
+        return line;
     }
 }
