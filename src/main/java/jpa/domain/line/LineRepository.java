@@ -1,6 +1,4 @@
-package jpa.repository;
-
-import jpa.domain.Line;
+package jpa.domain.line;
 
 import java.util.List;
 

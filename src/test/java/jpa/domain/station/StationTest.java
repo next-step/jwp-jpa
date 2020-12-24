@@ -1,8 +1,12 @@
-package jpa.repository;
+package jpa.domain.station;
 
-import jpa.domain.Station;
+import jpa.domain.line.Line;
+import jpa.domain.line.LineRepository;
 
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,12 +16,22 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-public class StationRepositoryTest {
+public class StationTest {
     @Autowired
     private StationRepository stationRepository;
 
+    @Autowired
+    private LineRepository lineRepository;
+
+    @PersistenceContext
+    private EntityManager em;
+
     private Station saveStation(String name) {
         return stationRepository.save(new Station(name));
+    }
+
+    private Line saveLine(String color, String name) {
+        return lineRepository.save(new Line(color, name));
     }
 
     @Test
@@ -46,5 +60,27 @@ public class StationRepositoryTest {
         List<Station> result = stationRepository.findAll();
 
         assertThat(result.size()).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("노선 조회 테스트")
+    void findLineByStation() {
+        // given
+        Station station = saveStation("선릉");
+        Line line1 = saveLine("YELLOW", "분당선");
+        Line line2 = saveLine("GREEN", "2호선");
+        line1.addStation(station);
+        line2.addStation(station);
+
+        em.flush();
+        em.clear();
+
+        // when
+        Station findStation = stationRepository.findLineEntityGraphByName("선릉");
+
+        // then
+        assertThat(findStation.getLines().size()).isEqualTo(2);
+        assertThat(findStation.getLines()).containsExactly(line1, line2)
+                .extracting("name").containsExactly("분당선", "2호선");
     }
 }
