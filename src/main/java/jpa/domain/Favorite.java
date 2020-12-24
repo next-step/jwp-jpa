@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "favorite")
-class Favorite extends BaseEntity {
+public class Favorite extends BaseEntity {
 
 	@ManyToOne(targetEntity = Member.class, fetch = FetchType.EAGER)
 	@JoinColumn(name = "member_id", nullable = false)
@@ -28,7 +28,7 @@ class Favorite extends BaseEntity {
 		this.arrivalStation = arrivalStation;
 	}
 
-	void changeMember(Member member) {
+	public void changeMember(Member member) {
 		if (member == null) {
 			throw new IllegalArgumentException("member cannot be null");
 		}
@@ -37,15 +37,15 @@ class Favorite extends BaseEntity {
 		this.member.getFavorites().add(this);
 	}
 
-	Member getMember() {
+	public Member getMember() {
 		return this.member;
 	}
 
-	Station getDepartureStation() {
+	public Station getDepartureStation() {
 		return this.departureStation;
 	}
 
-	Station getArrivalStation() {
+	public Station getArrivalStation() {
 		return this.arrivalStation;
 	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "member")
-class Member extends BaseEntity {
+public class Member extends BaseEntity {
 
 	@Column(name = "age", nullable = false)
 	private int age;
@@ -23,26 +23,26 @@ class Member extends BaseEntity {
 	protected Member() {
 	}
 
-	Member(int age, String email, String password) {
+	public Member(int age, String email, String password) {
 		this.age = age;
 		this.email = email;
 		this.password = password;
 		this.favorites = new ArrayList<>();
 	}
 
-	int getAge() {
+	public int getAge() {
 		return this.age;
 	}
 
-	String getEmail() {
+	public String getEmail() {
 		return this.email;
 	}
 
-	String getPassword() {
+	public String getPassword() {
 		return this.password;
 	}
 
-	List<Favorite> getFavorites() {
+	public List<Favorite> getFavorites() {
 		return this.favorites;
 	}
 }
