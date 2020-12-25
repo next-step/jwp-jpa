@@ -5,6 +5,7 @@ import jpa.domain.member.Member;
 import jpa.domain.station.Station;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -33,6 +34,12 @@ public class Favorite extends BaseTimeEntity {
         this.arrivalStation = arrivalStation;
     }
 
+    public Favorite(Station departureStation, Station arrivalStation, Member member) {
+        this.departureStation = departureStation;
+        this.arrivalStation = arrivalStation;
+        this.member = member;
+    }
+
     public Station getDepartureStation() {
         return departureStation;
     }
@@ -55,5 +62,26 @@ public class Favorite extends BaseTimeEntity {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void changeMember(Member member) {
+        this.setMember(member);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Favorite favorite = (Favorite) o;
+        return Objects.equals(id, favorite.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
