@@ -1,7 +1,7 @@
 package jpa.repository;
 
-import jpa.station.Station;
-import jpa.station.StationRepository;
+import jpa.line.Line;
+import jpa.line.LineRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -10,15 +10,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
-public class StationRepositoryTest {
+public class LIneRepositoryTest {
 
     @Autowired
-    private StationRepository stations;
+    private LineRepository lines;
 
     @Test
     void save() {
-        Station expected = new Station("잠실역");
-        Station actual = stations.save(expected);
+        Line expected = new Line("2호선");
+        Line actual = lines.save(expected);
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName())
@@ -27,9 +27,9 @@ public class StationRepositoryTest {
 
     @Test
     void findByName() {
-        String expected = "잠실역";
-        stations.save(new Station(expected));
-        String actual = stations.findByName(expected).getName();
+        String expected = "2호선";
+        lines.save(new Line(expected));
+        String actual = lines.findByName(expected).getName();
         assertThat(actual).isEqualTo(expected);
     }
 }

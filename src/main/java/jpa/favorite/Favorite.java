@@ -1,17 +1,19 @@
-package jpa.domain;
+package jpa.favorite;
+
+import jpa.base.BaseEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Line extends BaseEntity {
+public class Favorite extends BaseEntity {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private String color;
-
-    private String name;
+    public Long getId() {
+        return id;
+    }
 }
