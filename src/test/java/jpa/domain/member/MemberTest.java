@@ -26,10 +26,6 @@ public class MemberTest {
     @PersistenceContext
     private EntityManager em;
 
-    private Member saveMember(int age, String email, String password) {
-        return memberRepository.save(new Member(age, email, password));
-    }
-
     @Test
     @DisplayName("Member 조회 테스트")
     void memberSelectTest() {
@@ -84,5 +80,9 @@ public class MemberTest {
         // then
         Member findMember = memberRepository.findById(member.getId()).get();
         assertThat(findMember.getFavorites().size()).isEqualTo(2);
+    }
+
+    private Member saveMember(int age, String email, String password) {
+        return memberRepository.save(new Member(age, email, password));
     }
 }

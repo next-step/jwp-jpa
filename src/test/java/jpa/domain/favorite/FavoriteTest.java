@@ -31,18 +31,6 @@ public class FavoriteTest {
     @PersistenceContext
     private EntityManager em;
 
-    private void saveFavoriteMember(int age, String email, String password, Favorite favorite) {
-        Member member = new Member(age, email, password);
-        memberRepository.save(member);
-
-        favorite.setMember(member);
-        favoriteRepository.save(favorite);
-    }
-
-    private Station saveStation(String name) {
-        return stationRepository.save(new Station(name));
-    }
-
     @Test
     @DisplayName("즐겨찾기를 통해 사용자 찾기 테스트")
     void findUserByFavorite() {
@@ -89,5 +77,17 @@ public class FavoriteTest {
 
         // then
         assertThat(findFavorite.getFavoriteStations().size()).isEqualTo(1);
+    }
+
+    private void saveFavoriteMember(int age, String email, String password, Favorite favorite) {
+        Member member = new Member(age, email, password);
+        memberRepository.save(member);
+
+        favorite.changeMember(member);
+        favoriteRepository.save(favorite);
+    }
+
+    private Station saveStation(String name) {
+        return stationRepository.save(new Station(name));
     }
 }

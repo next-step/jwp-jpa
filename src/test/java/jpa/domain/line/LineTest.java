@@ -26,14 +26,6 @@ public class LineTest {
     @PersistenceContext
     private EntityManager em;
 
-    private Line saveLine(String color, String name) {
-        return lineRepository.save(new Line(color, name));
-    }
-
-    private Station saveStation(String name) {
-        return stationRepository.save(new Station(name));
-    }
-
     @Test
     @DisplayName("Line 저장 테스트")
     void lineSaveTest() {
@@ -87,5 +79,13 @@ public class LineTest {
         assertThat(findLine.getStations()).containsExactly(station1, station2)
                 .extracting("name")
                 .containsExactly("모란", "죽전");
+    }
+
+    private Line saveLine(String color, String name) {
+        return lineRepository.save(new Line(color, name));
+    }
+
+    private Station saveStation(String name) {
+        return stationRepository.save(new Station(name));
     }
 }

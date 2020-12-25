@@ -29,14 +29,14 @@ public class FavoriteStation {
     protected FavoriteStation() {}
 
     public FavoriteStation(Station station) {
-        setStation(station);
+        changeStation(station);
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setFavorite(Favorite favorite) {
+    public void changeFavorite(Favorite favorite) {
         this.favorite = favorite;
     }
 
@@ -44,7 +44,7 @@ public class FavoriteStation {
         return station;
     }
 
-    public void setStation(Station station) {
+    public void changeStation(Station station) {
         this.station = station;
     }
 

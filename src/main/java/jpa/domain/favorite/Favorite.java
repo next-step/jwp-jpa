@@ -33,7 +33,7 @@ public class Favorite extends BaseDateTimeEntity {
     public Favorite() {}
 
     public Favorite(Member member) {
-        setMember(member);
+        changeMember(member);
     }
 
     public Long getId() {
@@ -44,7 +44,7 @@ public class Favorite extends BaseDateTimeEntity {
         return member;
     }
 
-    public void setMember(Member member) {
+    public void changeMember(Member member) {
         this.member = member;
         member.addFavorite(this);
     }
@@ -55,7 +55,7 @@ public class Favorite extends BaseDateTimeEntity {
 
     public void addFavoriteStation(FavoriteStation favoriteStation) {
         favoriteStations.add(favoriteStation);
-        favoriteStation.setFavorite(this);
+        favoriteStation.changeFavorite(this);
     }
 
     public void removeFavoriteStation(FavoriteStation favoriteStation) {
