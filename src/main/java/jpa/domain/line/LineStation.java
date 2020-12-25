@@ -1,4 +1,4 @@
-package jpa.domain.favorite;
+package jpa.domain.line;
 
 import jpa.domain.station.Station;
 
@@ -13,46 +13,64 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class FavoriteStation {
+public class LineStation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "favorite_id")
-    private Favorite favorite;
+    @JoinColumn(name = "line_id")
+    private Line line;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "station_id")
     private Station station;
 
-    protected FavoriteStation() {}
+    private int distance;
 
-    public FavoriteStation(Station station) {
-        changeStation(station);
-    }
+    protected LineStation() {}
 
     public Long getId() {
         return id;
     }
 
-    public void changeFavorite(Favorite favorite) {
-        this.favorite = favorite;
+    public Line getLine() {
+        return line;
     }
 
     public Station getStation() {
         return station;
     }
 
+    public int getDistance() {
+        return distance;
+    }
+
+    public void changeLine(Line line) {
+        this.line = line;
+    }
+
     public void changeStation(Station station) {
         this.station = station;
+        station.addLineStation(this);
+    }
+
+    public void changeDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public static LineStation createLineStation(Station station, int distance) {
+        LineStation lineStation = new LineStation();
+        lineStation.changeStation(station);
+        lineStation.changeDistance(distance);
+        return lineStation;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof FavoriteStation)) return false;
-        FavoriteStation that = (FavoriteStation) o;
+        if (!(o instanceof LineStation)) return false;
+        LineStation that = (LineStation) o;
         return Objects.equals(id, that.id);
     }
 
