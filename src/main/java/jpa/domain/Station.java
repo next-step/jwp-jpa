@@ -9,7 +9,7 @@ public class Station extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "station")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "station")
     private final List<StationLine> stationLines = new ArrayList<>();
 
     protected Station() {

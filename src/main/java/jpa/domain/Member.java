@@ -1,5 +1,6 @@
 package jpa.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -15,7 +16,7 @@ public class Member extends BaseTimeEntity {
 
     private String password;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "member")
     private final List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {

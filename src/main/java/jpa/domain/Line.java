@@ -12,7 +12,7 @@ public class Line extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private LineColor lineColor;
 
-    @OneToMany(mappedBy = "line")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "line")
     private final List<StationLine> stationLines = new ArrayList<>();
 
     protected Line() {
