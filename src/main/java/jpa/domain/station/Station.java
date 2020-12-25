@@ -18,7 +18,7 @@ import javax.persistence.ManyToMany;
 public class Station extends BaseDateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(unique = true)
     private String name;
@@ -32,7 +32,7 @@ public class Station extends BaseDateTimeEntity {
         this.name = name;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -53,7 +53,7 @@ public class Station extends BaseDateTimeEntity {
         if (this == o) return true;
         if (!(o instanceof Station)) return false;
         Station station = (Station) o;
-        return id == station.id;
+        return Objects.equals(id, station.id);
     }
 
     @Override

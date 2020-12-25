@@ -5,6 +5,7 @@ import jpa.domain.member.Member;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ import javax.persistence.OneToMany;
 public class Favorite extends BaseDateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -35,7 +36,7 @@ public class Favorite extends BaseDateTimeEntity {
         setMember(member);
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -59,5 +60,18 @@ public class Favorite extends BaseDateTimeEntity {
 
     public void removeFavoriteStation(FavoriteStation favoriteStation) {
         favoriteStations.remove(favoriteStation);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Favorite)) return false;
+        Favorite favorite = (Favorite) o;
+        return Objects.equals(id, favorite.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

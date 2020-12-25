@@ -20,7 +20,7 @@ import javax.persistence.ManyToMany;
 public class Line extends BaseDateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String color;
 
@@ -40,7 +40,7 @@ public class Line extends BaseDateTimeEntity {
         this.name = name;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -66,7 +66,7 @@ public class Line extends BaseDateTimeEntity {
         if (this == o) return true;
         if (!(o instanceof Line)) return false;
         Line line = (Line) o;
-        return id == line.id;
+        return Objects.equals(id, line.id);
     }
 
     @Override

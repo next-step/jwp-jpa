@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 public class FavoriteStation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "favorite_id")
@@ -32,7 +32,7 @@ public class FavoriteStation {
         setStation(station);
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -53,7 +53,7 @@ public class FavoriteStation {
         if (this == o) return true;
         if (!(o instanceof FavoriteStation)) return false;
         FavoriteStation that = (FavoriteStation) o;
-        return id == that.id;
+        return Objects.equals(id, that.id);
     }
 
     @Override
