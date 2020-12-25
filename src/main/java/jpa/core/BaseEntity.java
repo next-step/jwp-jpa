@@ -1,16 +1,17 @@
 package jpa.core;
 
-import javax.persistence.Column;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    @Column(name = "created_date")
+    @CreatedDate
     protected LocalDateTime createdDate;
-
-    @Column(name = "modified_date")
+    @LastModifiedDate
     protected LocalDateTime modifiedDate;
 
 }

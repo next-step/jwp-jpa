@@ -24,12 +24,10 @@ public class Station extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "start")
+    @OneToMany(mappedBy = "start")
     private List<Section> startSections;
 
-    @OneToMany
-    @JoinColumn(name = "end")
+    @OneToMany(mappedBy = "end")
     private List<Section> endSections;
 
     public Station() {

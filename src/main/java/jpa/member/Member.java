@@ -2,9 +2,11 @@ package jpa.member;
 
 import com.sun.xml.bind.v2.model.core.ID;
 import jpa.core.BaseEntity;
+import jpa.favorite.Favorite;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table
@@ -20,6 +22,9 @@ public class Member extends BaseEntity {
 
     @Column(name = "password")
     private String password;
+
+    @OneToMany(mappedBy = "member")
+    private List<Favorite> favorites;
 
     public Member() {
     }

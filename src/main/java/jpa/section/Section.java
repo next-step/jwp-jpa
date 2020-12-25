@@ -17,11 +17,11 @@ public class Section {
     @JoinColumn(name = "line")
     private Line line;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "start")
     private Station start;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "end")
     private Station end;
 
