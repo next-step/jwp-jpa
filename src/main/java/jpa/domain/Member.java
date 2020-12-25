@@ -2,6 +2,8 @@ package jpa.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "member")
@@ -19,6 +21,8 @@ public class Member {
     private String email;
     @Column(name = "password")
     private String password;
+    @OneToMany
+    private List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {
     }
@@ -40,7 +44,15 @@ public class Member {
         return email;
     }
 
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
     public void changeEmail(String email) {
         this.email = email;
+    }
+
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
     }
 }
