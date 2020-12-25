@@ -1,20 +1,18 @@
 package jpa.domain.line;
 
 import jpa.domain.BaseDateTimeEntity;
-import jpa.domain.station.Station;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Line extends BaseDateTimeEntity {
@@ -27,11 +25,8 @@ public class Line extends BaseDateTimeEntity {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "line_station",
-            joinColumns = @JoinColumn(name = "line_id"),
-            inverseJoinColumns = @JoinColumn(name = "station_id"))
-    private List<Station> stations = new ArrayList<>();
+    @OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
+    private List<LineStation> lineStations = new ArrayList<>();
 
     protected Line() {}
 
@@ -52,13 +47,15 @@ public class Line extends BaseDateTimeEntity {
         return name;
     }
 
-    public List<Station> getStations() {
-        return stations;
+    public List<LineStation> getLineStations() {
+        return lineStations;
     }
 
-    public void addStation(Station station) {
-        stations.add(station);
-        station.addLine(this);
+    public void addLineStation(LineStation... lineStations) {
+        for (LineStation lineStation : lineStations) {
+            this.lineStations.add(lineStation);
+            lineStation.changeLine(this);
+        }
     }
 
     @Override

@@ -62,23 +62,26 @@ public class LineTest {
     @DisplayName("지하철역 조회 테스트")
     void findStationByLine() {
         // given
-        Line line = saveLine("YELLOW", "분당선");
+        Line line = new Line("YELLOW", "분당선");
         Station station1 = saveStation("모란");
         Station station2 = saveStation("죽전");
-        line.addStation(station1);
-        line.addStation(station2);
+        Station station3 = saveStation("수원");
 
-        em.flush();
-        em.clear();
+        LineStation lineStation1 = LineStation.createLineStation(station1, 5);
+        LineStation lineStation2 = LineStation.createLineStation(station2, 7);
+        LineStation lineStation3 = LineStation.createLineStation(station3, 0);
+
+        line.addLineStation(lineStation1, lineStation2, lineStation3);
+        lineRepository.save(line);
 
         // when
+        em.clear();
         Line findLine = lineRepository.findByName("분당선");
 
         // then
-        assertThat(findLine.getStations().size()).isEqualTo(2);
-        assertThat(findLine.getStations()).containsExactly(station1, station2)
-                .extracting("name")
-                .containsExactly("모란", "죽전");
+        assertThat(findLine.getLineStations().size()).isEqualTo(3);
+        assertThat(findLine.getLineStations()).containsExactly(lineStation1, lineStation2, lineStation3)
+                .extracting(l -> l.getStation().getName()).containsExactly("모란", "죽전", "수원");
     }
 
     private Line saveLine(String color, String name) {
