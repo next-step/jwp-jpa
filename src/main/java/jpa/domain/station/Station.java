@@ -1,13 +1,11 @@
 package jpa.domain.station;
 
 import jpa.domain.base.BaseEntity;
-import jpa.domain.line.Line;
 import jpa.domain.linestation.LineStation;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,17 +21,21 @@ public class Station extends BaseEntity {
     @OneToMany(mappedBy = "station", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LineStation> lineStations = new ArrayList<>();
 
-    @Builder
-    private Station(String name, List<Line> lines) {
+    private Station(String name) {
         this.name = name;
-        this.lineStations = Optional.ofNullable(lines).orElse(Collections.emptyList()).stream()
-                .map(line -> LineStation.of(line, this))
-                .collect(Collectors.toList());
+    }
+
+    public static Station of(String name) {
+        return new Station(name);
     }
 
     public Station updateName(String name) {
         this.name = name;
         return this;
+    }
+
+    public void addLineStation(LineStation lineStation) {
+        this.lineStations.add(lineStation);
     }
 
     @Override

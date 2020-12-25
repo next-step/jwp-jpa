@@ -7,7 +7,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -16,6 +15,8 @@ import java.util.stream.Collectors;
         @Index(name = "index_line", columnList = "name", unique = true),
 })
 public class Line extends BaseEntity {
+
+    private static final String ADD_DUPLICATE_STATION_ERROR = "%s 라인에 %s 역이 이미 포함된 역입니다.";
 
     @Column(name = "name", unique=true)
     private String name;
@@ -27,17 +28,28 @@ public class Line extends BaseEntity {
     private List<LineStation> lineStations = new ArrayList<>();
 
     @Builder
-    public Line(String name, String color, List<Station> stations) {
+    public Line(String name, String color) {
         this.name = name;
         this.color = color;
-        this.lineStations = Optional.ofNullable(stations).orElse(Collections.emptyList()).stream()
-                .map(station -> LineStation.of(this, station))
-                .collect(Collectors.toList());
     }
 
     public Line updateName(String name) {
         this.name = name;
         return this;
+    }
+
+    public void addLineStation(LineStation lineStation) {
+        Station station = lineStation.getStation();
+        if (isExistStation(station)) {
+            throw new IllegalArgumentException(String.format(ADD_DUPLICATE_STATION_ERROR, this.name, station.getName()));
+        }
+        
+        this.lineStations.add(lineStation);
+    }
+
+    private boolean isExistStation(Station station) {
+        return this.lineStations.stream()
+                .anyMatch(lineStation -> lineStation.getStation().equals(station));
     }
 
     @Override

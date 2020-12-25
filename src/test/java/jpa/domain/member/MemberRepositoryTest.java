@@ -47,15 +47,9 @@ class MemberRepositoryTest {
         memberRepository.save(member1);
         memberRepository.save(member2);
 
-        Station gangnam_station = stationRepository.save(Station.builder()
-                .name("강남역")
-                .build());
-        Station jamsil_station = stationRepository.save(Station.builder()
-                .name("잠실역")
-                .build());
-        Station pangyo_station = stationRepository.save(Station.builder()
-                .name("판교역")
-                .build());
+        Station gangnam_station = stationRepository.save(Station.of("강남역"));
+        Station jamsil_station = stationRepository.save(Station.of("잠실역"));
+        Station pangyo_station = stationRepository.save(Station.of("판교역"));
 
         favoriteRepository.save(Favorite.builder()
             .departure(gangnam_station)
@@ -177,12 +171,8 @@ class MemberRepositoryTest {
         assertAll(
                 () -> assertThat(favorites).hasSize(1),
                 () -> assertThat(favorites).contains(Favorite.builder()
-                        .departure(Station.builder()
-                                .name("잠실역")
-                                .build())
-                        .arrival(Station.builder()
-                                .name("판교역")
-                                .build())
+                        .departure(Station.of("잠실역"))
+                        .arrival(Station.of("판교역"))
                         .member(member)
                         .build())
         );

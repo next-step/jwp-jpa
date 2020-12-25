@@ -2,6 +2,7 @@ package jpa.domain.station;
 
 import jpa.domain.line.Line;
 import jpa.domain.linestation.LineStation;
+import jpa.domain.linestation.PreStationInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.persistence.EntityManager;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -33,30 +33,49 @@ class StationRepositoryTest {
                 .name("신분당선")
                 .color("빨강색")
                 .build();
+
         Line line_2 = Line.builder()
                 .name("2호선")
                 .color("초록색")
                 .build();
+
         entityManager.persist(line_shin);
         entityManager.persist(line_2);
 
-        stationRepository.save(Station.builder()
-                .name("판교역")
-                .lines(Arrays.asList(line_shin))
-                .build());
-        stationRepository.save(Station.builder()
-                .name("강남역")
-                .lines(Arrays.asList(line_shin, line_2))
-                .build());
+        Station gangnam = Station.of("강남역");
+        Station pangyo = Station.of("판교역");
+
+        LineStation gangnam_lineStation1 = LineStation.builder()
+                .line(line_2)
+                .station(gangnam)
+                .preStationInfo(PreStationInfo.of(pangyo, 10))
+                .build();
+        gangnam.addLineStation(gangnam_lineStation1);
+
+        LineStation gangnam_lineStation2 = LineStation.builder()
+                .line(line_shin)
+                .station(gangnam)
+                .preStationInfo(PreStationInfo.of(pangyo, 10))
+                .build();
+        gangnam.addLineStation(gangnam_lineStation2);
+
+        LineStation pangyo_lineStation = LineStation.builder()
+                .line(line_shin)
+                .station(pangyo)
+                .preStationInfo(PreStationInfo.of(null, null))
+                .build();
+        pangyo.addLineStation(pangyo_lineStation);
+
+
+        stationRepository.save(gangnam);
+        stationRepository.save(pangyo);
     }
 
     @Test
     @DisplayName("Station 추가 테스트")
     void insert_station_test() {
         // given
-        Station expected = Station.builder()
-                .name("잠실역")
-                .build();
+        Station expected = Station.of("잠실역");
 
         // when
         Station actual = stationRepository.save(expected);
@@ -71,9 +90,7 @@ class StationRepositoryTest {
     @DisplayName("Station 전체 조회 테스트")
     void get_all_station_test() {
         // given
-        Station expected = Station.builder()
-                .name("잠실역")
-                .build();
+        Station expected = Station.of("잠실역");
         stationRepository.save(expected);
 
         // when
@@ -159,4 +176,5 @@ class StationRepositoryTest {
                                 .build())
         );
     }
+
 }

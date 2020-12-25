@@ -37,15 +37,9 @@ class FavoriteRepositoryTest {
                 .password("12345")
                 .build();
 
-        Station gangnam_station = stationRepository.save(Station.builder()
-                .name("강남역")
-                .build());
-        Station jamsil_station = stationRepository.save(Station.builder()
-                .name("잠실역")
-                .build());
-        Station pangyo_station = stationRepository.save(Station.builder()
-                .name("판교역")
-                .build());
+        Station gangnam_station = stationRepository.save(Station.of("강남역"));
+        Station jamsil_station = stationRepository.save(Station.of("잠실역"));
+        Station pangyo_station = stationRepository.save(Station.of("판교역"));
 
         favoriteRepository.save(Favorite.builder()
                 .departure(gangnam_station)
