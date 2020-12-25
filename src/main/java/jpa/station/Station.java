@@ -1,36 +1,34 @@
 package jpa.station;
 
+import jpa.core.BaseEntity;
+import jpa.line.Line;
+import jpa.section.Section;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-/**
- * create table station (
- *     id bigint not null auto_increment,
- *     created_date datetime(6),
- *     modified_date datetime(6),
- *     name varchar(255),
- *     primary key (id)
- * ) engine=InnoDB
- *
- * alter table station
- *     add constraint UK_gnneuc0peq2qi08yftdjhy7ok unique (name)
- */
+
 @Entity
-@Table(name = "station")
-public class Station {
+@Table
+public class Station extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
-
-    @Column(name = "name", unique = true)
+    @Column(unique = true)
     private String name;
+
+    @OneToMany(mappedBy = "start")
+    private List<Section> startSections;
+
+    @OneToMany(mappedBy = "end")
+    private List<Section> endSections;
 
     public Station() {
     }
@@ -54,4 +52,35 @@ public class Station {
     public String getName() {
         return name;
     }
+
+    public List<Line> getLines() {
+        Set<Line> lines = new HashSet<Line>() {{
+            if (startSections != null) {
+                addAll(startSections.stream()
+                        .map(Section::getLine)
+                        .collect(Collectors.toList()));
+            }
+            if (endSections != null) {
+                addAll(endSections.stream()
+                        .map(Section::getLine)
+                        .collect(Collectors.toList()));
+            }
+        }};
+        return new ArrayList<>(lines);
+    }
+
+    public void addEndSection(Section section) {
+        if(this.endSections == null){
+            this.endSections = new ArrayList<>();
+        }
+        this.endSections.add(section);
+    }
+
+    public void addStartSection(Section section) {
+        if(this.startSections == null){
+            this.startSections = new ArrayList<>();
+        }
+        this.startSections.add(section);
+    }
+
 }

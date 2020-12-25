@@ -1,41 +1,33 @@
 package jpa.line;
 
+import jpa.core.BaseEntity;
+import jpa.section.Section;
+import jpa.station.Station;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-/**
- * create table line (
- *     id bigint not null auto_increment,
- *     created_date datetime(6),
- *     modified_date datetime(6),
- *     color varchar(255),
- *     name varchar(255),
- *     primary key (id)
- * ) engine=InnoDB
- *
- * alter table line
- *     add constraint UK_9ney9davbulf79nmn9vg6k7tn unique (name)
- */
 @Entity
-@Table(name = "line")
-public class Line {
+@Table
+public class Line extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private long id;
 
-    @Column(unique = true, name = "name")
+    @Column(unique = true)
     private String name;
 
-    @Column(name = "color")
     private String color;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
+    @OneToMany
+    @JoinColumn(name = "line")
+    private List<Section> sections;
 
     public Line() {
     }
@@ -63,4 +55,22 @@ public class Line {
     public LocalDateTime getModifiedDate() {
         return modifiedDate;
     }
+
+    public List<Station> getStations() {
+        Set<Station> stations = new HashSet<>();
+        sections.forEach(item -> {
+            stations.add(item.getStart());
+            stations.add(item.getEnd());
+        });
+        return new ArrayList<>(stations);
+    }
+
+    public void addSection(Section section) {
+        if (this.sections == null) {
+            this.sections = new ArrayList<>();
+        }
+        this.sections.add(section);
+        section.setLine(this);
+    }
+
 }

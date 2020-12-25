@@ -1,28 +1,52 @@
 package jpa.favorite;
 
+import jpa.core.BaseEntity;
+import jpa.member.Member;
+import jpa.station.Station;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * create table favorite (
- *     id bigint not null auto_increment,
- *     created_date datetime(6),
- *     modified_date datetime(6),
- *     primary key (id)
- * ) engine=InnoDB
- */
 @Entity
-@Table(name = "favorite")
-public class Favorite {
+public class Favorite extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    @ManyToOne
+    @JoinColumn(name = "start")
+    private Station start;
 
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
+    @ManyToOne
+    @JoinColumn(name = "end")
+    private Station end;
 
+    @ManyToOne
+    @JoinColumn(name = "member")
+    private Member member;
+
+    public Station getStart() {
+        return start;
+    }
+
+    public void setStart(Station start) {
+        this.start = start;
+    }
+
+    public Station getEnd() {
+        return end;
+    }
+
+    public void setEnd(Station end) {
+        this.end = end;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }
