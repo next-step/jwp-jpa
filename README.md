@@ -52,4 +52,4 @@ DDL(Data Definition Language)을 보고 유추하여 엔티티 클래스와 리�
 
 - [X] 이전 역(preStation)과 길이(distance) 정보를 가진 클래스 구현
 
-- [ ] 역 사이 길이 정보 추가에 따른 수정
+- [X] 역 사이 길이 정보 추가에 따른 수정
