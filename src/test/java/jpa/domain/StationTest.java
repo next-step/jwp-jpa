@@ -39,7 +39,7 @@ class StationTest {
 		stations.save(new Station("잠실역"));
 
 		// then
-		String actual = stations.findByName("잠실역").getName();
+		String actual = stations.findByName(expected).getName();
 		assertThat(expected).isEqualTo(actual);
 	}
 }
