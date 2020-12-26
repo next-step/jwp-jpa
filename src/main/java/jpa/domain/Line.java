@@ -3,6 +3,7 @@ package jpa.domain;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -19,7 +20,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "line", orphanRemoval = true)
+    @OneToMany(mappedBy = "line", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<StationLine> stationLines = new ArrayList<>();
 
     public Line() {
