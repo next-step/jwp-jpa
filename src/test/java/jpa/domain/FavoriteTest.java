@@ -9,14 +9,22 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class FavoriteRepositoryTest {
+class FavoriteTest {
+    @Autowired
+    private MemberRepository members;
+    @Autowired
+    private StationRepository stations;
     @Autowired
     private FavoriteRepository favorites;
+
     private Favorite favorite;
 
     @BeforeEach
     void beforeEach() {
-        favorite = new Favorite();
+        Member member = members.save(new Member(20, "test@gmail.com", "Abcde1234!@#"));
+        Station gangnamStation = stations.save(new Station("강남"));
+        Station jamsilStation = stations.save(new Station("잠실"));
+        favorite = new Favorite(gangnamStation, jamsilStation, member);
     }
 
     @DisplayName("`Favorite` 객체 생성")
@@ -26,7 +34,7 @@ class FavoriteRepositoryTest {
         Favorite actual = favorites.save(favorite);
         // Then
         assertAll(
-                () -> assertNotNull(actual),
+                () -> assertNotNull(favorite),
                 () -> assertSame(actual, favorite)
         );
     }
