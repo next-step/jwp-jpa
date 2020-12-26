@@ -6,15 +6,15 @@ import javax.persistence.*;
 @Table(name = "favorite")
 public class Favorite extends BaseEntity {
 
-	@ManyToOne(targetEntity = Member.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
 
-	@ManyToOne(targetEntity = Station.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Station.class)
 	@JoinColumn(name = "departure_station_id", nullable = false)
 	private Station departureStation;
 
-	@ManyToOne(targetEntity = Station.class, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Station.class)
 	@JoinColumn(name = "arrival_station_id", nullable = false)
 	private Station arrivalStation;
 
@@ -35,10 +35,6 @@ public class Favorite extends BaseEntity {
 		this.member.getFavorites().remove(this);
 		this.member = member;
 		this.member.getFavorites().add(this);
-	}
-
-	public Member getMember() {
-		return this.member;
 	}
 
 	public Station getDepartureStation() {

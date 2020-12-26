@@ -28,9 +28,6 @@ class FavoriteTest {
 		em.flush();
 
 		Favorite favorite2 = em.find(Favorite.class, favorite.getId());
-		assertThat(favorite2.getMember().getId())
-				.isNotEqualTo(member1.getId())
-				.isEqualTo(member2.getId());
 		assertThat(member1.getFavorites()).doesNotContain(favorite);
 		assertThat(member2.getFavorites()).contains(favorite);
 	}
