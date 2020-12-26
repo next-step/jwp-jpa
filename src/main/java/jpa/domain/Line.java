@@ -35,21 +35,6 @@ public class Line extends BaseEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Line line = (Line) o;
-        return Objects.equals(color, line.color) &&
-                Objects.equals(name, line.name) &&
-                Objects.equals(stationLines, line.stationLines);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(color, name, stationLines);
-    }
-
-    @Override
     public String toString() {
         return name;
     }
