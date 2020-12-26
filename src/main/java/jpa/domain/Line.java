@@ -19,7 +19,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "line")
+    @OneToMany(mappedBy = "line", orphanRemoval = true)
     private List<StationLine> stationLines = new ArrayList<>();
 
     public Line() {
