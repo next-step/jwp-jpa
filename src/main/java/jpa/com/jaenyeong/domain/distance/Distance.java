@@ -20,7 +20,7 @@ public class Distance {
     private Station previous;
 
     public Distance(final Station previous, final long meter) {
-        if (previous == null || meter <= EMPTY) {
+        if (meter < EMPTY) {
             throw new IllegalArgumentException("not valid parameters");
         }
         this.previous = previous;

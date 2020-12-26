@@ -3,6 +3,7 @@ package jpa.com.jaenyeong.domain.mapping;
 import jpa.com.jaenyeong.domain.distance.Distance;
 import jpa.com.jaenyeong.domain.line.Line;
 import jpa.com.jaenyeong.domain.line.LineRepository;
+import jpa.com.jaenyeong.domain.station.EmptyStation;
 import jpa.com.jaenyeong.domain.station.Station;
 import jpa.com.jaenyeong.domain.station.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,17 +32,21 @@ class LineStationRepositoryTest {
     private Station mokdong;
     private Station sindorim;
     private Station seocho;
+    private Station juan;
+    private Station emptyStation;
     private Line greenLine;
     private Line blueLine;
     private Line purpleLine;
     private Distance firstDistance;
     private Distance secondDistance;
     private Distance thirdDistance;
+    private Distance emptyDistance;
     private LineStation gangnamGreenLine;
     private LineStation jamsilGreenLine;
     private LineStation yongsanBlueLine;
     private LineStation kkachisanGreenLine;
     private LineStation kkachisanPurpleLine;
+    private LineStation juanBlueLine;
 
     @BeforeEach
     void setUp() {
@@ -59,6 +64,8 @@ class LineStationRepositoryTest {
         mokdong = new Station("목동역");
         sindorim = new Station("신도림역");
         seocho = new Station("서초역");
+        juan = new Station("주안역");
+        emptyStation = new EmptyStation();
 
         stations.save(gangnam);
         stations.save(jamsil);
@@ -67,6 +74,8 @@ class LineStationRepositoryTest {
         stations.save(mokdong);
         stations.save(sindorim);
         stations.save(seocho);
+        stations.save(juan);
+        stations.save(emptyStation);
     }
 
     private void setUpLines() {
@@ -83,6 +92,7 @@ class LineStationRepositoryTest {
         firstDistance = new Distance(mokdong, 1_000L);
         secondDistance = new Distance(sindorim, 10_000L);
         thirdDistance = new Distance(seocho, 1_000L);
+        emptyDistance = new Distance(emptyStation, 0L);
     }
 
     private void setUpLineStations() {
@@ -91,12 +101,14 @@ class LineStationRepositoryTest {
         yongsanBlueLine = new LineStation(blueLine, yongsan, secondDistance);
         kkachisanGreenLine = new LineStation(greenLine, kkachisan, secondDistance);
         kkachisanPurpleLine = new LineStation(purpleLine, kkachisan, thirdDistance);
+        juanBlueLine = new LineStation(blueLine, juan, emptyDistance);
 
         linesAndStations.save(gangnamGreenLine);
         linesAndStations.save(jamsilGreenLine);
         linesAndStations.save(yongsanBlueLine);
         linesAndStations.save(kkachisanGreenLine);
         linesAndStations.save(kkachisanPurpleLine);
+        linesAndStations.save(juanBlueLine);
     }
 
     @Test
@@ -108,7 +120,7 @@ class LineStationRepositoryTest {
                 .haveStationsSize(), 3),
             () -> assertSame(lines.findByName("1호선")
                 .orElseThrow(NullPointerException::new)
-                .haveStationsSize(), 1),
+                .haveStationsSize(), 2),
             () -> assertSame(lines.findByName("5호선")
                 .orElseThrow(NullPointerException::new)
                 .haveStationsSize(), 1)
@@ -185,5 +197,17 @@ class LineStationRepositoryTest {
 
         assertSame(kkachisanGreenLine.getPreviousStationName(), "목동역");
         assertSame(kkachisanGreenLine.getDistanceFromPreviousStation(), 100L);
+    }
+
+    @Test
+    @DisplayName("EmptyDistance, EmptyStation null 객체 테스트")
+    void checkNullObject() {
+        assertSame(juanBlueLine.getPreviousStationName(), "");
+        assertEquals(juanBlueLine.getDistanceFromPreviousStation(), 0L);
+
+        juanBlueLine.changeDistance(new Distance(juan, 1_000L));
+
+        assertSame(juanBlueLine.getPreviousStationName(), "주안역");
+        assertEquals(juanBlueLine.getDistanceFromPreviousStation(), 1_000L);
     }
 }
