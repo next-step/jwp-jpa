@@ -3,6 +3,7 @@ package jpa.domain;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class Member extends BaseEntity {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Favorite> favorites = new ArrayList<>();
 
     public void addFavorites(Favorite favorite) {
