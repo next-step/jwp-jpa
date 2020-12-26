@@ -1,14 +1,12 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "member")
-class Member extends BaseEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public class Member extends BaseEntity {
 
 	@Column(name = "age", nullable = false)
 	private int age;
@@ -19,25 +17,36 @@ class Member extends BaseEntity {
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	Member(int age, String email, String password) {
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Favorite> favorites;
+
+	protected Member() {
+	}
+
+	public Member(int age, String email, String password) {
 		this.age = age;
 		this.email = email;
 		this.password = password;
+		this.favorites = new ArrayList<>();
 	}
 
-	Long getId() {
-		return id;
+	public void removeFavorite(Favorite favorite) {
+		this.getFavorites().remove(favorite);
 	}
 
-	int getAge() {
-		return age;
+	public int getAge() {
+		return this.age;
 	}
 
-	String getEmail() {
-		return email;
+	public String getEmail() {
+		return this.email;
 	}
 
-	String getPassword() {
-		return password;
+	public String getPassword() {
+		return this.password;
+	}
+
+	public List<Favorite> getFavorites() {
+		return this.favorites;
 	}
 }

@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import javax.persistence.EntityManager;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -12,6 +14,9 @@ class MemberRepositoryTest {
 
 	@Autowired
 	private MemberRepository members;
+
+	@Autowired
+	private EntityManager em;
 
 	@Test
 	void save() {
@@ -80,4 +85,46 @@ class MemberRepositoryTest {
 	private Member createMember(String email) {
 		return new Member(22, email, "secret");
 	}
+
+	@Test
+	@DisplayName("연관관계로 등록된 Favorite 를 역그래프 탐색가능한지 테스트")
+	void hasFavorites() {
+		Member member = new Member(22, "", "");
+		Favorite favorite1 = new Favorite(member, persistStation("이태원"), persistStation("잠실"));
+		Favorite favorite2 = new Favorite(member, persistStation("동대문"), persistStation("모란"));
+		em.persist(member);
+		em.persist(favorite1);
+		em.persist(favorite2);
+		em.flush();
+
+		member = members.findById(member.getId()).get();
+		assertThat(member.getFavorites())
+				.hasSize(2)
+				.containsExactly(favorite1, favorite2);
+	}
+
+	@Test
+	@DisplayName("연관관계로 등록된 Favorite 를 detach 된 상태에서도 역그래프 탐색가능한지 테스트")
+	void hasFavorites_emClear() {
+		Member member = new Member(22, "", "");
+		Favorite favorite1 = new Favorite(member, persistStation("이태원"), persistStation("잠실"));
+		Favorite favorite2 = new Favorite(member, persistStation("동대문"), persistStation("모란"));
+		em.persist(member);
+		em.persist(favorite1);
+		em.persist(favorite2);
+		em.flush();
+		em.clear();
+
+		member = members.findById(member.getId()).get();
+		assertThat(member.getFavorites())
+				.hasSize(2)
+				.containsExactly(favorite1, favorite2);
+	}
+
+	private Station persistStation(String name) {
+		Station station = new Station(name);
+		em.persist(station);
+		return station;
+	}
+
 }

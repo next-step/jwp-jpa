@@ -18,21 +18,21 @@ class LineRepositoryTest {
 
 	@Test
 	void findByColor() {
-		lines.save(new Line("일호선", "빨간색"));
-		lines.save(new Line("이호선", "빨간색"));
-		lines.save(new Line("삼호선", "빨간색"));
-		lines.save(new Line("사호선", "파란색"));
+		lines.save(new Line("일호선", Color.BLUE));
+		lines.save(new Line("이호선", Color.BLUE));
+		lines.save(new Line("삼호선", Color.BLUE));
+		lines.save(new Line("사호선", Color.SKYBLUE));
 
-		assertThat(lines.findAllByColor("빨간색")).hasSize(3);
-		assertThat(lines.findAllByColor("파란색")).hasSize(1);
+		assertThat(lines.findAllByColor(Color.BLUE)).hasSize(3);
+		assertThat(lines.findAllByColor(Color.SKYBLUE)).hasSize(1);
 	}
 
 	@Test
 	@DisplayName("유니크 키 중복 save 시 예외 테스트")
 	void save_duplicatedKey() {
-		lines.save(new Line("일호선", "red"));
+		lines.save(new Line("일호선", Color.BLUE));
 
-		assertThatThrownBy(() -> lines.save(new Line("일호선", "blue")))
+		assertThatThrownBy(() -> lines.save(new Line("일호선", Color.BLUE)))
 				.isInstanceOf(DataIntegrityViolationException.class)
 				.hasCauseInstanceOf(ConstraintViolationException.class);
 	}
@@ -40,7 +40,7 @@ class LineRepositoryTest {
 	@Test
 	@DisplayName("createdDate, ModifiedDate 잘 저장되는지 확인")
 	void auditing() {
-		Line line = lines.save(new Line("일호선", "파란색"));
+		Line line = lines.save(new Line("일호선", Color.BLUE));
 
 		assertThat(line.getCreatedDate()).isNotNull();
 		assertThat(line.getModifiedDate()).isNotNull();

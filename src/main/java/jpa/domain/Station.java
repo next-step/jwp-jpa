@@ -1,34 +1,50 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "station")
 public class Station extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
 	@Column(name = "name", nullable = false, unique = true, length = 255)
 	private String name;
 
-	public Station() {
+	@OneToMany(mappedBy = "station", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private List<LineStation> lineStations;
+
+	protected Station() {
 	}
 
-	Station(String name) {
+	public Station(String name) {
+		this.name = name;
+		this.lineStations = new ArrayList<>();
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	Long getId() {
-		return id;
+	public List<Line> getLines() {
+		return this.getLineStations().stream()
+				.map(LineStation::getLine)
+				.collect(Collectors.toList());
 	}
 
-	String getName() {
-		return name;
+	List<LineStation> getLineStations() {
+		return this.lineStations;
 	}
 
-	void setName(String name) {
-		this.name = name;
+	@PreRemove
+	private void removeAll() {
+		for (LineStation lineStation : getLineStations()) {
+			lineStation.getLine().getLineStations().remove(lineStation);
+		}
 	}
 }
