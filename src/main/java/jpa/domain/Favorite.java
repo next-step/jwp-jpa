@@ -1,15 +1,40 @@
 package jpa.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Favorite extends BaseTimeEntity {
-    @Id @GeneratedValue
-    private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "depart_station_id")
+    private Station departureStation;
 
-    public Long getId() {
-        return id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "arrive_station_id")
+    private Station arrivalStation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    protected Favorite() {
+    }
+
+    public Favorite(Station departureStation, Station arrivalStation, Member member) {
+        this.departureStation = departureStation;
+        this.arrivalStation = arrivalStation;
+        this.member = member;
+        member.addFavorite(this);
+    }
+
+    public Station getDepartureStation() {
+        return departureStation;
+    }
+
+    public Station getArrivalStation() {
+        return arrivalStation;
+    }
+
+    public Member getMember() {
+        return member;
     }
 }

@@ -1,38 +1,43 @@
 package jpa.domain;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int age;
 
-    private Integer age;
+    @Column(unique = true, nullable = false)
     private String email;
+
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "member")
+    private final List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {
     }
 
-    public Member(Integer age, String password) {
+    public Member(int age, String password) {
         this.age = age;
         this.password = password;
     }
 
-    public Member(Integer age, String email, String password) {
+    public Member(int age, String email, String password) {
         this.age = age;
         this.email = email;
         this.password = password;
     }
 
-    public Long getId() {
-        return id;
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
     }
 
-    public Integer getAge() {
+    public int getAge() {
         return age;
     }
 
@@ -44,7 +49,11 @@ public class Member extends BaseTimeEntity {
         return password;
     }
 
-    public void setPassword(String password) {
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    public void changePassword(String password) {
         this.password = password;
     }
 }

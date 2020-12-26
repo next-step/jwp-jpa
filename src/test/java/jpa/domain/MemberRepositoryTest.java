@@ -37,7 +37,7 @@ class MemberRepositoryTest {
     void update_age() {
         Member member = memberRepository.save(new Member(27, "woo@xxx.com", "333"));
 
-        member.setPassword("222");
+        member.changePassword("222");
         Member actual = memberRepository.getOne(member.getId());
 
         assertThat(actual.getPassword()).isEqualTo("222");

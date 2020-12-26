@@ -1,16 +1,19 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Line extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
 
-    private String color;
+    @Enumerated(EnumType.STRING)
+    private LineColor lineColor;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "line")
+    private final List<StationLine> stationLines = new ArrayList<>();
 
     protected Line() {
     }
@@ -19,24 +22,28 @@ public class Line extends BaseTimeEntity {
         this.name = name;
     }
 
-    public Line(String name, String color) {
+    public Line(String name, LineColor lineColor) {
         this.name = name;
-        this.color = color;
+        this.lineColor = lineColor;
     }
 
-    public Long getId() {
-        return id;
+    public void addStationLine(StationLine stationLine) {
+        stationLines.add(stationLine);
     }
 
-    public String getColor() {
-        return color;
+    public LineColor getColor() {
+        return lineColor;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public List<StationLine> getStationLines() {
+        return stationLines;
+    }
+
+    public void changeColor(LineColor lineColor) {
+        this.lineColor = lineColor;
     }
 }

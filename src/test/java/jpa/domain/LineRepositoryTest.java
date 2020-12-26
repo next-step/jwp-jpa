@@ -16,12 +16,12 @@ class LineRepositoryTest {
     @BeforeEach
     void setUp() {
         lineRepository.save(new Line("1호선"));
-        lineRepository.save(new Line("2호선", "초록"));
+        lineRepository.save(new Line("2호선", LineColor.GREEN));
     }
 
     @Test
     void save() {
-        Line line = new Line("3호선", "주황");
+        Line line = new Line("3호선", LineColor.ORANGE);
         Line actual = lineRepository.save(line);
 
         assertAll(
@@ -42,10 +42,10 @@ class LineRepositoryTest {
         Line line = lineRepository.findByName("1호선");
         assertThat(line.getColor()).isNull();
 
-        line.setColor("파랑");
+        line.changeColor(LineColor.BLUE);
         Line actual = lineRepository.findByName("1호선");
 
-        assertThat(actual.getColor()).isEqualTo("파랑");
+        assertThat(actual.getColor()).isEqualTo(LineColor.BLUE);
     }
 
     @Test
