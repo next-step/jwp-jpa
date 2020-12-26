@@ -29,47 +29,21 @@ public class Favorite extends BaseTimeEntity {
     protected Favorite() {
     }
 
-    public Favorite(Station departureStation, Station arrivalStation) {
-        this.departureStation = departureStation;
-        this.arrivalStation = arrivalStation;
-    }
-
     public Favorite(Station departureStation, Station arrivalStation, Member member) {
+        validate(departureStation, arrivalStation, member);
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
         this.member = member;
     }
 
-    public Station getDepartureStation() {
-        return departureStation;
-    }
-
-    public void setDepartureStation(Station departureStation) {
-        this.departureStation = departureStation;
-    }
-
-    public Station getArrivalStation() {
-        return arrivalStation;
-    }
-
-    public void setArrivalStation(Station arrivalStation) {
-        this.arrivalStation = arrivalStation;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    public Long getId() {
-        return this.id;
+    private void validate(Station departureStation, Station arrivalStation, Member member) {
+        if (departureStation == null || arrivalStation == null || member == null) {
+            throw new IllegalArgumentException("필수값 누락입니다.");
+        }
     }
 
     public void changeMember(Member member) {
-        this.setMember(member);
+        this.member = member;
     }
 
     @Override

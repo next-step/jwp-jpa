@@ -24,17 +24,20 @@ public class Line extends BaseTimeEntity {
     protected Line() {
     }
 
-    public Line(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    public Line(String name, String color) {
+        this(name);
+        this.color = color;
     }
 
     public Line(String name) {
+        validate(name);
         this.name = name;
     }
 
-    public String getName() {
-        return this.name;
+    private void validate(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("필수값 누락입니다.");
+        }
     }
 
     @Override

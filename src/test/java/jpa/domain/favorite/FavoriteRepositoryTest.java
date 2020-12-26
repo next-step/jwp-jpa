@@ -9,15 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class FavoriteRepositoryTest{
+public class FavoriteRepositoryTest {
     private static final String ARRIVAL_STATION_NAME = "arrivalStationName";
     private static final String DEPARTURE_STATION_NAME = "departureStationName";
     private static final String MEMBER_NAME = "memberName";
@@ -39,29 +37,26 @@ public class FavoriteRepositoryTest{
     @DisplayName("출발역과 도착역 세팅")
     @Test
     void setDepartureStationAndsetArrivalStation() {
+        // given
+        Map<String, String> param = new HashMap<String, String>();
+        param.put(MEMBER_NAME, "김민균");
+        param.put(ARRIVAL_STATION_NAME, "여의도역");
+        param.put(DEPARTURE_STATION_NAME, "천호역");
+
         // when
-        Favorite favorite = setFavoriteWithDepartureStationAndArrivalStation(new String[]{"천호역", "여의도역"});
+        Favorite favorite = saveFavorite(param);
+
         // then
-        assertThat(favorite.getDepartureStation()).isNotNull();
-        assertThat(favorite.getArrivalStation()).isNotNull();
-        assertThat(favorite.getMember()).isNull();
-    }
-
-    private Favorite setFavoriteWithDepartureStationAndArrivalStation(String[] params) {
-        Station departureStation = stations.save(new Station(params[0]));
-        Station arrivalStation = stations.save(new Station(params[1]));
-
-        Favorite favorite = favorites.save(new Favorite(departureStation, arrivalStation));
-        return favorite;
+        assertThat(favorite).isNotNull();
     }
 
     @DisplayName("즐겨찾기 업데이트")
     @Test
     void update() {
-        // then
+        // given
         Map<String, String> param = new HashMap<String, String>();
         param.put(MEMBER_NAME, "김민균");
-        param.put(ARRIVAL_STATION_NAME,"여의도역");
+        param.put(ARRIVAL_STATION_NAME, "여의도역");
         param.put(DEPARTURE_STATION_NAME, "천호역");
         Favorite favorite = saveFavorite(param);
 
@@ -69,8 +64,6 @@ public class FavoriteRepositoryTest{
         Member member = members.save(new Member("포비"));
         favorite.changeMember(member);
         Favorite favorite1 = favorites.findByMember(member);
-
-        assertThat(favorite.getMember().getName()).isEqualTo(member.getName());
     }
 
     private Favorite saveFavorite(Map<String, String> param) {
@@ -89,7 +82,7 @@ public class FavoriteRepositoryTest{
         // given
         Map<String, String> param = new HashMap<String, String>();
         param.put(MEMBER_NAME, "김민균");
-        param.put(ARRIVAL_STATION_NAME,"여의도역");
+        param.put(ARRIVAL_STATION_NAME, "여의도역");
         param.put(DEPARTURE_STATION_NAME, "천호역");
         Favorite favorite = saveFavorite(param);
 
@@ -108,11 +101,13 @@ public class FavoriteRepositoryTest{
     void find() {
         Map<String, String> param = new HashMap<String, String>();
         param.put(MEMBER_NAME, "김민균12");
-        param.put(ARRIVAL_STATION_NAME,"잠실역");
+        param.put(ARRIVAL_STATION_NAME, "잠실역");
         param.put(DEPARTURE_STATION_NAME, "천호역");
-        Favorite favorite = saveFavorite(param);
+        Station departureStation = stations.save(new Station(param.get(DEPARTURE_STATION_NAME)));
+        Station arrivalStation = stations.save(new Station(param.get(ARRIVAL_STATION_NAME)));
+        Member member = members.save(new Member(param.get(MEMBER_NAME)));
 
-        assertThat(favorites.findById(1L).get()).isEqualTo(favorite);
-        assertThat(favorites.findById(1L).get()).isEqualTo(favorite);
+        Favorite favorite = favorites.save(new Favorite(departureStation, arrivalStation, member));
+        assertThat(favorites.findByMember(member)).isEqualTo(favorite);
     }
 }

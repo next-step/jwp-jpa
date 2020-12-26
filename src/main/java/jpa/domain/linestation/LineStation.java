@@ -15,11 +15,11 @@ public class LineStation extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "line_id")
-    Line line;
+    private Line line;
 
     @ManyToOne
     @JoinColumn(name = "station_id")
-    Station station;
+    private Station station;
 
     protected LineStation() {
     }

@@ -1,11 +1,11 @@
 package jpa.domain.member;
 
 import jpa.domain.base.BaseTimeEntity;
-import jpa.domain.favorite.Favorite;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
@@ -18,9 +18,6 @@ public class Member extends BaseTimeEntity {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Favorite> favorites = new ArrayList<>();
-
     public Member(String name) {
         this.name = name;
     }
@@ -28,13 +25,19 @@ public class Member extends BaseTimeEntity {
     protected Member() {
     }
 
-    public Member(Long id, String name) {
-        this.id = id;
+    public Member(String name, int age, String email, String password) {
+        this(name);
+        this.age = age;
+        this.email = email;
+        this.password = password;
+    }
+
+    public void changeName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return this.name;
+    public void changeAge(int age) {
+        this.age = age;
     }
 
     @Override
@@ -48,22 +51,5 @@ public class Member extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public void changeName(String name) {
-        this.name =  name;
-    }
-
-    public void changeAge(int age) {
-        this.age = age;
-    }
-
-    public int getAge() {
-        return this.age;
-    }
-
-    public void addFavorites(Favorite favorite) {
-        this.favorites.add(favorite);
-        favorite.setMember(this);
     }
 }
