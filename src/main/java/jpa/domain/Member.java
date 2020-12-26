@@ -17,7 +17,7 @@ public class Member extends BaseEntity {
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Favorite> favorites;
 
 	protected Member() {
@@ -28,6 +28,10 @@ public class Member extends BaseEntity {
 		this.email = email;
 		this.password = password;
 		this.favorites = new ArrayList<>();
+	}
+
+	public void removeFavorite(Favorite favorite) {
+		this.getFavorites().remove(favorite);
 	}
 
 	public int getAge() {
