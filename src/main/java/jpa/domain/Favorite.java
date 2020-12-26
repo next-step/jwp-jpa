@@ -3,24 +3,20 @@ package jpa.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Setter
-@Getter
 @Entity
 public class Favorite extends BaseEntity {
 
-    @OneToOne
+    @ManyToOne
     private Station startStation;
 
-    @OneToOne
+    @ManyToOne
     private Station endStation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -32,6 +28,14 @@ public class Favorite extends BaseEntity {
         this.endStation = endStation;
         this.member = member;
         member.addFavorites(this);
+    }
+
+    public Station getStartStation() {
+        return startStation;
+    }
+
+    public Station getEndStation() {
+        return endStation;
     }
 
     @Override
