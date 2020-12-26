@@ -1,30 +1,31 @@
 package jpa.domain.station;
 
 import jpa.domain.BaseDateTimeEntity;
-import jpa.domain.line.Line;
+import jpa.domain.line.LineStation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Station extends BaseDateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "stations")
-    private List<Line> lines = new ArrayList<>();
+    @OneToMany(mappedBy = "station", cascade = CascadeType.REMOVE)
+    private List<LineStation> lineStations = new ArrayList<>();
 
     protected Station() {}
 
@@ -32,7 +33,7 @@ public class Station extends BaseDateTimeEntity {
         this.name = name;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -40,12 +41,12 @@ public class Station extends BaseDateTimeEntity {
         return name;
     }
 
-    public List<Line> getLines() {
-        return lines;
+    public List<LineStation> getLineStations() {
+        return lineStations;
     }
 
-    public void addLine(Line line) {
-        lines.add(line);
+    public void addLineStation(LineStation lineStation) {
+        lineStations.add(lineStation);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class Station extends BaseDateTimeEntity {
         if (this == o) return true;
         if (!(o instanceof Station)) return false;
         Station station = (Station) o;
-        return id == station.id;
+        return Objects.equals(id, station.id);
     }
 
     @Override

@@ -2,6 +2,7 @@ package jpa.domain.station;
 
 import jpa.domain.line.Line;
 import jpa.domain.line.LineRepository;
+import jpa.domain.line.LineStation;
 
 import java.util.List;
 
@@ -25,14 +26,6 @@ public class StationTest {
 
     @PersistenceContext
     private EntityManager em;
-
-    private Station saveStation(String name) {
-        return stationRepository.save(new Station(name));
-    }
-
-    private Line saveLine(String color, String name) {
-        return lineRepository.save(new Line(color, name));
-    }
 
     @Test
     @DisplayName("Station 저장 테스트")
@@ -66,21 +59,29 @@ public class StationTest {
     @DisplayName("노선 조회 테스트")
     void findLineByStation() {
         // given
+        Line line1 = new Line("YELLOW", "분당선");
+        Line line2 = new Line("GREEN", "2호선");
         Station station = saveStation("선릉");
-        Line line1 = saveLine("YELLOW", "분당선");
-        Line line2 = saveLine("GREEN", "2호선");
-        line1.addStation(station);
-        line2.addStation(station);
 
-        em.flush();
-        em.clear();
+        LineStation lineStation1 = LineStation.createLineStation(station, 10);
+        LineStation lineStation2 = LineStation.createLineStation(station, 7);
+
+        line1.addLineStation(lineStation1);
+        lineRepository.save(line1);
+        line2.addLineStation(lineStation2);
+        lineRepository.save(line2);
 
         // when
-        Station findStation = stationRepository.findLineEntityGraphByName("선릉");
+        em.clear();
+        Station findStation = stationRepository.findLineStationsEntityGraphByName("선릉");
 
         // then
-        assertThat(findStation.getLines().size()).isEqualTo(2);
-        assertThat(findStation.getLines()).containsExactly(line1, line2)
-                .extracting("name").containsExactly("분당선", "2호선");
+        assertThat(findStation.getLineStations().size()).isEqualTo(2);
+        assertThat(findStation.getLineStations()).containsExactly(lineStation1, lineStation2)
+                .extracting(l -> l.getLine().getName()).containsExactly("분당선", "2호선");
+    }
+
+    private Station saveStation(String name) {
+        return stationRepository.save(new Station(name));
     }
 }

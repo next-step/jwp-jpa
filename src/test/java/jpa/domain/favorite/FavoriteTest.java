@@ -31,27 +31,15 @@ public class FavoriteTest {
     @PersistenceContext
     private EntityManager em;
 
-    private void saveFavoriteMember(int age, String email, String password, Favorite favorite) {
-        Member member = new Member(age, email, password);
-        memberRepository.save(member);
-
-        favorite.setMember(member);
-        favoriteRepository.save(favorite);
-    }
-
-    private Station saveStation(String name) {
-        return stationRepository.save(new Station(name));
-    }
-
     @Test
     @DisplayName("즐겨찾기를 통해 사용자 찾기 테스트")
     void findUserByFavorite() {
         // given
-        saveFavoriteMember(30, "white@github.com", "red_white", new Favorite());
-
-        em.clear();
+        Member member = saveMember(30, "white@github.com", "red_white");
+        favoriteRepository.save(new Favorite(member, saveStation("인천"), saveStation("청량리")));
 
         // when
+        em.clear();
         List<Favorite> result = favoriteRepository.findAll();
 
         // then
@@ -63,31 +51,27 @@ public class FavoriteTest {
 
     @Test
     @DisplayName("즐겨찾기를 통해 지하철역 찾기 테스트")
-    void findFavoriteStationByFavorite() {
+    void findStationByFavorite() {
         // given
-        Favorite favorite = new Favorite();
-        FavoriteStation favoriteStation1 = new FavoriteStation(saveStation("왕십리"));
-        FavoriteStation favoriteStation2 = new FavoriteStation(saveStation("수원"));
-        favorite.addFavoriteStation(favoriteStation1);
-        favorite.addFavoriteStation(favoriteStation2);
-        saveFavoriteMember(30, "white@github.com", "red_white", favorite);
-
-        em.clear();
+        Member member = saveMember(30, "white@github.com", "red_white");
+        Favorite favorite = favoriteRepository.save(new Favorite(member, saveStation("인천"), saveStation("청량리")));
+        favorite.changeArrivalStation(saveStation("왕십리"));
 
         // when
+        em.flush();
+        em.clear();
         Favorite findFavorite = favoriteRepository.findById(favorite.getId()).get();
 
         // then
-        assertThat(findFavorite.getFavoriteStations().size()).isEqualTo(2);
-        assertThat(findFavorite.getFavoriteStations()).containsExactly(favoriteStation1, favoriteStation2);
-        assertThat(findFavorite.getFavoriteStations()).containsExactly(favoriteStation1, favoriteStation2)
-                .extracting(f -> f.getStation().getName()).containsExactly("왕십리", "수원");
+        assertThat(findFavorite.getDepartureStation().getName()).isEqualTo("인천");
+        assertThat(findFavorite.getArrivalStation().getName()).isEqualTo("왕십리");
+    }
 
-        // when
-        findFavorite.removeFavoriteStation(favoriteStation1);
-        em.flush();
+    private Member saveMember(int age, String email, String password) {
+        return memberRepository.save(new Member(age, email, password));
+    }
 
-        // then
-        assertThat(findFavorite.getFavoriteStations().size()).isEqualTo(1);
+    private Station saveStation(String name) {
+        return stationRepository.save(new Station(name));
     }
 }

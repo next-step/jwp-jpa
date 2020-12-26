@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StationRepository extends JpaRepository<Station, Long> {
     Station findByName(String name);
 
-    @EntityGraph(attributePaths = "lines")
-    Station findLineEntityGraphByName(String name);
+    @EntityGraph(attributePaths = "lineStations")
+    Station findLineStationsEntityGraphByName(String name);
 }

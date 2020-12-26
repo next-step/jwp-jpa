@@ -2,6 +2,8 @@ package jpa.domain.member;
 
 import jpa.domain.favorite.Favorite;
 import jpa.domain.favorite.FavoriteRepository;
+import jpa.domain.station.Station;
+import jpa.domain.station.StationRepository;
 
 import java.util.List;
 
@@ -23,12 +25,11 @@ public class MemberTest {
     @Autowired
     private FavoriteRepository favoriteRepository;
 
+    @Autowired
+    private StationRepository stationRepository;
+
     @PersistenceContext
     private EntityManager em;
-
-    private Member saveMember(int age, String email, String password) {
-        return memberRepository.save(new Member(age, email, password));
-    }
 
     @Test
     @DisplayName("Member 조회 테스트")
@@ -74,15 +75,26 @@ public class MemberTest {
     void findFavoriteByMember() {
         // given
         Member member = saveMember(20, "black@gmail.com", "red_black");
+        Station station1 = saveStation("인천");
+        Station station3 = saveStation("모란");
+        Station station2 = saveStation("청량리");
+
+        favoriteRepository.save(new Favorite(member, station1, station2));
+        favoriteRepository.save(new Favorite(member, station1, station3));
 
         // when
-        favoriteRepository.save(new Favorite(member));
-        favoriteRepository.save(new Favorite(member));
-
         em.clear();
+        Member findMember = memberRepository.findById(member.getId()).get();
 
         // then
-        Member findMember = memberRepository.findById(member.getId()).get();
         assertThat(findMember.getFavorites().size()).isEqualTo(2);
+    }
+
+    private Member saveMember(int age, String email, String password) {
+        return memberRepository.save(new Member(age, email, password));
+    }
+
+    private Station saveStation(String name) {
+        return stationRepository.save(new Station(name));
     }
 }
