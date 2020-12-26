@@ -1,6 +1,6 @@
 package jpa.station.domain;
 
-import jpa.domain.BaseEntity;
+import jpa.common.domain.BaseEntity;
 import jpa.line.domain.Line;
 
 import javax.persistence.*;

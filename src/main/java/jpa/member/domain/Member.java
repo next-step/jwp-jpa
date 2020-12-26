@@ -1,6 +1,6 @@
 package jpa.member.domain;
 
-import jpa.domain.BaseEntity;
+import jpa.common.domain.BaseEntity;
 import jpa.favorite.domain.Favorite;
 import jpa.station.domain.Station;
 
