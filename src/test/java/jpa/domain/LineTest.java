@@ -17,7 +17,7 @@ class LineTest {
     @Autowired
     private LineRepository lines;
     @Autowired
-    private StationRepository staions;
+    private StationRepository stations;
     private Line line;
 
     @BeforeEach
@@ -80,7 +80,7 @@ class LineTest {
     @Test
     void addStation() {
         // Given
-        Station seokChonStation = staions.save(new Station("석촌"));
+        Station seokChonStation = stations.save(new Station("석촌"));
         // When
         line.addStation(seokChonStation);
         // Then
@@ -93,7 +93,7 @@ class LineTest {
     @Test
     void removeStation() {
         // Given
-        Station seokChonStation = staions.save(new Station("석촌"));
+        Station seokChonStation = stations.save(new Station("석촌"));
         line.addStation(seokChonStation);
         // When
         line.removeStation(seokChonStation);
@@ -106,7 +106,7 @@ class LineTest {
     void getStations() {
         // Given
         List<Station> expected = Arrays.asList(new Station("석촌"), new Station("강남"));
-        expected.forEach(station -> line.addStation(staions.save(station)));
+        expected.forEach(station -> line.addStation(stations.save(station)));
         // When
         List<Station> actual = line.getStations();
         // Then
