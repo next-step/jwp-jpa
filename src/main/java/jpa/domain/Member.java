@@ -1,6 +1,8 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member extends BaseEntity {
@@ -14,6 +16,9 @@ public class Member extends BaseEntity {
     @Column
     private String password;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private final List<Favorite> favorites = new ArrayList<>();
+
     protected Member() {
     }
 
@@ -21,6 +26,18 @@ public class Member extends BaseEntity {
         this.age = age;
         this.email = email;
         this.password = password;
+    }
+
+    public void addFavorite(Station departure, Station destination) {
+        favorites.add(new Favorite(departure, destination, this));
+    }
+
+    public void removeFavorite(Favorite favorite) {
+        favorites.remove(favorite);
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites;
     }
 
     public Integer getAge() {

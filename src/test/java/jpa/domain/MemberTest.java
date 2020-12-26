@@ -7,13 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class MemberRepositoryTest {
+class MemberTest {
     @Autowired
     private MemberRepository members;
+    @Autowired
+    private StationRepository stations;
     @Autowired
     private TestEntityManager em;
     private Member member;
@@ -89,5 +93,35 @@ class MemberRepositoryTest {
         Member actual = em.find(Member.class, id);
         // Then
         assertNull(actual);
+    }
+
+    @Test
+    @DisplayName("`Member`는 다수의 `Favorite` 추가")
+    void addFavorite() {
+        // Given
+        members.save(member);
+        Station seokChonStation = stations.save(new Station("석촌"));
+        Station gangNamStation = stations.save(new Station("강남"));
+        // When
+        member.addFavorite(seokChonStation, gangNamStation);
+        member.addFavorite(gangNamStation, seokChonStation);
+        List<Favorite> actual = member.getFavorites();
+        // Then
+        assertThat(actual).hasSize(2);
+    }
+
+    @DisplayName("`Member`는 가진 Favorite 삭제")
+    @Test
+    void removeFavorite() {
+        // Given
+        members.save(member);
+        Station seokChonStation = stations.save(new Station("석촌"));
+        Station gangNamStation = stations.save(new Station("강남"));
+        member.addFavorite(seokChonStation, gangNamStation);
+        // When
+        Favorite favorite = member.getFavorites().stream().findAny().orElseThrow(IllegalArgumentException::new);
+        member.removeFavorite(favorite);
+        // Then
+        assertThat(member.getFavorites()).isEmpty();
     }
 }
