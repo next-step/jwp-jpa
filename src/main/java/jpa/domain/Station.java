@@ -18,7 +18,7 @@ public class Station extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "station", orphanRemoval = true)
+    @OneToMany(mappedBy = "station", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<StationLine> stationLines = new ArrayList<>();
 
     public Station() {
