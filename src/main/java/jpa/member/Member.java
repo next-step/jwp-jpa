@@ -19,7 +19,7 @@ public class Member extends BaseEntity {
 
     private String password;
 
-    public Member() {}
+    protected Member() {}
 
     public Member(int age, String email, String password) {
         this.age = age;

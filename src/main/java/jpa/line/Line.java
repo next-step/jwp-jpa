@@ -19,7 +19,7 @@ public class Line extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    public Line() {}
+    protected Line() {}
 
     public Line(String name) {
         this.name = name;
