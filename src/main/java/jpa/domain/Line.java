@@ -13,8 +13,9 @@ public class Line extends BaseEntity {
 	@Column(name = "name", nullable = false, unique = true, length = 255)
 	private String name;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "color", nullable = false, length = 255)
-	private String color;
+	private Color color;
 
 	@OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
 	private List<LineStation> lineStations;
@@ -22,7 +23,7 @@ public class Line extends BaseEntity {
 	protected Line() {
 	}
 
-	public Line(String name, String color) {
+	public Line(String name, Color color) {
 		this.name = name;
 		this.color = color;
 		this.lineStations = new ArrayList<>();

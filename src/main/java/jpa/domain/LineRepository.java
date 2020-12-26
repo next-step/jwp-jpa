@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface LineRepository extends JpaRepository<Line, Long> {
 
-	List<Line> findAllByColor(String color);
+	List<Line> findAllByColor(Color color);
 	Optional<Line> findByName(String name);
 }

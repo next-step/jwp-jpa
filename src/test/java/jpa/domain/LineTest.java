@@ -25,7 +25,7 @@ class LineTest {
 
 	@BeforeEach
 	void setUp() {
-		이호선 = new Line("2호선", "green");
+		이호선 = new Line("2호선", Color.GREEN);
 		삼성역 = new Station("삼성역");
 		잠실역 = new Station("잠실역");
 		em.persist(이호선);

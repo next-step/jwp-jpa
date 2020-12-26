@@ -23,8 +23,8 @@ class StationTest {
 
 	@BeforeEach
 	void setUp() {
-		이호선 = new Line("이호선", "green");
-		신분당선 = new Line("신분당선", "yellow");
+		이호선 = new Line("이호선", Color.GREEN);
+		신분당선 = new Line("신분당선", Color.YELLOW);
 		선릉역 = new Station("선릉역");
 		em.persist(이호선);
 		em.persist(신분당선);
