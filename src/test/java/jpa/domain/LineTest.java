@@ -6,18 +6,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class LineRepositoryTest {
+class LineTest {
     @Autowired
     private LineRepository lines;
+    @Autowired
+    private StationRepository staions;
     private Line line;
 
     @BeforeEach
     void beforeEach() {
-        line = new Line("파란색", "1호선");
+        line = new Line(LineColor.BLUE, "1호선");
+        lines.save(line);
     }
 
     @DisplayName("`Line` 객체 저장")
@@ -50,10 +56,10 @@ class LineRepositoryTest {
     @Test
     void changeName() {
         // Given
-        String expected = "노란색";
+        LineColor expected = LineColor.YELLOW;
         Line actual = lines.save(line);
         // When
-        actual.changeColor("노란색");
+        actual.changeColor(LineColor.YELLOW);
         // Then
         assertAll(
                 () -> assertNotNull(actual),
@@ -68,5 +74,44 @@ class LineRepositoryTest {
         lines.delete(line);
         // Then
         assertNotNull(line);
+    }
+
+    @DisplayName("`Line`에서 하나의 `Station` 추가")
+    @Test
+    void addStation() {
+        // Given
+        Station seokChonStation = staions.save(new Station("석촌"));
+        // When
+        line.addStation(seokChonStation);
+        // Then
+        assertThat(line.getStations())
+                .containsOnly(seokChonStation)
+                .hasSize(1);
+    }
+
+    @DisplayName("`Line`에서 하나의 `Station` 삭제")
+    @Test
+    void removeStation() {
+        // Given
+        Station seokChonStation = staions.save(new Station("석촌"));
+        line.addStation(seokChonStation);
+        // When
+        line.removeStation(seokChonStation);
+        // Then
+        assertThat(line.getStations()).isEmpty();
+    }
+
+    @DisplayName("`Line`에 속해있는 `Station` 확인")
+    @Test
+    void getStations() {
+        // Given
+        List<Station> expected = Arrays.asList(new Station("석촌"), new Station("강남"));
+        expected.forEach(station -> line.addStation(staions.save(station)));
+        // When
+        List<Station> actual = line.getStations();
+        // Then
+        assertThat(actual)
+                .containsAll(expected)
+                .hasSize(expected.size());
     }
 }
