@@ -1,4 +1,7 @@
-package jpa.domain;
+package jpa.station.domain;
+
+import jpa.domain.BaseEntity;
+import jpa.line.domain.Line;
 
 import javax.persistence.*;
 import java.util.ArrayList;

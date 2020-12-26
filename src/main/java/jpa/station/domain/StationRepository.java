@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.station.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

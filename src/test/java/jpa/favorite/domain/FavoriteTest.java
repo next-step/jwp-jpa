@@ -1,5 +1,11 @@
-package jpa.domain;
+package jpa.favorite.domain;
 
+import jpa.favorite.domain.Favorite;
+import jpa.favorite.domain.FavoriteRepository;
+import jpa.station.domain.Station;
+import jpa.station.domain.StationRepository;
+import jpa.member.domain.Member;
+import jpa.member.domain.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

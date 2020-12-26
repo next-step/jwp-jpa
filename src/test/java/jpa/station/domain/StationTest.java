@@ -1,5 +1,10 @@
-package jpa.domain;
+package jpa.station.domain;
 
+import jpa.line.domain.Line;
+import jpa.line.domain.LineColor;
+import jpa.line.domain.LineRepository;
+import jpa.station.domain.Station;
+import jpa.station.domain.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
