@@ -40,4 +40,16 @@ public class SubwayTest {
 		assertThat(createdLine.getId()).isEqualTo(1L);
 	}
 
+	@DisplayName("Line 등록시 유니크 키 제약조건 위반시 익셉션")
+	@Test
+	void given_line_duplicated_name_when_save_then_throw_exception() {
+		final String lineName = "2호선";
+		final String duplicatedLineName = "2호선";
+		Line line = new Line(Color.GREEN, lineName);
+		Line duplicatedLine = new Line(Color.GREEN, duplicatedLineName);
+		lineRepository.save(line);
+
+		assertThatThrownBy(() -> lineRepository.save(duplicatedLine));
+	}
+
 }
