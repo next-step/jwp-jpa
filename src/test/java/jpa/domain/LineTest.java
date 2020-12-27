@@ -46,7 +46,7 @@ class LineTest {
 		Line line1 = em.find(Line.class, 이호선.getId());
 		assertThat(line1.getLineStations()).hasSize(1)
 				.first()
-				.satisfies(lineStation -> assertThat(lineStation.getDistance()).isEqualTo(50))
+				.satisfies(lineStation -> assertThat(lineStation.getPrevStationDistance()).isEqualTo(50))
 				.extracting(LineStation::getStation).isEqualTo(삼성역)
 				.extracting(Station::getName).isEqualTo("삼성역");
 		assertThat(삼성역.getLineStations()).hasSize(1)

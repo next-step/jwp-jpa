@@ -15,16 +15,16 @@ class LineStation extends BaseEntity {
 	private Station station;
 
 	@Embedded
-	@AttributeOverride(name = "distance", column = @Column(name = "prevStationDistance"))
-	private Distance distance;
+	@AttributeOverride(name = "prevStationDistance", column = @Column(name = "prevStationDistance"))
+	private Distance prevStationDistance;
 
 	protected LineStation() {
 	}
 
-	public LineStation(Line line, Station station, Distance distance) {
+	public LineStation(Line line, Station station, Distance prevStationDistance) {
 		this.line = line;
 		this.station = station;
-		this.distance = distance;
+		this.prevStationDistance = prevStationDistance;
 	}
 
 	public Line getLine() {
@@ -35,7 +35,7 @@ class LineStation extends BaseEntity {
 		return this.station;
 	}
 
-	public Distance getDistance() {
-		return distance;
+	public Distance getPrevStationDistance() {
+		return prevStationDistance;
 	}
 }
