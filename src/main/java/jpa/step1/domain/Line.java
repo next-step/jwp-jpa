@@ -33,6 +33,7 @@ public class Line {
 	@Column(name = "created_date")
 	private LocalDateTime createdDate;
 
+	@Column(name = "modified_date")
 	private LocalDateTime modifiedDate;
 
 	public Line(final Color color, final String name) {
