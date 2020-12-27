@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import jpa.domain.member.Member;
 import jpa.domain.station.Station;
 import jpa.domain.station.StationRepository;
 
@@ -41,5 +42,34 @@ class StationTest {
 		// then
 		String actual = stations.findByName(expected).getName();
 		assertThat(expected).isEqualTo(actual);
+	}
+
+	@Test
+	public void update() {
+		// given
+		Station newStation = new Station("잠실역");
+		Long stationId = stations.save(newStation).getId();
+		String expected = "강남역";
+
+		// when
+		newStation.setName(expected);
+
+		// then
+		Station findStation = stations.findById(stationId)
+			.orElseThrow(() -> new IllegalArgumentException("아이디에 해당하는 데이터가 없습니다."));
+		assertThat(expected).isEqualTo(findStation.getName());
+	}
+
+	@Test
+	public void delete() {
+		// given
+		Station newStation = new Station("잠실역");
+		Long stationId = stations.save(newStation).getId();
+
+		// when
+		stations.delete(newStation);
+
+		// then
+		assertThat(stations.findById(stationId).isPresent()).isFalse();
 	}
 }

@@ -47,4 +47,33 @@ class MemberTest {
 		String actual = members.findByEmail(expected).get(0).getEmail();
 		assertThat(expected).isEqualTo(actual);
 	}
+
+	@Test
+	public void update() {
+		// given
+		Member newMember = new Member(31, "jpa@google.com", "1234");
+		Long memberId = members.save(newMember).getId();
+		int expected = 40;
+
+		// when
+		newMember.setAge(expected);
+
+		// then
+		Member findMember = members.findById(memberId)
+			.orElseThrow(() -> new IllegalArgumentException("아이디에 해당하는 데이터가 없습니다."));
+		assertThat(expected).isEqualTo(findMember.getAge());
+	}
+
+	@Test
+	public void delete() {
+		// given
+		Member newMember = new Member(31, "jpa@google.com", "1234");
+		Long memberId = members.save(newMember).getId();
+
+		// when
+		members.delete(newMember);
+
+		// then
+		assertThat(members.findById(memberId).isPresent()).isFalse();
+	}
 }

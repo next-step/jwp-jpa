@@ -60,4 +60,33 @@ class LineTest {
 		String actual = lines.findByName(expected).getName();
 		assertThat(expected).isEqualTo(actual);
 	}
+
+	@DisplayName("Line update 테스트")
+	@Test
+	public void update() {
+		// given
+		Line newLine = new Line("green", "2호선");
+		Long lineId = lines.save(newLine).getId();
+		String expected = "5호선";
+
+		// when
+		newLine.setName(expected);
+
+		// then
+		Line findLine = lines.findById(lineId).orElseThrow(() -> new IllegalArgumentException("아이디에 해당하는 데이터가 없습니다."));
+		assertThat(expected).isEqualTo(findLine.getName());
+	}
+
+	@Test
+	public void delete() {
+		// given
+		Line newLine = new Line("green", "2호선");
+		Long lineId = lines.save(newLine).getId();
+
+		// when
+		lines.delete(newLine);
+
+		// then
+		assertThat(lines.findById(lineId).isPresent()).isFalse();
+	}
 }
