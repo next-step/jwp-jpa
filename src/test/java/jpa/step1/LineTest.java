@@ -12,7 +12,7 @@ import jpa.step1.domain.Line;
 import jpa.step1.repository.LineRepository;
 
 @DataJpaTest
-public class SubwayTest {
+public class LineTest {
 
 	@Autowired
 	private LineRepository lineRepository;
