@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,18 @@ class LineRepositoryTest {
 
     @Autowired
     private LineRepository lines;
+    @Autowired
+    private StationRepository stations;
+
+    @BeforeEach
+    void setUp() {
+        Line blue = lines.save(new Line("1호선", "Blue"));
+        Line green = lines.save(new Line("2호선", "Green"));
+        Station cityHall = new Station("시청");
+        cityHall.addLines(blue);
+        cityHall.addLines(green);
+        stations.save(cityHall);
+    }
 
     @Test
     void save() {
@@ -52,7 +65,7 @@ class LineRepositoryTest {
     }
 
     @Test
-    @DisplayName("노선 조회 시 속한 지하철역을 조회하는 기")
+    @DisplayName("노선 조회 시 속한 지하철역을 조회하는 기능")
     void findAndGetStations() {
         Line line2 = lines.findByName("2호선");
         List<Station> line2Stations = line2.getStations();
