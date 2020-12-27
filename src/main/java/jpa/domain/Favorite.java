@@ -18,6 +18,9 @@ public class Favorite extends JpaAuditingDate {
     @Column(nullable = false)
     private Long id;
 
+    @ManyToOne
+    private Member member;
+
     @OneToOne
     private Station departureStation;
 
@@ -34,6 +37,14 @@ public class Favorite extends JpaAuditingDate {
 
     public Long getId() {
         return this.id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public Station getDepartureStation() {

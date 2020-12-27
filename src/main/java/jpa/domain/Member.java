@@ -26,7 +26,7 @@ public class Member extends JpaAuditingDate {
 
     private String password;
 
-    @OneToMany
+    @OneToMany(mappedBy = "member")
     private List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {
@@ -54,6 +54,7 @@ public class Member extends JpaAuditingDate {
 
     public void addFavorites(Favorite favorite) {
         this.favorites.add(favorite);
+        favorite.setMember(this);
     }
 
     @Override
