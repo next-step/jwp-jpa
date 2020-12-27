@@ -35,8 +35,8 @@ class StationTest {
 	@ValueSource(booleans = {true, false})
 	void getLines(boolean clean) {
 		// given
-		이호선.addStation(선릉역);
-		신분당선.addStation(선릉역);
+		이호선.addStation(선릉역, Distance.of(50));
+		신분당선.addStation(선릉역, Distance.of(40));
 		em.flush();
 		if (clean) em.clear();
 

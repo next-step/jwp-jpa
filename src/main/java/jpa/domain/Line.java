@@ -35,7 +35,7 @@ public class Line extends BaseEntity {
 				.collect(Collectors.toList());
 	}
 
-	public void addStation(Station station) {
+	public void addStation(Station station, Distance prevStationDistance) {
 		if (station == null) {
 			throw new IllegalArgumentException("station cannot be null");
 		}
@@ -44,7 +44,7 @@ public class Line extends BaseEntity {
 			throw new IllegalArgumentException("duplicated station");
 		}
 
-		LineStation lineStation = new LineStation(this, station);
+		LineStation lineStation = new LineStation(this, station, prevStationDistance);
 		this.getLineStations().add(lineStation);
 		station.getLineStations().add(lineStation);
 	}

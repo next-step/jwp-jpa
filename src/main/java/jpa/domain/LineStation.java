@@ -14,19 +14,28 @@ class LineStation extends BaseEntity {
 	@JoinColumn(name = "station_id", nullable = false)
 	private Station station;
 
+	@Embedded
+	@AttributeOverride(name = "distance", column = @Column(name = "prevStationDistance"))
+	private Distance distance;
+
 	protected LineStation() {
 	}
 
-	LineStation(Line line, Station station) {
+	public LineStation(Line line, Station station, Distance distance) {
 		this.line = line;
 		this.station = station;
+		this.distance = distance;
 	}
 
-	Line getLine() {
+	public Line getLine() {
 		return this.line;
 	}
 
-	Station getStation() {
+	public Station getStation() {
 		return this.station;
+	}
+
+	public Distance getDistance() {
+		return distance;
 	}
 }
