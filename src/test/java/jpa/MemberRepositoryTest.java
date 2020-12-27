@@ -1,7 +1,10 @@
 package jpa;
 
+import jpa.domain.Favorite;
+import jpa.domain.FavoriteRepository;
 import jpa.domain.Member;
 import jpa.domain.MemberRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -17,12 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DataJpaTest
 class MemberRepositoryTest {
     @Autowired
-    private MemberRepository repository;
+    private MemberRepository memberRepository;
+    @Autowired
+    private FavoriteRepository favoriteRepository;
 
     @Test
     void save() {
         Member expected = new Member(10, "mj@naver.com");
-        Member actual = repository.save(expected);
+        Member actual = memberRepository.save(expected);
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getAge()).isEqualTo(expected.getAge()),
@@ -33,11 +38,11 @@ class MemberRepositoryTest {
     @ParameterizedTest()
     @ValueSource(strings = {"mj2@naver.com", "mj3@naver.com"})
     void findByAge(String email) {
-        repository.save(new Member(8, "mj1@naver.com"));
-        repository.save(new Member(10, "mj2@naver.com"));
-        repository.save(new Member(10, "mj3@naver.com"));
+        memberRepository.save(new Member(8, "mj1@naver.com"));
+        memberRepository.save(new Member(10, "mj2@naver.com"));
+        memberRepository.save(new Member(10, "mj3@naver.com"));
 
-        List<Member> members = repository.findByAge(10);
+        List<Member> members = memberRepository.findByAge(10);
         assertAll(
                 () -> assertThat(members.size()).isEqualTo(2),
                 () -> assertThat(members.contains(
@@ -47,33 +52,47 @@ class MemberRepositoryTest {
 
     @Test
     void findByEmail() {
-        repository.save(new Member(8, "mj1@naver.com"));
-        repository.save(new Member(10, "mj2@naver.com"));
+        memberRepository.save(new Member(8, "mj1@naver.com"));
+        memberRepository.save(new Member(10, "mj2@naver.com"));
 
-        Optional<Member> member = repository.findByEmail("mj2@naver.com");
+        Optional<Member> member = memberRepository.findByEmail("mj2@naver.com");
         assertThat(member).isPresent();
         assertThat(member.get().getAge()).isEqualTo(10);
     }
 
     @Test
     void updateEmail() {
-        Member exptectd = repository.save(new Member(8, "mj1@naver.com"));
+        Member exptectd = memberRepository.save(new Member(8, "mj1@naver.com"));
 
         exptectd.changeEmail("mj2@naver.com");
 
-        Optional<Member> actual = repository.findByEmail(exptectd.getEmail());
+        Optional<Member> actual = memberRepository.findByEmail(exptectd.getEmail());
         assertThat(actual).isPresent();
         assertThat(actual.get().getEmail()).isEqualTo(exptectd.getEmail());
     }
 
     @Test
     void delete() {
-        Member exptectd = repository.save(new Member(8, "mj1@naver.com"));
+        Member exptectd = memberRepository.save(new Member(8, "mj1@naver.com"));
 
-        repository.deleteById(exptectd.getId());
-        repository.flush();
+        memberRepository.deleteById(exptectd.getId());
+        memberRepository.flush();
 
-        Optional<Member> member = repository.findById(exptectd.getId());
+        Optional<Member> member = memberRepository.findById(exptectd.getId());
         assertThat(member).isNotPresent();
+    }
+
+    @Test
+    @DisplayName("사용자 조회시 여러 즐겨찾기 조회")
+    void findWithFavorite_test() {
+        Member save = memberRepository.save(new Member(8, "mj1@naver.com"));
+        Favorite favorite = favoriteRepository.save(new Favorite());
+        Favorite favorite2 = favoriteRepository.save(new Favorite());
+
+        save.addFavorite(favorite);
+        save.addFavorite(favorite2);
+
+        Member found = memberRepository.findById(save.getId()).get();
+        assertThat(found.getFavorites().size()).isEqualTo(2);
     }
 }
