@@ -1,6 +1,7 @@
 package jpa.repository;
 
 import jpa.domain.Line;
+import jpa.domain.PreviousStation;
 import jpa.domain.Station;
 import jpa.domain.StationLine;
 import org.junit.jupiter.api.DisplayName;
@@ -56,11 +57,15 @@ class LineRepositoryTest {
     @DisplayName("노선을 조회하는 테스트")
     void findByLine() {
         Line line = lineRepository.save(new Line("4호선"));
+
+        PreviousStation previousStation1 = new PreviousStation(new Station("강남역"), 3);
         Station station1 = stationRepository.save(new Station("사당역"));
+
+        PreviousStation previousStation2 = new PreviousStation(new Station("서울역"), 1);
         Station station2 = stationRepository.save(new Station("명동역"));
 
-        StationLine stationLine1 = stationLineRepository.save(new StationLine(station1, line));
-        StationLine stationLine2 = stationLineRepository.save(new StationLine(station2, line));
+        StationLine stationLine1 = stationLineRepository.save(new StationLine(previousStation1, station1, line));
+        StationLine stationLine2 = stationLineRepository.save(new StationLine(previousStation2, station2, line));
 
         List<StationLine> stationLines = line.getStationLines();
         assertEquals(stationLines.get(0), stationLine1);

@@ -1,6 +1,7 @@
 package jpa.repository;
 
 import jpa.domain.Line;
+import jpa.domain.PreviousStation;
 import jpa.domain.Station;
 import jpa.domain.StationLine;
 import org.junit.jupiter.api.DisplayName;
@@ -55,11 +56,12 @@ class StationRepositoryTest {
     @Test
     @DisplayName("지하철이 여러 노선을 가지는 기능 테스트")
     void stationToManyLine() {
+        PreviousStation previousStation = new PreviousStation(new Station("강남역"), 3);
         Station station1 = stationRepository.save(new Station("사당역"));
         Line line1 = lineRepository.save(new Line("2호선"));
         Line line2 = lineRepository.save(new Line("4호선"));
-        StationLine stationLine1 = stationLineRepository.save(new StationLine(station1, line1));
-        StationLine stationLine2 =  stationLineRepository.save(new StationLine(station1, line2));
+        StationLine stationLine1 = stationLineRepository.save(new StationLine(previousStation, station1, line1));
+        StationLine stationLine2 =  stationLineRepository.save(new StationLine(previousStation, station1, line2));
 
         List<StationLine> stationLines = station1.getStationLines();
         assertEquals(stationLines.get(0), stationLine1);
