@@ -92,7 +92,6 @@ public class MemberRepositoryTest {
         Member member = new Member();
         String stationName1 = "강남역";
         String stationName2 = "교대역";
-        String regex = "^[" + stationName1 + "|" + stationName2 + "]";
         Station station1 = this.stationRepository.save(new Station(stationName1));
         Station station2 = this.stationRepository.save(new Station(stationName2));
         Favorite favorite1 = new Favorite(station1, station2);
@@ -106,9 +105,7 @@ public class MemberRepositoryTest {
         List<Favorite> favorites = memberOptional.get().getFavorites();
 
         // then
-        favorites.stream().forEach(favorite -> {
-            assertThat(favorite.getArrivalStation().getName())
-                    .containsPattern(Pattern.compile(regex));
-        });
+        assertThat(favorites).extracting(Favorite::getArrivalStation)
+                            .contains(station1, station2);
     }
 }
