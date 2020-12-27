@@ -31,7 +31,6 @@ public class StationTest {
 		);
 	}
 
-
 	@DisplayName("Station 조회")
 	@Test
 	void given_station_when_save_and_findByName_then_return_created_station() {

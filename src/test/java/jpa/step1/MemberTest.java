@@ -14,7 +14,6 @@ import jpa.step1.repository.MemberRepository;
 @DataJpaTest
 public class MemberTest {
 
-
 	@Autowired
 	private MemberRepository memberRepository;
 
