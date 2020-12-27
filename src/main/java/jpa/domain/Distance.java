@@ -30,6 +30,10 @@ public class Distance {
 
 	@Override
 	public boolean equals(Object obj) {
-		return Objects.equals(distance, obj);
+		if (obj instanceof Distance) {
+			return Objects.equals(((Distance) obj).distance, this.distance);
+		}
+
+		return Objects.equals(obj, this);
 	}
 }
