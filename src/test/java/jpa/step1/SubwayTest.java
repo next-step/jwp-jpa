@@ -17,14 +17,25 @@ public class SubwayTest {
 	@Autowired
 	private LineRepository lineRepository;
 
-	@DisplayName("Line 생성 테스트")
+	@DisplayName("Line 생성")
 	@Test
 	void given_line_when_save_then_return_created_line_with_primary_key() {
 		final String lineName = "2호선";
-
 		Line line = new Line(Color.GREEN, lineName);
 
 		Line createdLine = lineRepository.save(line);
+
+		assertThat(createdLine.getId()).isEqualTo(1L);
+	}
+
+	@DisplayName("Line 조회")
+	@Test
+	void given_line_when_save_and_getOne_then_return_created_line_with_primary_key() {
+		final String lineName = "2호선";
+		Line line = new Line(Color.GREEN, lineName);
+		lineRepository.save(line);
+
+		Line createdLine = lineRepository.getOne(1L);
 
 		assertThat(createdLine.getId()).isEqualTo(1L);
 	}
