@@ -1,7 +1,7 @@
-INSERT INTO line (id, name)
-VALUES (1, '1호선');
-INSERT INTO line (id, name)
-VALUES (2, '2호선');
+INSERT INTO line (id, name, color)
+VALUES (1, '1호선', 'Blue');
+INSERT INTO line (id, name, color)
+VALUES (2, '2호선', 'Green');
 
 INSERT INTO station (id, name)
 VALUES (1, '가능');

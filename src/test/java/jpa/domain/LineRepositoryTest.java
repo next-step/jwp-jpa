@@ -18,7 +18,7 @@ class LineRepositoryTest {
 
     @Test
     void save() {
-        Line expected = new Line("1호선", "Blue");
+        Line expected = new Line("3호선", "Orange");
         Line actual = lines.save(expected);
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -29,35 +29,35 @@ class LineRepositoryTest {
 
     @Test
     void findByEmail() {
-        String expected = "1호선";
-        lines.save(new Line("1호선", "Blue"));
+        String expected = "3호선";
+        lines.save(new Line("3호선", "Orange"));
         String actual = lines.findByName(expected).getName();
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void update() {
-        Line actual = lines.save(new Line("1호선", "Blue"));
-        actual.changeName("2호선");
-        Line line2 = lines.findByName("2호선");
+        Line actual = lines.save(new Line("3호선", "Orange"));
+        actual.changeName("4호선");
+        Line line2 = lines.findByName("4호선");
         assertThat(line2).isNotNull();
     }
 
     @Test
     void delete() {
-        Line actual = lines.save(new Line("1호선", "Blue"));
+        Line actual = lines.save(new Line("3호선", "Orange"));
         lines.delete(actual);
-        Line line2 = lines.findByName("1호선");
+        Line line2 = lines.findByName("3호선");
         assertThat(line2).isNull();
     }
 
     @Test
-    @DisplayName("노선 조회 시 속한 지하철역을 조회하는 기능")
+    @DisplayName("노선 조회 시 속한 지하철역을 조회하는 기")
     void findAndGetStations() {
-        Line cityHall = lines.findByName("2호선");
-        List<Station> stations = cityHall.getStations();
+        Line line2 = lines.findByName("2호선");
+        List<Station> line2Stations = line2.getStations();
 
-        List<String> collect = stations.stream().map(Station::getName).collect(Collectors.toList());
+        List<String> collect = line2Stations.stream().map(Station::getName).collect(Collectors.toList());
         assertThat(collect).contains("시청");
     }
 }
