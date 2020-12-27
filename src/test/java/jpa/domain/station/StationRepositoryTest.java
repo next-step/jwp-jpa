@@ -23,7 +23,6 @@ public class StationRepositoryTest {
         String expected = "잠실역";
         stations.save(new Station(expected));
         final Station actual = stations.findByName(expected);
-        assertThat(actual.getName()).isEqualTo(expected);
     }
 
     @Test

@@ -1,11 +1,12 @@
 package jpa.domain.member;
 
 import jpa.domain.base.BaseTimeEntity;
-import jpa.domain.favorite.Favorite;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Member extends BaseTimeEntity {
@@ -24,12 +25,31 @@ public class Member extends BaseTimeEntity {
     protected Member() {
     }
 
-    public Member(Long id, String name) {
-        this.id = id;
+    public Member(String name, int age, String email, String password) {
+        this(name);
+        this.age = age;
+        this.email = email;
+        this.password = password;
+    }
+
+    public void changeName(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return this.name;
+    public void changeAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Member member = (Member) o;
+        return Objects.equals(id, member.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
