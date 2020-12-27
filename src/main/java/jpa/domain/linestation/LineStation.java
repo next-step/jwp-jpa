@@ -3,10 +3,7 @@ package jpa.domain.linestation;
 import jpa.domain.base.BaseEntity;
 import jpa.domain.line.Line;
 import jpa.domain.station.Station;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -25,12 +22,21 @@ public class LineStation extends BaseEntity {
     @JoinColumn(name = "station_id")
     private Station station;
 
-    private LineStation(Line line, Station station) {
+    @Embedded
+    private PreStationInfo preStationInfo;
+
+    @Builder
+    private LineStation(Line line, Station station, PreStationInfo preStationInfo) {
         this.line = line;
         this.station = station;
+        this.preStationInfo = preStationInfo;
     }
 
-    public static LineStation of(Line line, Station station) {
-        return new LineStation(line, station);
+    public int getDistance() {
+        return preStationInfo.getDistance();
+    }
+
+    public Station getPreStation() {
+        return preStationInfo.getPreStation();
     }
 }

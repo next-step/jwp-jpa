@@ -1,6 +1,7 @@
 package jpa.domain.line;
 
 import jpa.domain.linestation.LineStation;
+import jpa.domain.linestation.PreStationInfo;
 import jpa.domain.station.Station;
 import jpa.domain.station.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,26 +31,35 @@ class LineRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        Station gangnam_station = stationRepository.save(Station.builder()
-                .name("강남역")
-                .build());
-        Station jamsil_station = stationRepository.save(Station.builder()
-                .name("잠실역")
-                .build());
-        Station pangyo_station = stationRepository.save(Station.builder()
-                .name("판교역")
-                .build());
+        Station gangnam_station = stationRepository.save(Station.of("강남역"));
+        Station jamsil_station = stationRepository.save(Station.of("잠실역"));
+        Station pangyo_station = stationRepository.save(Station.of("판교역"));
 
-        lineRepository.save(Line.builder()
+        Line line_2 = Line.builder()
                 .name("2호선")
                 .color("초록색")
-                .stations(Arrays.asList(jamsil_station, gangnam_station))
+                .build();
+
+        line_2.addLineStation(LineStation.builder()
+                .line(line_2)
+                .station(jamsil_station)
+                .preStationInfo(PreStationInfo.of(gangnam_station, 10))
                 .build());
-        lineRepository.save(Line.builder()
+
+        lineRepository.save(line_2);
+
+        Line line_shin = Line.builder()
                 .name("신분당선")
                 .color("빨강색")
-                .stations(Arrays.asList(gangnam_station, pangyo_station))
+                .build();
+
+        line_2.addLineStation(LineStation.builder()
+                .line(line_2)
+                .station(gangnam_station)
+                .preStationInfo(PreStationInfo.of(pangyo_station, 5))
                 .build());
+
+        lineRepository.save(line_shin);
     }
 
     @Test
@@ -162,12 +171,8 @@ class LineRepositoryTest {
         assertAll(
                 () -> assertThat(stations).hasSize(2),
                 () -> assertThat(stations).contains(
-                        Station.builder()
-                                .name("강남역")
-                                .build(),
-                        Station.builder()
-                                .name("잠실역")
-                                .build())
+                        Station.of("강남역"),
+                        Station.of("잠실역"))
         );
     }
 
