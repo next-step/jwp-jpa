@@ -3,6 +3,9 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -48,4 +51,13 @@ class LineRepositoryTest {
         assertThat(line2).isNull();
     }
 
+    @Test
+    @DisplayName("노선 조회 시 속한 지하철역을 조회하는 기능")
+    void findAndGetStations() {
+        Line cityHall = lines.findByName("2호선");
+        List<Station> stations = cityHall.getStations();
+
+        List<String> collect = stations.stream().map(Station::getName).collect(Collectors.toList());
+        assertThat(collect).contains("시청");
+    }
 }
