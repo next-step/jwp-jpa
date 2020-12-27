@@ -30,4 +30,19 @@ public class MemberTest {
 		);
 	}
 
+	@DisplayName("Member 조회")
+	@Test
+	void given_member_when_save_and_findByEmail_then_return_created_member() {
+		Member member = new Member("leemingyu05@gmail.com", "1q2w3e4r", 33);
+		memberRepository.save(member);
+
+		Member actual = memberRepository.findByEmail(member.getEmail())
+			.orElseThrow(IllegalArgumentException::new);
+
+		assertAll(
+			() -> assertThat(actual.getEmail()).isEqualTo(member.getEmail()),
+			() -> assertThat(actual == member).isTrue()
+		);
+	}
+
 }
