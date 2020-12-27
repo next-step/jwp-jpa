@@ -19,12 +19,19 @@ public class Station {
     private String name;
     @ManyToMany(mappedBy = "stations")
     private final List<Line> lines = new ArrayList<>();
+    @Embedded
+    private Distance distance;
 
     protected Station() {
     }
 
     public Station(String name) {
         this.name = name;
+    }
+
+    public Station(String name, Distance distance) {
+        this.name = name;
+        this.distance = distance;
     }
 
     public Long getId() {
@@ -45,6 +52,10 @@ public class Station {
 
     public List<Line> getLines() {
         return lines;
+    }
+
+    public Distance getDistance() {
+        return distance;
     }
 
     @Override
