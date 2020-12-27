@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Setter
@@ -14,18 +12,22 @@ import java.util.Objects;
 @Entity
 public class StationLine extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "station_id")
     private Station station;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "line_id")
     private Line line;
+
+    @Embedded
+    private PreviousStation previousStation;
 
     public StationLine() {
     }
 
-    public StationLine(Station station, Line line) {
+    public StationLine(PreviousStation previousStation, Station station, Line line) {
+        this.previousStation = previousStation;
         this.station = station;
         this.line = line;
         station.addStationLines(this);
@@ -37,6 +39,7 @@ public class StationLine extends BaseEntity {
         return "StationLine{" +
                 "station=" + station +
                 ", line=" + line +
+                ", previousStation=" + previousStation +
                 '}';
     }
 }
