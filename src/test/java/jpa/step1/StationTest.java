@@ -48,4 +48,15 @@ public class StationTest {
 		);
 	}
 
+	@DisplayName("Station 등록시 유니크 키 제약조건 위반시 익셉션")
+	@Test
+	void given_station_duplicated_name_when_save_then_throw_exception() {
+		final String stationName = "사당역";
+		Station station = new Station(stationName);
+		Station duplicationStation = new Station(stationName);
+		stationRepository.save(station);
+
+		assertThatThrownBy(() -> stationRepository.save(duplicationStation));
+	}
+
 }
