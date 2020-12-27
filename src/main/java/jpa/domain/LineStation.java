@@ -1,9 +1,12 @@
 package jpa.domain;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "line_station")
+@DynamicUpdate
 class LineStation extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
