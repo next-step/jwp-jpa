@@ -1,6 +1,5 @@
 package jpa.step1;
 
-
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,6 +28,23 @@ public class StationTest {
 		assertAll(
 			() -> assertThat(createdStation.getId()).isNotNull(),
 			() -> assertThat(createdStation.getName()).isEqualTo(station.getName())
+		);
+	}
+
+
+	@DisplayName("Station 조회")
+	@Test
+	void given_station_when_save_and_findByName_then_return_created_station() {
+		final String stationName = "사당역";
+		Station station = new Station(stationName);
+		stationRepository.save(station);
+
+		Station actual = stationRepository.findByName(stationName)
+			.orElseThrow(IllegalArgumentException::new);
+
+		assertAll(
+			() -> assertThat(actual.getName()).isEqualTo(station.getName()),
+			() -> assertThat(actual == station).isTrue()
 		);
 	}
 
