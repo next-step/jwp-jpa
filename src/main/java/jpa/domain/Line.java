@@ -1,11 +1,14 @@
 package jpa.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,6 +23,9 @@ public class Line {
     @Column(unique = true)
     private String name;
     private String color;
+
+    @ManyToMany
+    private List<Station> stations;
 
     protected Line() {
     }
@@ -47,6 +53,10 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public List<Station> getStations() {
+        return stations;
     }
 
     public void changeName(String name) {
