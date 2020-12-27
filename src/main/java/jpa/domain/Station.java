@@ -26,6 +26,12 @@ public class Station extends JpaAuditingDate {
     @ManyToMany(mappedBy = "stations")
     private List<Line> lines = new ArrayList<>();
 
+    @OneToMany(mappedBy = "departureStation")
+    private List<Favorite> favoritesHasDepartureStation = new ArrayList<>();
+
+    @OneToMany(mappedBy = "arrivalStation")
+    private List<Favorite> favoritesHasArrvalStation = new ArrayList<>();
+
     protected Station() {
     }
 
@@ -47,6 +53,22 @@ public class Station extends JpaAuditingDate {
 
     public void addLine(Line line) {
         this.lines.add(line);
+    }
+
+    public List<Favorite> getFavoritesHasDepartureStation() {
+        return favoritesHasDepartureStation;
+    }
+
+    public void addFavoritesHasDepartureStation(Favorite favoritesHasDepartureStation) {
+        this.favoritesHasDepartureStation.add(favoritesHasDepartureStation);
+    }
+
+    public List<Favorite> getFavoritesHasArrvalStation() {
+        return favoritesHasArrvalStation;
+    }
+
+    public void addFavoritesHasArrvalStation(Favorite favoritesHasArrvalStation) {
+        this.favoritesHasArrvalStation.add(favoritesHasArrvalStation);
     }
 
     @Override

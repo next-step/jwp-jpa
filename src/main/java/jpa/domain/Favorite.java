@@ -21,10 +21,10 @@ public class Favorite extends JpaAuditingDate {
     @ManyToOne
     private Member member;
 
-    @OneToOne
+    @ManyToOne
     private Station departureStation;
 
-    @OneToOne
+    @ManyToOne
     private Station arrivalStation;
 
     protected Favorite() {
@@ -33,6 +33,9 @@ public class Favorite extends JpaAuditingDate {
     public Favorite(Station departureStation, Station arrivalStation) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
+
+        departureStation.addFavoritesHasDepartureStation(this);
+        arrivalStation.addFavoritesHasArrvalStation(this);
     }
 
     public Long getId() {
