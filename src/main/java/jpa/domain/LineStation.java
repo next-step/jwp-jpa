@@ -27,6 +27,10 @@ class LineStation extends BaseEntity {
 		this.prevStationDistance = prevStationDistance;
 	}
 
+	public void changePrevStationDistance(Distance distance) {
+		this.prevStationDistance = distance;
+	}
+
 	public Line getLine() {
 		return this.line;
 	}
