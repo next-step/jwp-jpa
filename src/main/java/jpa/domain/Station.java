@@ -32,6 +32,12 @@ public class Station extends JpaAuditingDate {
     @OneToMany(mappedBy = "arrivalStation")
     private List<Favorite> favoritesHasArrvalStation = new ArrayList<>();
 
+    @OneToMany(mappedBy = "upwardStation")
+    private List<Section> upwardSections = new ArrayList<>();
+
+    @OneToMany(mappedBy = "downStation")
+    private List<Section> downSections = new ArrayList<>();
+
     protected Station() {
     }
 
@@ -69,6 +75,22 @@ public class Station extends JpaAuditingDate {
 
     public void addFavoritesHasArrvalStation(Favorite favoritesHasArrvalStation) {
         this.favoritesHasArrvalStation.add(favoritesHasArrvalStation);
+    }
+
+    public List<Section> getUpwardSections() {
+        return upwardSections;
+    }
+
+    public void addUpwardSections(Section upwardSection) {
+        this.upwardSections.add(upwardSection);
+    }
+
+    public List<Section> getDownSections() {
+        return downSections;
+    }
+
+    public void addDownSections(Section downSection) {
+        this.downSections.add(downSection);
     }
 
     @Override
