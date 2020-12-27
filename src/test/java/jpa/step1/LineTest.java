@@ -44,9 +44,8 @@ public class LineTest {
 	@Test
 	void given_line_duplicated_name_when_save_then_throw_exception() {
 		final String lineName = "2호선";
-		final String duplicatedLineName = "2호선";
 		Line line = new Line(Color.GREEN, lineName);
-		Line duplicatedLine = new Line(Color.GREEN, duplicatedLineName);
+		Line duplicatedLine = new Line(Color.GREEN, lineName);
 		lineRepository.save(line);
 
 		assertThatThrownBy(() -> lineRepository.save(duplicatedLine));
