@@ -11,7 +11,10 @@ public class Section {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+
+    private Long id;
+
+    private Long distance;
 
     @ManyToOne
     @JoinColumn(name = "line")
@@ -28,10 +31,13 @@ public class Section {
     public Section() {
     }
 
-    public Section(Line line, Station start, Station end) {
+
+    public Section(Line line, Station start, Station end, Long distance) {
         this.line = line;
         this.start = start;
         this.end = end;
+        this.distance = distance;
+
     }
 
     public Line getLine() {
@@ -52,16 +58,12 @@ public class Section {
         this.end.addEndSection(this);
     }
 
-    public void setStart(Station start) {
-        this.start = start;
-    }
-
-    public void setEnd(Station end) {
-        this.end = end;
-    }
-
-    public long getId() {
+    public Long getId() {
         return this.id;
+    }
+
+    public Long getDistance() {
+        return this.distance;
     }
 
 }
