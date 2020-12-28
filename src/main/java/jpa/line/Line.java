@@ -1,11 +1,12 @@
 package jpa.line;
 
 import jpa.base.BaseEntity;
+import jpa.route.Route;
+import jpa.station.Station;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Line extends BaseEntity {
@@ -18,6 +19,10 @@ public class Line extends BaseEntity {
 
     @Column(unique = true)
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "route", joinColumns = @JoinColumn(name = "stationId"))
+    private List<Route> routes = new ArrayList<>();
 
     protected Line() {}
 
@@ -35,5 +40,14 @@ public class Line extends BaseEntity {
 
     public String getName() {
         return name;
+    }
+
+    public void addRoute(Station fromStation, Station toStation, int distance) {
+        routes.add(new Route(this, fromStation, toStation, distance, true));
+        routes.add(new Route(this, fromStation, toStation, distance, false));
+    }
+
+    public List<Route> getRoutes() {
+        return routes;
     }
 }
