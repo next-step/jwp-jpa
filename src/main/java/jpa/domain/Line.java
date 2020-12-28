@@ -31,7 +31,7 @@ public class Line extends JpaAuditingDate {
                 , inverseJoinColumns = @JoinColumn(name = "station_id"))
     private List<Station> stations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "line")
+    @OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
     private List<Section> sections = new ArrayList<>();
 
     protected Line() {
@@ -64,6 +64,10 @@ public class Line extends JpaAuditingDate {
 
     public List<Section> getSections() {
         return sections;
+    }
+
+    public void addSections(Station upwardStation, Station downStation, int distance) {
+        this.addSections(new Section(this, upwardStation, downStation, distance));
     }
 
     public void addSections(Section section) {

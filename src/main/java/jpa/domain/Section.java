@@ -42,7 +42,6 @@ public class Section extends JpaAuditingDate {
 
     public void setLine(Line line) {
         this.line = line;
-        line.addSections(this);
     }
 
     public Station getUpwardStation() {
