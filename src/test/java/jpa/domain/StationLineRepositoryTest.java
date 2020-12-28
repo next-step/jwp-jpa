@@ -38,9 +38,9 @@ class StationLineRepositoryTest {
         Station 영등포_station = stationRepository.save(new Station("영등포역"));
         Station 사당_station = stationRepository.save(new Station("사당역"));
 
-        stationLineRepository.save(new StationLine(신도림_station, line_1, Section.of(영등포_station.getName(), 10)));
-        stationLineRepository.save(new StationLine(신도림_station, line_2, Section.of(사당_station.getName(), 60)));
-        stationLineRepository.save(new StationLine(강남_station, line_2, Section.of(사당_station.getName(), 50)));
+        stationLineRepository.save(new StationLine(신도림_station, line_1, Section.of(영등포_station, 10)));
+        stationLineRepository.save(new StationLine(신도림_station, line_2, Section.of(사당_station, 60)));
+        stationLineRepository.save(new StationLine(강남_station, line_2, Section.of(사당_station, 50)));
     }
 
     @DisplayName("노선 조회 시 속한 지하철 역을 볼 수 있다.")
@@ -74,10 +74,12 @@ class StationLineRepositoryTest {
     void check_distance() {
         Line line = lineRepository.findByName("1호선");
         Station station = stationRepository.findByName("신도림역");
+        Station previousStation = stationRepository.findByName("영등포역");
         StationLine stationLine = stationLineRepository.findByStationAndLine(station, line);
 
         Section resultSection = stationLine.getSection();
-        assertThat(resultSection.getPreviousStationName()).isEqualTo("영등포역");
+
+        assertThat(resultSection.getPreviousStation()).isEqualTo(previousStation);
         assertThat(resultSection.getDistance()).isEqualTo(10);
     }
 }
