@@ -17,23 +17,23 @@ public class Favorite extends BaseEntity {
 	private Station startingStation;
 
 	@OneToOne
-	@JoinColumn(name = "destination_station_id")
-	private Station destinationStation;
+	@JoinColumn(name = "station_id")
+	private Station station;
 
 	public Favorite() {
 
 	}
 
-	public Favorite(Station startingStation, Station destinationStation) {
+	public Favorite(Station startingStation, Station station) {
 		this.startingStation = startingStation;
-		this.destinationStation = destinationStation;
+		this.station = station;
 	}
 
 	public Station getStartingStation() {
 		return startingStation;
 	}
 
-	public Station getDestinationStation() {
-		return destinationStation;
+	public Station getStation() {
+		return station;
 	}
 }
