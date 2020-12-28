@@ -33,8 +33,4 @@ public class Favorite extends BaseTimeEntity {
     public Station getArrivalStation() {
         return arrivalStation;
     }
-
-    public Member getMember() {
-        return member;
-    }
 }

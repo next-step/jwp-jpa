@@ -26,12 +26,14 @@ class StationLineRepositoryTest {
         Line line_1 = lineRepository.save(new Line("1호선"));
         Line line_2 = lineRepository.save(new Line("2호선"));
 
-        Station 신도림_station = stationRepository.save(new Station("신도림"));
-        Station 강남_station = stationRepository.save(new Station("강남"));
+        Station 신도림_station = stationRepository.save(new Station("신도림역"));
+        Station 강남_station = stationRepository.save(new Station("강남역"));
+        Station 영등포_station = stationRepository.save(new Station("영등포역"));
+        Station 사당_station = stationRepository.save(new Station("사당역"));
 
-        stationLineRepository.save(new StationLine(신도림_station, line_1));
-        stationLineRepository.save(new StationLine(신도림_station, line_2));
-        stationLineRepository.save(new StationLine(강남_station, line_2));
+        stationLineRepository.save(new StationLine(신도림_station, line_1, Section.of(영등포_station.getName(), 10)));
+        stationLineRepository.save(new StationLine(신도림_station, line_2, Section.of(사당_station.getName(), 60)));
+        stationLineRepository.save(new StationLine(강남_station, line_2, Section.of(사당_station.getName(), 50)));
     }
 
     @DisplayName("노선 조회 시 속한 지하철 역을 볼 수 있다.")
@@ -50,7 +52,7 @@ class StationLineRepositoryTest {
     @DisplayName("지하철역 조회 시 어느 노선에 속한지 확인할 수 있다. 환승역을 고려하여 여러 노선에 속할 수 있다.")
     @Test
     void check_transfer() {
-        Station station = stationRepository.findByName("신도림");
+        Station station = stationRepository.findByName("신도림역");
         List<StationLine> stationLines = station.getStationLines();
 
         stationLines.forEach(stationLine -> {
@@ -58,5 +60,17 @@ class StationLineRepositoryTest {
             assertThat(stationLine.getStation()).isEqualTo(station);
         });
         assertThat(stationLines).hasSize(2);
+    }
+
+    @DisplayName("지하철역 조회 시 이전 역과 얼마나 차이가 나는지 길이를 알수 있다.")
+    @Test
+    void check_distance() {
+        Line line = lineRepository.findByName("1호선");
+        Station station = stationRepository.findByName("신도림역");
+        StationLine stationLine = stationLineRepository.findByStationAndLine(station, line);
+
+        Section resultSection = stationLine.getSection();
+        assertThat(resultSection.getPreviousStationName()).isEqualTo("영등포역");
+        assertThat(resultSection.getDistance()).isEqualTo(10);
     }
 }
