@@ -1,4 +1,7 @@
-package jpa.domain;
+package jpa.domain.favorite;
+
+import jpa.domain.common.BaseTimeEntity;
+import jpa.domain.station.Station;
 
 import javax.persistence.*;
 
@@ -12,18 +15,12 @@ public class Favorite extends BaseTimeEntity {
     @JoinColumn(name = "arrive_station_id")
     private Station arrivalStation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
     protected Favorite() {
     }
 
-    public Favorite(Station departureStation, Station arrivalStation, Member member) {
+    public Favorite(Station departureStation, Station arrivalStation) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
-        this.member = member;
-        member.addFavorite(this);
     }
 
     public Station getDepartureStation() {
