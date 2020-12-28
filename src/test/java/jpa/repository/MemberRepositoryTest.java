@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
@@ -58,5 +59,13 @@ public class MemberRepositoryTest {
 
         assertThat(actual.getFavorites().get(0).getFromStation()).isEqualTo(expected.getFromStation());
         assertThat(actual.getFavorites().get(0).getToStation()).isEqualTo(expected.getToStation());
+    }
+
+    @Test
+    void addFavoriteFromToSameStation() {
+        Member member = members.save(new Member(32, "suahnn@gmail.com", "1234"));
+        Station station = stations.save(new Station("이대역"));
+
+        assertThatIllegalArgumentException().isThrownBy(() -> new Favorite(member, station, station));
     }
 }
