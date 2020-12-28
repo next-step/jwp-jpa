@@ -35,13 +35,20 @@ class StationTest {
 	@ValueSource(booleans = {true, false})
 	void getLines(boolean clean) {
 		// given
-		이호선.addStation(선릉역, Distance.of(50));
-		신분당선.addStation(선릉역, Distance.of(40));
+		이호선.addStation(선릉역, createConnectedStation("삼성"));
+		신분당선.addStation(선릉역, createConnectedStation("선정릉역"));
 		em.flush();
 		if (clean) em.clear();
 
 		// when & then
 		assertThat(선릉역.getLines()).hasSize(2)
 				.containsExactly(이호선, 신분당선);
+	}
+
+	private ConnectedStation createConnectedStation(String name) {
+		Station station = new Station(name);
+		ConnectedStation connectedStation = new ConnectedStation(10, station);
+		em.persist(station);
+		return connectedStation;
 	}
 }

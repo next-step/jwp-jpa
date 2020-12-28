@@ -18,20 +18,21 @@ class LineStation extends BaseEntity {
 	private Station station;
 
 	@Embedded
-	@AttributeOverride(name = "prevStationDistance", column = @Column(name = "prevStationDistance"))
-	private Distance prevStationDistance;
+	@AttributeOverride(name = "distance", column = @Column(name = "prev_distance"))
+	@AssociationOverride(name = "station", joinColumns = {@JoinColumn(name = "prev_station", nullable = false)})
+	private ConnectedStation prevConnectedStation;
 
 	protected LineStation() {
 	}
 
-	public LineStation(Line line, Station station, Distance prevStationDistance) {
+	public LineStation(Line line, Station station, ConnectedStation prevConnectedStation) {
 		this.line = line;
 		this.station = station;
-		this.prevStationDistance = prevStationDistance;
+		this.prevConnectedStation = prevConnectedStation;
 	}
 
-	public void changePrevStationDistance(Distance distance) {
-		this.prevStationDistance = distance;
+	public void changePrevStationDistance(ConnectedStation connectedStation) {
+		this.prevConnectedStation = connectedStation;
 	}
 
 	public Line getLine() {
@@ -42,7 +43,7 @@ class LineStation extends BaseEntity {
 		return this.station;
 	}
 
-	public Distance getPrevStationDistance() {
-		return prevStationDistance;
+	public ConnectedStation getPrevConnectedStation() {
+		return prevConnectedStation;
 	}
 }

@@ -22,9 +22,12 @@ public class LineStationTest {
 	void setUp() {
 		Line line = new Line("2호선", Color.GREEN);
 		Station station = new Station("삼성역");
-		lineStation = new LineStation(line, station, Distance.of(40));
+		Station prevStation = new Station("선릉역");
+		ConnectedStation prevConnected = new ConnectedStation(40, prevStation);
+		lineStation = new LineStation(line, station, prevConnected);
 		em.persist(line);
 		em.persist(station);
+		em.persist(prevStation);
 		em.persist(lineStation);
 	}
 
@@ -32,11 +35,14 @@ public class LineStationTest {
 	@ValueSource(booleans = {true, false})
 	void changePrevStationDistance(boolean clear) {
 		// when
-		lineStation.changePrevStationDistance(Distance.of(999));
+		Station prevStation = new Station("종합운동장역");
+		ConnectedStation prevConnected2 = new ConnectedStation(50, prevStation);
+		em.persist(prevStation);
+		lineStation.changePrevStationDistance(prevConnected2);
 		em.flush();
 		if (clear) em.clear();
 
 		// then
-		assertThat(lineStation.getPrevStationDistance()).isEqualTo(Distance.of(999));
+		assertThat(lineStation.getPrevConnectedStation()).isEqualTo(prevConnected2);
 	}
 }
