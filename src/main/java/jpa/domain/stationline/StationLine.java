@@ -1,4 +1,8 @@
-package jpa.domain;
+package jpa.domain.stationline;
+
+import jpa.domain.common.BaseTimeEntity;
+import jpa.domain.line.Line;
+import jpa.domain.station.Station;
 
 import javax.persistence.*;
 

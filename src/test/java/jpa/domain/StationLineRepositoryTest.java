@@ -1,5 +1,12 @@
 package jpa.domain;
 
+import jpa.domain.line.Line;
+import jpa.domain.line.LineRepository;
+import jpa.domain.station.Station;
+import jpa.domain.station.StationRepository;
+import jpa.domain.stationline.Section;
+import jpa.domain.stationline.StationLine;
+import jpa.domain.stationline.StationLineRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.domain.stationline;
 
 import javax.persistence.Embeddable;
 

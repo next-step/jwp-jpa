@@ -1,5 +1,6 @@
-package jpa.domain;
+package jpa.domain.member;
 
+import jpa.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

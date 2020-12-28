@@ -1,5 +1,8 @@
 package jpa.domain;
 
+import jpa.domain.line.Line;
+import jpa.domain.line.LineColor;
+import jpa.domain.line.LineRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
