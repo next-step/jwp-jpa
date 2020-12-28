@@ -25,7 +25,7 @@ public class LineStation extends BaseTimeEntity {
     @JoinColumn(name = "pre_station_id")
     private Station preSation;
 
-    private int dinstance;
+    private int distance;
 
     protected LineStation() {
     }
