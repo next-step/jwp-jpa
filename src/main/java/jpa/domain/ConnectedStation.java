@@ -16,15 +16,6 @@ public class ConnectedStation {
 	protected ConnectedStation() {
 	}
 
-	public static ConnectedStation of(int distance) {
-		return new ConnectedStation(distance);
-	}
-
-	public ConnectedStation(int distance) {
-		validateDistance(distance);
-		this.distance = distance;
-	}
-
 	public ConnectedStation(int distance, Station station) {
 		validateDistance(distance);
 		this.distance = distance;
