@@ -1,9 +1,16 @@
 package jpa.entity;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Line extends BaseTimeEntity {
 
@@ -17,40 +24,20 @@ public class Line extends BaseTimeEntity {
     @Column(name = "color", length = 20, nullable = false)
     private String color;
 
-    @ManyToMany
-    @JoinTable(
-        name = "station_line",
-        joinColumns = @JoinColumn(name = "line_id"),
-        inverseJoinColumns = @JoinColumn(name = "station_id")
-    )
-    private List<Station> stations = new ArrayList<>();
+    @OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
+    private List<LineStation> lineStations = new ArrayList<>();
 
-    public Line() {
-    }
-
-    public Line(String name, String color) {
+    @Builder
+    public Line(String name, String color, List<Station> stations) {
         this.name = name;
         this.color = color;
+        this.lineStations = Optional.ofNullable(stations).orElse(Collections.emptyList()).stream()
+                .map(station -> new LineStation(this, station))
+                .collect(Collectors.toList());
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public List<Station> getStations() {
-        return stations;
-    }
-
-    public void addStation(Station station) {
-        this.stations.add(station);
-        station.getLines().add(this);
-    }
-
-    public void changeStation(String name) {
+    public void changeLine(String name) {
         this.name = name;
     }
 }
+
