@@ -1,9 +1,12 @@
 package jpa.domain;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "line_station")
+@DynamicUpdate
 class LineStation extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -14,19 +17,33 @@ class LineStation extends BaseEntity {
 	@JoinColumn(name = "station_id", nullable = false)
 	private Station station;
 
+	@Embedded
+	@AttributeOverride(name = "distance", column = @Column(name = "prev_distance"))
+	@AssociationOverride(name = "station", joinColumns = {@JoinColumn(name = "prev_station", nullable = false)})
+	private ConnectedStation prevConnectedStation;
+
 	protected LineStation() {
 	}
 
-	LineStation(Line line, Station station) {
+	public LineStation(Line line, Station station, ConnectedStation prevConnectedStation) {
 		this.line = line;
 		this.station = station;
+		this.prevConnectedStation = prevConnectedStation;
 	}
 
-	Line getLine() {
+	public void changePrevStationDistance(ConnectedStation connectedStation) {
+		this.prevConnectedStation = connectedStation;
+	}
+
+	public Line getLine() {
 		return this.line;
 	}
 
-	Station getStation() {
+	public Station getStation() {
 		return this.station;
+	}
+
+	public ConnectedStation getPrevConnectedStation() {
+		return prevConnectedStation;
 	}
 }

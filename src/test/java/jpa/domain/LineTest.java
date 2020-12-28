@@ -22,15 +22,19 @@ class LineTest {
 	private Line 이호선;
 	private Station 삼성역;
 	private Station 잠실역;
+	private ConnectedStation 연결역;
 
 	@BeforeEach
 	void setUp() {
 		이호선 = new Line("2호선", Color.GREEN);
 		삼성역 = new Station("삼성역");
 		잠실역 = new Station("잠실역");
+		Station 선릉역 = new Station("선릉역");
+		연결역 = new ConnectedStation(50, 선릉역);
 		em.persist(이호선);
 		em.persist(삼성역);
 		em.persist(잠실역);
+		em.persist(선릉역);
 		em.flush();
 	}
 
@@ -38,7 +42,7 @@ class LineTest {
 	@ValueSource(booleans = {true, false})
 	void addStation(boolean clear) {
 		// when
-		이호선.addStation(삼성역);
+		이호선.addStation(삼성역, 연결역);
 		em.flush();
 		if (clear) em.clear();
 
@@ -46,6 +50,7 @@ class LineTest {
 		Line line1 = em.find(Line.class, 이호선.getId());
 		assertThat(line1.getLineStations()).hasSize(1)
 				.first()
+				.satisfies(lineStation -> assertThat(lineStation.getPrevConnectedStation()).isEqualTo(연결역))
 				.extracting(LineStation::getStation).isEqualTo(삼성역)
 				.extracting(Station::getName).isEqualTo("삼성역");
 		assertThat(삼성역.getLineStations()).hasSize(1)
@@ -57,12 +62,12 @@ class LineTest {
 	@ValueSource(booleans = {true, false})
 	void addStation_duplicated(boolean clear) {
 		// given
-		이호선.addStation(삼성역);
+		이호선.addStation(삼성역, 연결역);
 		em.flush();
 		if (clear) em.clear();
 
 		// when & then
-		assertThatThrownBy(() -> 이호선.addStation(삼성역))
+		assertThatThrownBy(() -> 이호선.addStation(삼성역, 연결역))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining("duplicated");
 	}
@@ -71,8 +76,8 @@ class LineTest {
 	@ValueSource(booleans = {true, false})
 	void removeStation(boolean clear) {
 		// given
-		이호선.addStation(삼성역);
-		이호선.addStation(잠실역);
+		이호선.addStation(삼성역, 연결역);
+		이호선.addStation(잠실역, 연결역);
 		em.flush();
 
 		// when
@@ -92,8 +97,8 @@ class LineTest {
 	@ValueSource(booleans = {true, false})
 	void getStations(boolean clear) {
 		// given
-		이호선.addStation(삼성역);
-		이호선.addStation(잠실역);
+		이호선.addStation(삼성역, 연결역);
+		이호선.addStation(잠실역, 연결역);
 		em.flush();
 		if (clear) em.clear();
 
@@ -110,7 +115,7 @@ class LineTest {
 	@DisplayName("노선에 있던 기존 역이 remove 됐을때 새로 고침된 stations 가 반환되는지 확인")
 	void getStations_onStationRemoved(boolean clear) {
 		// given
-		이호선.addStation(삼성역);
+		이호선.addStation(삼성역, 연결역);
 		em.flush();
 
 		// when
@@ -130,7 +135,7 @@ class LineTest {
 	@DisplayName("이호선 이 remove 됐을때 lineStation 또한 remove 되고, Station 은 잘 살아 있는지 확인")
 	void cascade_remove(boolean clear) {
 		// given
-		이호선.addStation(삼성역);
+		이호선.addStation(삼성역, 연결역);
 		em.flush();
 		LineStation lineStation = 이호선.getLineStations().get(0);
 
