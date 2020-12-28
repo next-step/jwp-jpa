@@ -56,8 +56,10 @@ public class MemberRepositoryTest {
 
         Favorite expected = favorites.findAll().get(0);
 
-        assertThat(actual.getFavorites().get(0).getFromStation()).isEqualTo(expected.getFromStation());
-        assertThat(actual.getFavorites().get(0).getToStation()).isEqualTo(expected.getToStation());
+        assertThat(actual.getFavorites().get(0).getFromStation().getId())
+                .isEqualTo(expected.getFromStation().getId());
+        assertThat(actual.getFavorites().get(0).getToStation().getId())
+                .isEqualTo(expected.getToStation().getId());
     }
 
     @Test
