@@ -123,4 +123,20 @@ public class LineRepositoryTest {
 
 		assertThat(findLine.getLineStation(destinationStation).getDistance()).isEqualTo(distance);
 	}
+
+	@Test
+	@DisplayName("ManyToMany로 Station에 접근")
+	void connectStationDirect() {
+		String lineName = "2호선";
+		String lineColor = "green";
+
+		Line savedLine = lines.save(new Line(lineName, lineColor));
+		Station startingStation = new Station("교대역");
+		Station destinationStation = new Station("강남역");
+		savedLine.addStationDirect(startingStation, destinationStation);
+
+		Line findLine = lines.findByName(lineName);
+
+		assertThat(findLine.getStationsDirect()).contains(startingStation, destinationStation);
+	}
 }

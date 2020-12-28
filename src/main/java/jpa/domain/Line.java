@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 /**
@@ -22,8 +25,22 @@ public class Line extends BaseEntity {
 	@Column(unique = true)
 	private String name;
 
+	/*
+		1)다대다 연관관계
+		- Line <OneToMany> LineStation <ManyToOne> Station
+		- LineStation을 연관관계 매핑테이블로 사용
+	 */
 	@OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
 	private List<LineStation> lineStations = new ArrayList<>();
+
+	/*
+		2)다대다 연관관계
+		- Line <ManyToMany> Station
+		- ManyToMany로 직접 연결
+	 */
+	@ManyToMany
+	private List<Station> stationsDirect = new ArrayList<>();
+
 
 	public Line() {
 	}
@@ -66,6 +83,15 @@ public class Line extends BaseEntity {
 			.filter(lineStation -> lineStation.hasStation(station))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("역이름에 해당되는 지하철이 없습니다"));
+	}
+
+	public void addStationDirect(Station startingStation, Station station) {
+		stationsDirect.add(startingStation);
+		stationsDirect.add(station);
+	}
+
+	public List<Station> getStationsDirect() {
+		return stationsDirect;
 	}
 
 	@Override
