@@ -21,7 +21,6 @@ public class Line extends BaseEntity {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "line_id")
     private List<Route> routes = new ArrayList<>();
 
     protected Line() {}
@@ -43,8 +42,7 @@ public class Line extends BaseEntity {
     }
 
     public void addRoute(Station fromStation, Station toStation, int distance) {
-        routes.add(new Route(this, fromStation, toStation, distance, true));
-        routes.add(new Route(this, toStation, fromStation, distance, false));
+        routes.add(new Route(this, fromStation, toStation, distance));
     }
 
     public List<Route> getRoutes() {

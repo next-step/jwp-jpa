@@ -28,16 +28,13 @@ public class Route extends BaseEntity {
 
     private int distance;
 
-    private boolean upward;
-
     protected Route() {}
 
-    public Route(Line line, Station station, Station nextStation, int distance, boolean upward) {
+    public Route(Line line, Station station, Station nextStation, int distance) {
         this.line = line;
         this.station = station;
         this.nextStation = nextStation;
         this.distance = distance;
-        this.upward = upward;
     }
 
     public Long getId() {
@@ -58,9 +55,5 @@ public class Route extends BaseEntity {
 
     public int getDistance() {
         return distance;
-    }
-
-    public boolean isUpward() {
-        return upward;
     }
 }

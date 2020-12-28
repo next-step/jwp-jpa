@@ -51,7 +51,6 @@ public class MemberRepositoryTest {
         Member actual = new Member(age, email, password);
 
         Favorite favorite = new Favorite(actual, fromStation, toStation);
-        favorites.save(favorite);
         actual.addFavorite(favorite);
         members.save(actual);
 

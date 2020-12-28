@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,11 +51,16 @@ public class LineRepositoryTest {
 
         Line actual = lines.save(line);
 
-        assertThat(actual.getRoutes()).hasSize(2);
-        assertThat(actual.getRoutes()
+        List<Station> stationList = actual.getRoutes()
                 .stream()
                 .map(Route::getStation)
-                .collect(Collectors.toList()))
-                .contains(fromStation, toStation);
+                .collect(Collectors.toList());
+
+        stationList.addAll(actual.getRoutes()
+                .stream()
+                .map(Route::getNextStation)
+                .collect(Collectors.toList()));
+
+        assertThat(stationList).contains(fromStation, toStation);
     }
 }

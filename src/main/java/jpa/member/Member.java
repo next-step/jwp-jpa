@@ -21,7 +21,6 @@ public class Member extends BaseEntity {
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_id")
     private final List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {}
