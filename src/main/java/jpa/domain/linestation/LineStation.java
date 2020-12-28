@@ -21,6 +21,12 @@ public class LineStation extends BaseTimeEntity {
     @JoinColumn(name = "station_id")
     private Station station;
 
+    @ManyToOne
+    @JoinColumn(name = "pre_station_id")
+    private Station preSation;
+
+    private int dinstance;
+
     protected LineStation() {
     }
 
@@ -28,6 +34,12 @@ public class LineStation extends BaseTimeEntity {
         validate(line, station);
         this.line = line;
         this.station = station;
+    }
+
+    public LineStation(Line line, Station station, Station preSation, int dinstance) {
+        this(line, station);
+        this.preSation = preSation;
+        this.dinstance = dinstance;
     }
 
     private void validate(Line line, Station station) {
