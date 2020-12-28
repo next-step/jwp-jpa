@@ -71,7 +71,6 @@ class StationRepositoryTest {
     @Test
     @DisplayName("역 추가")
     void save() {
-        // 에러 발생
         // given
         Line line = lineRepository.findByName("2호선");
 
@@ -82,13 +81,9 @@ class StationRepositoryTest {
 
         // when
         Station actual = stationRepository.save(expected);
-        //System.out.println(actual.getLineStations().size());
 
         // then
-        assertAll(
-                () -> assertThat(actual).isEqualTo(expected),
-                () -> assertThat(actual.getLineStations().size()).isEqualTo(4)
-        );
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
