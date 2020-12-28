@@ -14,7 +14,7 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private int age;
 
@@ -35,7 +35,7 @@ public class Member extends BaseEntity {
         this.age = age;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

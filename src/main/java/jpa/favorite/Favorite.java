@@ -18,35 +18,15 @@ public class Favorite extends BaseEntity {
     @JoinColumn(name = "start")
     private Station start;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "end")
     private Station end;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member")
     private Member member;
 
-    public Station getStart() {
-        return start;
-    }
 
-    public void setStart(Station start) {
-        this.start = start;
-    }
 
-    public Station getEnd() {
-        return end;
-    }
 
-    public void setEnd(Station end) {
-        this.end = end;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
 }
