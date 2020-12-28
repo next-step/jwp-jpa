@@ -7,6 +7,7 @@ import jpa.station.Station;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"line_id", "station_id", "next_station_id"}))
 public class Route extends BaseEntity {
 
     @Id
@@ -14,15 +15,15 @@ public class Route extends BaseEntity {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "line_id", insertable = false, updatable = false)
     private Line line;
 
     @ManyToOne
-    @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "station_id", insertable = false, updatable = false)
     private Station station;
 
     @ManyToOne
-    @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "next_station_id", insertable = false, updatable = false)
     private Station nextStation;
 
     private int distance;
