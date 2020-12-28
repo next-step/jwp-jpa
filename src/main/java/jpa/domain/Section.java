@@ -51,7 +51,6 @@ public class Section extends JpaAuditingDate {
 
     public void setUpwardStation(Station upwardStation) {
         this.upwardStation = upwardStation;
-        upwardStation.addUpwardSections(this);
     }
 
     public Station getDownStation() {
@@ -60,7 +59,6 @@ public class Section extends JpaAuditingDate {
 
     public void setDownStation(Station downStation) {
         this.downStation = downStation;
-        downStation.addDownSections(this);
     }
 
     public int getDistance() {

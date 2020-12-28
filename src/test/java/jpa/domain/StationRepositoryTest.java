@@ -91,38 +91,4 @@ public class StationRepositoryTest {
                 , () -> assertThat(lines.toString()).contains(lineName1, lineName2)
         );
     }
-
-
-    @ParameterizedTest
-    @CsvSource(value = {"산본역,1,0", "잠실역,0,1", "강남역,0,0"})
-    @DisplayName("지하철역이 등록된 즐겨찾기 조회 테스트")
-    public void findRegistFavorite(String input, String expected1, String expected2) {
-        // given
-        String stationName1 = "산본역";
-        String stationName2 = "잠실역";
-        String stationName3 = "강남역";
-
-        Station station1 = new Station(stationName1);
-        Station station2 = new Station(stationName2);
-        Station station3 = new Station(stationName3);
-        this.stationRepository.save(station1);
-        this.stationRepository.save(station2);
-        this.stationRepository.save(station3);
-
-        Favorite favorite1 = new Favorite(station1, station2);
-
-        // when
-        Station findStation = this.stationRepository.findAll().stream()
-                                .filter(station -> station.getName().equals(input))
-                                .findAny()
-                                .get();
-
-        // then
-        assertAll(
-                () -> assertEquals(findStation.getFavoritesHasDepartureStation().size()
-                                    , Integer.parseInt(expected1))
-                , () -> assertEquals(findStation.getFavoritesHasArrvalStation().size()
-                                    , Integer.parseInt(expected2))
-        );
-    }
 }

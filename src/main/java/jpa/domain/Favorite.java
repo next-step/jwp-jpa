@@ -33,9 +33,6 @@ public class Favorite extends JpaAuditingDate {
     public Favorite(Station departureStation, Station arrivalStation) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
-
-        departureStation.addFavoritesHasDepartureStation(this);
-        arrivalStation.addFavoritesHasArrvalStation(this);
     }
 
     public Long getId() {
