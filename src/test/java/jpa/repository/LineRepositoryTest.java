@@ -2,15 +2,17 @@ package jpa.repository;
 
 import jpa.line.Line;
 import jpa.line.LineRepository;
+import jpa.route.Route;
 import jpa.station.Station;
 import jpa.station.StationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.stream.Collectors;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 public class LineRepositoryTest {
@@ -49,9 +51,10 @@ public class LineRepositoryTest {
         Line actual = lines.save(line);
 
         assertThat(actual.getRoutes()).hasSize(2);
-
-        actual.getRoutes()
-                .forEach(route ->
-                        assertTrue(route.getStation() == fromStation || route.getStation() == toStation));
+        assertThat(actual.getRoutes()
+                .stream()
+                .map(Route::getStation)
+                .collect(Collectors.toList()))
+                .contains(fromStation, toStation);
     }
 }
