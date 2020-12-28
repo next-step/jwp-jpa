@@ -1,10 +1,11 @@
 package jpa.member;
 
 import jpa.base.BaseEntity;
+import jpa.favorite.Favorite;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member extends BaseEntity {
@@ -18,6 +19,10 @@ public class Member extends BaseEntity {
     private String email;
 
     private String password;
+
+    @OneToMany
+    @JoinColumn(name = "member_id")
+    private final List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {}
 
@@ -41,5 +46,13 @@ public class Member extends BaseEntity {
 
     public String getPassword() {
         return password;
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
     }
 }
