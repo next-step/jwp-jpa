@@ -1,6 +1,6 @@
 package jpa.favorite;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FavoriteRepository extends CrudRepository<Favorite, Long> {
+public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 }
