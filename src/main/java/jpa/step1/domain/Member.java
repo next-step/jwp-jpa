@@ -13,7 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Table(name = "member")
 @Entity
-public class Member {
+public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +28,6 @@ public class Member {
 
 	@Column(name = "password")
 	private String password;
-
-	@CreationTimestamp
-	@Column(name = "created_date")
-	private LocalDateTime createdDate;
-
-	@Column(name = "modified_date")
-	private LocalDateTime modifiedDate;
 
 	public Member(final String email, final String password, final Integer age) {
 		this.email = email;
@@ -58,11 +51,4 @@ public class Member {
 		return password;
 	}
 
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public LocalDateTime getModifiedDate() {
-		return modifiedDate;
-	}
 }
