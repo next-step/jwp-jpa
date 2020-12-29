@@ -19,7 +19,7 @@ public class BaseEntityTest {
 
     @Test
     void Auditing_테스트() {
-        LocalDateTime now = LocalDateTime.of(2020, 12, 28, 14, 48);
+        LocalDateTime now = LocalDateTime.now();
         Line expected = new Line("2호선");
         lineRepository.save(expected);
         Line actual = lineRepository.findAll().get(0);

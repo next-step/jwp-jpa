@@ -23,12 +23,10 @@ public class MemberRepositoryTest {
         String password = "1234";
         int age = 30;
         Member actual = memberRepository.save(new Member(email, password, age));
-        assertAll(
-                () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getEmail()).isEqualTo(email),
-                () -> assertThat(actual.getPassword()).isEqualTo(password),
-                () -> assertThat(actual.getAge()).isEqualTo(age)
-        );
+        assertThat(actual.getId()).isNotNull();
+        assertThat(actual.getEmail()).isEqualTo(email);
+        assertThat(actual.getPassword()).isEqualTo(password);
+        assertThat(actual.getAge()).isEqualTo(age);
     }
 
     @Test

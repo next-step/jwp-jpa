@@ -26,7 +26,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Favorite> favorites;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String email, String password, int age) {

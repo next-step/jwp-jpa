@@ -25,10 +25,8 @@ public class LineRepositoryTest {
     void save() {
         Line expected = new Line("2호선");
         Line actual = lineRepository.save(expected);
-        assertAll(
-                () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getName()).isEqualTo(expected.getName())
-        );
+        assertThat(actual.getId()).isNotNull();
+        assertThat(actual.getName()).isEqualTo(expected.getName());
     }
 
     @Test

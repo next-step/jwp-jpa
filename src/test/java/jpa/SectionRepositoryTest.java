@@ -75,11 +75,9 @@ public class SectionRepositoryTest {
         Section section1 = new Section(line2, gyodae, seocho, DISTANCE);
         line2.addSection(section1);
 
-        assertAll(
-                () -> assertThat(line2.getStations().size()).isEqualTo(2),
-                () -> assertThat(line2.getStations().contains(gyodae)).isTrue(),
-                () -> assertThat(line2.getStations().contains(seocho)).isTrue()
-        );
+        assertThat(line2.getStations().size()).isEqualTo(2);
+        assertThat(line2.getStations().contains(gyodae)).isTrue();
+        assertThat(line2.getStations().contains(seocho)).isTrue();
     }
 
     @Test
@@ -96,11 +94,9 @@ public class SectionRepositoryTest {
         line2.addSection(section1);
         line3.addSection(section2);
 
-        assertAll(
-                () -> assertThat(gyodae.getLines().size()).isEqualTo(2),
-                () -> assertThat(gyodae.getLines().contains(line2)).isTrue(),
-                () -> assertThat(gyodae.getLines().contains(line3)).isTrue()
-        );
+        assertThat(gyodae.getLines().size()).isEqualTo(2);
+        assertThat(gyodae.getLines().contains(line2)).isTrue();
+        assertThat(gyodae.getLines().contains(line3)).isTrue();
     }
 
 }
