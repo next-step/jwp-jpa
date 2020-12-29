@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import jpa.common.BaseTime;
@@ -35,8 +34,7 @@ public class Member extends BaseTime {
 	private String password;
 
 	@Getter
-	@OneToMany
-	@JoinColumn
+	@OneToMany(mappedBy = "member")
 	private final List<Favorite> favorites = new ArrayList<>();
 
 	public void addFavorite(Favorite favorite) {

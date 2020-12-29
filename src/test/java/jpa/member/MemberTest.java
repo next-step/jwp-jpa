@@ -10,12 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.domain.Subway;
 import jpa.favorite.Favorite;
 import jpa.favorite.FavoriteRepository;
 import jpa.line.Line;
 import jpa.line.LineRepository;
-import jpa.position.Position;
 import jpa.position.PositionRepository;
 import jpa.station.Station;
 import jpa.station.StationRepository;
@@ -54,10 +52,12 @@ class MemberTest {
 		lineNumber1 = lineRepository.save(new Line("1호선", Color.BLUE));
 		lineNumber2 = lineRepository.save(new Line("2호선", Color.GREEN));
 
+		/*
 		Subway.createSubway(주안, lineNumber1, positionRepository.save(new Position(10)));
 		Subway.createSubway(시청, lineNumber1, positionRepository.save(new Position(67)));
 		Subway.createSubway(시청, lineNumber2, positionRepository.save(new Position(40)));
 		Subway.createSubway(강남, lineNumber2, positionRepository.save(new Position(77)));
+		 */
 	}
 
 	@Test
