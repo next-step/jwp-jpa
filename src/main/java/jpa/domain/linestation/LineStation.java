@@ -23,7 +23,7 @@ public class LineStation extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "pre_station_id")
-    private Station preSation;
+    private Station preStation;
 
     private int distance;
 
@@ -36,10 +36,10 @@ public class LineStation extends BaseTimeEntity {
         this.station = station;
     }
 
-    public LineStation(Line line, Station station, Station preSation, int dinstance) {
+    public LineStation(Line line, Station station, Station preStation, int distance) {
         this(line, station);
-        this.preSation = preSation;
-        this.dinstance = dinstance;
+        this.preStation = preStation;
+        this.distance = distance;
     }
 
     private void validate(Line line, Station station) {
