@@ -14,8 +14,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE
@@ -92,7 +91,6 @@ public class MemberRepositoryTest {
         Member member = new Member();
         String stationName1 = "강남역";
         String stationName2 = "교대역";
-        String regex = "^[" + stationName1 + "|" + stationName2 + "]";
         Station station1 = this.stationRepository.save(new Station(stationName1));
         Station station2 = this.stationRepository.save(new Station(stationName2));
         Favorite favorite1 = new Favorite(station1, station2);
@@ -106,9 +104,30 @@ public class MemberRepositoryTest {
         List<Favorite> favorites = memberOptional.get().getFavorites();
 
         // then
-        favorites.stream().forEach(favorite -> {
-            assertThat(favorite.getArrivalStation().getName())
-                    .containsPattern(Pattern.compile(regex));
-        });
+        assertThat(favorites).extracting(Favorite::getArrivalStation)
+                            .contains(station1, station2);
+    }
+
+
+    @Test
+    @DisplayName("사용자를 삭제 한 경우 해당 사용자의 즐겨찾기가 삭제되는지 테스트")
+    public void deleteCascadeFavorite() {
+        // given
+        Member member = new Member();
+        String stationName1 = "강남역";
+        String stationName2 = "교대역";
+        Station station1 = this.stationRepository.save(new Station(stationName1));
+        Station station2 = this.stationRepository.save(new Station(stationName2));
+        Favorite favorite = this.favoriteRepository.save(new Favorite(station1, station2));
+        Long favoriteId = favorite.getId();
+        member.addFavorites(favorite);
+        Member savedMember = this.memberRepository.save(member);
+
+        // when
+        this.memberRepository.delete(savedMember);
+        Optional<Favorite> findFavorite = this.favoriteRepository.findById(favoriteId);
+
+        // then
+        assertEquals(findFavorite, Optional.empty());
     }
 }

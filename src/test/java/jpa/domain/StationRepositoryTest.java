@@ -4,6 +4,8 @@ import jpa.common.JpaAuditingDate;
 import jpa.config.JpaAuditingConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,6 +28,9 @@ public class StationRepositoryTest {
 
     @Autowired
     LineRepository lineRepository;
+
+    @Autowired
+    FavoriteRepository favoriteRepository;
 
     @Test
     @DisplayName("station 저장 테스트")
