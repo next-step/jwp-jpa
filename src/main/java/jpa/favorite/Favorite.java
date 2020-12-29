@@ -18,7 +18,7 @@ public class Favorite extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", insertable = false, updatable = false)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne
@@ -37,6 +37,10 @@ public class Favorite extends BaseEntity {
         this.member = member;
         this.fromStation = fromStation;
         this.toStation = toStation;
+
+        if (!member.getFavorites().contains(this)) {
+            this.member.addFavorite(this);
+        }
     }
 
     public Long getId() {

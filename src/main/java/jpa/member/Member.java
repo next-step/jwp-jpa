@@ -20,7 +20,7 @@ public class Member extends BaseEntity {
 
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member")
     private final List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {}

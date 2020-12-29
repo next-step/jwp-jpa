@@ -48,17 +48,18 @@ public class MemberRepositoryTest {
         String password = "1234";
         Station fromStation = stations.save(new Station("이대역"));
         Station toStation = stations.save(new Station("신촌역"));
-        Member actual = new Member(age, email, password);
+        Member actual = members.save(new Member(age, email, password));
 
-        Favorite favorite = new Favorite(actual, fromStation, toStation);
-        actual.addFavorite(favorite);
-        members.save(actual);
+        favorites.save(new Favorite(actual, fromStation, toStation));
 
-        Favorite expected = favorites.findAll().get(0);
+        Favorite expected = members.findById(actual.getId())
+                .get()
+                .getFavorites()
+                .get(0);
 
-        assertThat(actual.getFavorites().get(0).getFromStation().getId())
+        assertThat(fromStation.getId())
                 .isEqualTo(expected.getFromStation().getId());
-        assertThat(actual.getFavorites().get(0).getToStation().getId())
+        assertThat(toStation.getId())
                 .isEqualTo(expected.getToStation().getId());
     }
 
