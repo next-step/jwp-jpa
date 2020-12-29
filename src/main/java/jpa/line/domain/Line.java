@@ -23,9 +23,16 @@ public class Line extends BaseEntity {
     protected Line() {
     }
 
-    public Line(LineColor color, String name) {
-        this.color = color;
-        this.name = name;
+    public Line(LineType type) {
+        validate(type);
+        this.color = type.getColor();
+        this.name = type.getName();
+    }
+
+    private void validate(LineType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("노선의 정보는 입력되어야합니다.");
+        }
     }
 
     public void addStation(Station station, Location location) {

@@ -3,6 +3,7 @@ package jpa.location.domain;
 import jpa.line.domain.Line;
 import jpa.line.domain.LineColor;
 import jpa.line.domain.LineRepository;
+import jpa.line.domain.LineType;
 import jpa.station.domain.Distance;
 import jpa.station.domain.Station;
 import jpa.station.domain.StationRepository;
@@ -26,7 +27,7 @@ class LocationTest {
     @Test
     void save() {
         // Given
-        Line line = lines.save(new Line(LineColor.GREEN, "2호선"));
+        Line line = lines.save(new Line(LineType.SECOND_LINE));
         Station station = stations.save(new Station("잠실"));
         Station previousStation = stations.save(new Station("잠실새내"));
         // When

@@ -27,7 +27,7 @@ class LineTest {
 
     @BeforeEach
     void beforeEach() {
-        line = lines.save(new Line(LineColor.GREEN, "2호선"));
+        line = lines.save(new Line(LineType.SECOND_LINE));
         Station previousStation = stations.save(new Station("잠실새내"));
         Station station = stations.save(new Station("잠실"));
         Distance distance = new Distance(previousStation, 2000);
@@ -38,7 +38,7 @@ class LineTest {
     @Test
     void save() {
         // Given
-        Line line = new Line(LineColor.BLUE, "1호선");
+        Line line = new Line(LineType.FIRST_LINE);
         // When
         Line actual = lines.save(line);
         // Then
