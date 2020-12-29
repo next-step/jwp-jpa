@@ -18,6 +18,7 @@ import lombok.ToString;
 @Entity
 public class Position extends BaseTime {
 
+	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

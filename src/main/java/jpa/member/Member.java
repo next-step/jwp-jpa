@@ -18,6 +18,7 @@ import lombok.Getter;
 @Entity
 public class Member extends BaseTime {
 
+	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

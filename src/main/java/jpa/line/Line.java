@@ -24,6 +24,7 @@ import lombok.Getter;
 @Table(indexes = @Index(name = "unique_line_name", columnList = "name", unique = true))
 public class Line extends BaseTime {
 
+	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

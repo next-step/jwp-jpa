@@ -24,6 +24,7 @@ import lombok.Getter;
 @Table(indexes = @Index(name = "unique_station_name", columnList = "name", unique = true))
 public class Station extends BaseTime {
 
+	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

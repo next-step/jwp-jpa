@@ -14,6 +14,7 @@ import lombok.Getter;
 @Entity
 public class Favorite extends BaseTime {
 
+	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
