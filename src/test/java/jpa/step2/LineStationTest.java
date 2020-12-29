@@ -67,4 +67,19 @@ public class LineStationTest {
 		);
 	}
 
+	@DisplayName("지하철역 조회 시 어느 노선에 속한지 조회")
+	@Test
+	void given_station_when_linestation_for_each_then_has_line() {
+		Station sadang = stationRepository.findByName("사당역")
+			.orElseThrow(IllegalArgumentException::new);
+
+		assertAll(
+			() -> sadang.getLineStations().forEach(lineStation -> {
+				assertThat(lineStation.getLine()).isNotNull();
+				assertThat(lineStation.getStation()).isEqualTo(sadang);
+			}),
+			() -> assertThat(sadang.getLineStations()).hasSize(2)
+		);
+	}
+
 }
