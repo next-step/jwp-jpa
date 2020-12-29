@@ -2,6 +2,7 @@ package jpa.station.domain;
 
 import jpa.common.domain.BaseEntity;
 import jpa.line.domain.Line;
+import jpa.location.domain.Location;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ public class Station extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "line_id"))
     private final List<Line> lines = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "station", cascade = CascadeType.PERSIST)
+    private final List<Location> locations = new ArrayList<>();
+
     protected Station() {
     }
 
@@ -37,6 +41,10 @@ public class Station extends BaseEntity {
         this.lines.remove(line);
     }
 
+    public void addLocation(Location location) {
+        this.locations.add(location);
+    }
+
     public void changeName(String name) {
         this.name = name;
     }
@@ -47,5 +55,9 @@ public class Station extends BaseEntity {
 
     public List<Line> getLines() {
         return lines;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
     }
 }

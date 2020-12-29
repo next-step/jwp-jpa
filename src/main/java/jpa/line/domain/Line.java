@@ -1,6 +1,7 @@
 package jpa.line.domain;
 
 import jpa.common.domain.BaseEntity;
+import jpa.location.domain.Location;
 import jpa.station.domain.Station;
 
 import javax.persistence.*;
@@ -27,8 +28,9 @@ public class Line extends BaseEntity {
         this.name = name;
     }
 
-    public void addStation(Station station) {
-        station.addLine(this);
+    public void addStation(Station station, Location location) {
+        station.addLocation(location);
+        stations.add(station);
     }
 
     public void removeStation(Station station) {

@@ -1,8 +1,7 @@
 package jpa.line.domain;
 
-import jpa.line.domain.Line;
-import jpa.line.domain.LineColor;
-import jpa.line.domain.LineRepository;
+import jpa.location.domain.Location;
+import jpa.station.domain.Distance;
 import jpa.station.domain.Station;
 import jpa.station.domain.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,16 +23,22 @@ class LineTest {
     @Autowired
     private StationRepository stations;
     private Line line;
+    private Location location;
 
     @BeforeEach
     void beforeEach() {
-        line = new Line(LineColor.BLUE, "1호선");
-        lines.save(line);
+        line = lines.save(new Line(LineColor.GREEN, "2호선"));
+        Station previousStation = stations.save(new Station("잠실새내"));
+        Station station = stations.save(new Station("잠실"));
+        Distance distance = new Distance(previousStation, 2000);
+        location = new Location(line, station, distance);
     }
 
     @DisplayName("`Line` 객체 저장")
     @Test
     void save() {
+        // Given
+        Line line = new Line(LineColor.BLUE, "1호선");
         // When
         Line actual = lines.save(line);
         // Then
@@ -46,10 +51,8 @@ class LineTest {
     @DisplayName("이미 저장된 `Line`와 찾게된 `Line`의 동일성 여부 확인")
     @Test
     void findByName() {
-        // Given
-        lines.save(line);
         // When
-        Line actual = lines.findByName("1호선");
+        Line actual = lines.findByName(line.getName());
         // Then
         assertAll(
                 () -> assertNotNull(actual),
@@ -87,7 +90,7 @@ class LineTest {
         // Given
         Station seokChonStation = stations.save(new Station("석촌"));
         // When
-        line.addStation(seokChonStation);
+        line.addStation(seokChonStation, location);
         // Then
         assertThat(line.getStations())
                 .containsOnly(seokChonStation)
@@ -99,7 +102,7 @@ class LineTest {
     void removeStation() {
         // Given
         Station seokChonStation = stations.save(new Station("석촌"));
-        line.addStation(seokChonStation);
+        line.addStation(seokChonStation, location);
         // When
         line.removeStation(seokChonStation);
         // Then
@@ -111,7 +114,7 @@ class LineTest {
     void getStations() {
         // Given
         List<Station> expected = Arrays.asList(new Station("석촌"), new Station("강남"));
-        expected.forEach(station -> line.addStation(stations.save(station)));
+        expected.forEach(station -> line.addStation(stations.save(station), location));
         // When
         List<Station> actual = line.getStations();
         // Then
