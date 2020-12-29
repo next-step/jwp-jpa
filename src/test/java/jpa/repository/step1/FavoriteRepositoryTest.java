@@ -1,4 +1,4 @@
-package jpa.repository;
+package jpa.repository.step1;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import jpa.entity.Favorite;
+import jpa.repository.FavoriteRepository;
 
 @DisplayName("FavoriteRepositoryTest : 정렬, 페이징 테스트")
 @DataJpaTest
@@ -37,7 +38,7 @@ class FavoriteRepositoryTest {
 	void saveBefaoreEach() {
 		List<Favorite> initDatas = new ArrayList<>();
 		for (int i = 0; i < 100; i++) {
-			initDatas.add(new Favorite());
+			initDatas.add(new Favorite(null, null, null));
 		}
 		favoriteRepository.saveAll(initDatas);
 		em.flush();
