@@ -1,12 +1,16 @@
 package jpa.entity;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.*;
 
+import javax.persistence.*;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "station", indexes = {
-    @Index(name = "UK_station_idx", columnList = "name", unique = true)
+        @Index(name = "UK_station_idx", columnList = "name", unique = true)
 })
 public class Station extends BaseTimeEntity {
 
@@ -14,33 +18,23 @@ public class Station extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "stations")
-    private List<Line> lines = new ArrayList<>();
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    private List<LineStation> lineStations = new ArrayList<>();
 
-    public Station() {
-    }
-
-    public Station(String name) {
+    @Builder
+    public Station(String name, List<Line> lines) {
         this.name = name;
-    }
-
-    public List<Line> getLines() {
-        return lines;
-    }
-
-    public void addLine(Line line) {
-        this.lines.add(line);
-        line.getStations().add(this);
+        this.lineStations = Optional.ofNullable(lines).orElse(Collections.emptyList()).stream()
+                .map(line -> new LineStation(line, this))
+                .collect(Collectors.toList());
     }
 
     public void changeStation(String name) {
         this.name = name;
     }
-
-    public String getName() {
-        return name;
-    }
 }
+
+
