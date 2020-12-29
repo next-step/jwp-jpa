@@ -20,7 +20,12 @@ public class Member extends BaseEntity {
     @Column
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinTable(
+            name = "member_favorite",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "favorite_id")
+    )
     private final List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {
@@ -33,11 +38,14 @@ public class Member extends BaseEntity {
     }
 
     public void addFavorite(Station departure, Station destination) {
-        favorites.add(new Favorite(departure, destination, this));
+        Favorite favorite = new Favorite(departure, destination);
+        favorite.getMembers().add(this);
+        this.favorites.add(favorite);
     }
 
     public void removeFavorite(Favorite favorite) {
-        favorites.remove(favorite);
+        favorite.getMembers().remove(this);
+        this.favorites.remove(favorite);
     }
 
     public List<Favorite> getFavorites() {

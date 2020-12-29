@@ -1,10 +1,12 @@
 package jpa.favorite.domain;
 
 import jpa.common.domain.BaseEntity;
-import jpa.station.domain.Station;
 import jpa.member.domain.Member;
+import jpa.station.domain.Station;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Favorite extends BaseEntity {
@@ -17,29 +19,24 @@ public class Favorite extends BaseEntity {
     @JoinColumn(name = "destination_station_id", nullable = false)
     private Station destinationStation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "favorites")
+    private final List<Member> members = new ArrayList<>();
 
     protected Favorite() {
     }
 
-    public Favorite(Station departureStation, Station destinationStation, Member member) {
-        validate(departureStation, destinationStation, member);
+    public Favorite(Station departureStation, Station destinationStation) {
+        validate(departureStation, destinationStation);
         this.departureStation = departureStation;
         this.destinationStation = destinationStation;
-        this.member = member;
     }
 
-    private void validate(Station departureStation, Station destinationStation, Member member) {
+    private void validate(Station departureStation, Station destinationStation) {
         if (departureStation == null) {
             throw new IllegalArgumentException("출발역은 비어있을 수 없습니다.");
         }
         if (destinationStation == null) {
             throw new IllegalArgumentException("도착역은 비어있을 수 없습니다.");
-        }
-        if (member == null) {
-            throw new IllegalArgumentException("사용자는 비어있을 수 없습니다.");
         }
     }
 
@@ -51,7 +48,7 @@ public class Favorite extends BaseEntity {
         return destinationStation;
     }
 
-    public Member getMember() {
-        return member;
+    public List<Member> getMembers() {
+        return members;
     }
 }
