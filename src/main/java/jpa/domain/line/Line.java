@@ -1,22 +1,26 @@
 package jpa.domain.line;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import jpa.domain.BaseEntity;
+import jpa.domain.station.Station;
 
 @Entity
 public class Line extends BaseEntity {
-	@Id
-	@GeneratedValue
-	private Long id;
-
 	@Column(unique = true)
 	private String color;
 
 	private String name;
+
+	@ManyToMany
+	private List<Station> stations = new ArrayList<>();
 
 	protected Line() {
 	}
@@ -26,12 +30,10 @@ public class Line extends BaseEntity {
 		this.name = name;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public Line(String color, String name, List<Station> stations) {
+		this.color = color;
+		this.name = name;
+		this.stations = stations;
 	}
 
 	public String getColor() {
@@ -48,5 +50,9 @@ public class Line extends BaseEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Station> getStations() {
+		return stations;
 	}
 }
