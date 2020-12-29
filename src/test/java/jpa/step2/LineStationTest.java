@@ -82,4 +82,17 @@ public class LineStationTest {
 		);
 	}
 
+	@DisplayName("다대다 매핑 테스트")
+	@Test
+	void given_line_when_linestation_for_each_then_has_many_to_many_relation() {
+		Line line2 = lineRepository.findByName("2호선").orElseThrow(IllegalArgumentException::new);
+
+		Station sadang = stationRepository.findByName("사당역")
+			.orElseThrow(IllegalArgumentException::new);
+		Station bangbae = stationRepository.findByName("방배역")
+			.orElseThrow(IllegalArgumentException::new);
+
+		assertThat(line2.getLineStations()).contains(new LineStation(line2, sadang), new LineStation(line2, bangbae));
+	}
+
 }
