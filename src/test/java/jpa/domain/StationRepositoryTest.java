@@ -1,5 +1,7 @@
 package jpa.domain;
 
+import jpa.domain.station.Station;
+import jpa.domain.station.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

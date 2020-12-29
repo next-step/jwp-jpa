@@ -1,9 +1,9 @@
-package jpa.domain;
+package jpa.domain.member;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import jpa.domain.common.BaseTimeEntity;
+import jpa.domain.favorite.Favorite;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,15 +16,11 @@ public class Member extends BaseTimeEntity {
 
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "member")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "member_id")
     private final List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {
-    }
-
-    public Member(int age, String password) {
-        this.age = age;
-        this.password = password;
     }
 
     public Member(int age, String email, String password) {

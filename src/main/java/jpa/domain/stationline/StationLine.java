@@ -1,9 +1,10 @@
-package jpa.domain;
+package jpa.domain.stationline;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import jpa.domain.common.BaseTimeEntity;
+import jpa.domain.line.Line;
+import jpa.domain.station.Station;
+
+import javax.persistence.*;
 
 @Entity
 public class StationLine extends BaseTimeEntity {
@@ -15,13 +16,17 @@ public class StationLine extends BaseTimeEntity {
     @JoinColumn(name = "line_id")
     private Line line;
 
+    @Embedded
+    private Section section;
+
     protected StationLine() {
     }
 
-    public StationLine(Station station, Line line) {
+    public StationLine(Station station, Line line, Section section) {
         validate(station, line);
         this.station = station;
         this.line = line;
+        this.section = section;
 
         station.addStationLine(this);
         line.addStationLine(this);
@@ -39,5 +44,9 @@ public class StationLine extends BaseTimeEntity {
 
     public Line getLine() {
         return line;
+    }
+
+    public Section getSection() {
+        return section;
     }
 }

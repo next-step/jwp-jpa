@@ -1,5 +1,11 @@
 package jpa.domain;
 
+import jpa.domain.favorite.Favorite;
+import jpa.domain.favorite.FavoriteRepository;
+import jpa.domain.member.Member;
+import jpa.domain.member.MemberRepository;
+import jpa.domain.station.Station;
+import jpa.domain.station.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,8 +35,10 @@ class FavoriteRepositoryTest {
 
         Member member = memberRepository.save(new Member(24, "asd@gmail.com", "123"));
 
-        favoriteRepository.save(new Favorite(강남_station, 방배_station, member));
-        favoriteRepository.save(new Favorite(잠실_station, 강남_station, member));
+        Favorite favorite1 = favoriteRepository.save(new Favorite(강남_station, 방배_station));
+        Favorite favorite2 = favoriteRepository.save(new Favorite(잠실_station, 강남_station));
+        member.addFavorite(favorite1);
+        member.addFavorite(favorite2);
     }
 
     @DisplayName("사용자는 여러 즐겨찾기를 가질 수 있다.")

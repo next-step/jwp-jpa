@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.domain.favorite;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
