@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import jpa.common.BaseTime;
@@ -41,10 +40,6 @@ public class Line extends BaseTime {
 	@ManyToMany(mappedBy = "lines")
 	private final List<Station> stations = new ArrayList<>();
 
-	@Getter
-	@OneToMany(mappedBy = "line")
-	private final List<Position> positions = new ArrayList<>();
-
 	protected Line() {
 	}
 
@@ -53,7 +48,7 @@ public class Line extends BaseTime {
 		this.name = name;
 	}
 
-	public void addStation(Station station) {
+	private void changeStation(Station station) {
 		station.addLine(this);
 	}
 
@@ -61,13 +56,14 @@ public class Line extends BaseTime {
 		station.clearLine(this);
 	}
 
-	public int getLocation(Station station) {
-		return station.getLocation(this);
-	}
-
 	public List<String> getStationsName() {
 		return this.stations.stream()
 			.map(Station::getName)
 			.collect(Collectors.toList());
+	}
+
+	public void addStation(Station station, Position position) {
+		station.addPosition(position);
+		changeStation(station);
 	}
 }

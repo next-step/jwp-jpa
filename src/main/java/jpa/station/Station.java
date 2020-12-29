@@ -67,17 +67,21 @@ public class Station extends BaseTime {
 		this.lines.remove(line);
 	}
 
-	public int getLocation(Line line) {
-		return positions.stream()
-			.filter(position -> position.getLine() == line)
-			.map(Position::getLocation)
-			.findFirst()
-			.orElse(0);
+	public void addPosition(Position position) {
+		position.addStation(this);
 	}
 
 	public List<String> getLinesName() {
 		return lines.stream()
 			.map(Line::getName)
 			.collect(Collectors.toList());
+	}
+
+	public long getPosition(long id) {
+		return positions.stream()
+			.filter(position -> position.getLineId() == id)
+			.mapToLong(Position::getDistance)
+			.findFirst()
+			.orElse(-1L);
 	}
 }
