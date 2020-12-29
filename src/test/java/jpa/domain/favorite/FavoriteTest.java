@@ -17,9 +17,6 @@ import jpa.domain.station.StationRepository;
 @DataJpaTest
 class FavoriteTest {
 	@Autowired
-	EntityManager em;
-
-	@Autowired
 	private FavoriteRepository favorites;
 
 	@Autowired
@@ -29,7 +26,7 @@ class FavoriteTest {
 	private StationRepository stations;
 
 	@Test
-	public void save() {
+	public void findFavoriteWithMemberAndStations() {
 		// given
 		String expectedEmail = "jpa@google.com";
 		String expectedStationOne = "강남역";
@@ -44,9 +41,6 @@ class FavoriteTest {
 		stations.save(stationOne);
 		stations.save(stationTwo);
 		Long favoriteId = favorites.save(favorite).getId();
-
-		em.flush();
-		em.clear();
 
 		// then
 		Favorite findFavorite = favorites.findById(favoriteId)

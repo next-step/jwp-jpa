@@ -19,9 +19,6 @@ import jpa.domain.station.StationRepository;
 @DataJpaTest
 class LineRepositoryTest {
 	@Autowired
-	EntityManager em;
-
-	@Autowired
 	private LineRepository lines;
 
 	@Autowired
@@ -120,9 +117,6 @@ class LineRepositoryTest {
 		stations.save(stationOne);
 		stations.save(stationTwo);
 		Long lineId = lines.save(line).getId();
-
-		em.flush();
-		em.clear();
 
 		// then
 		Line findLine = lines
