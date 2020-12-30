@@ -69,7 +69,7 @@ public class FavoriteTest {
 
 	@DisplayName("사용자를 조회시 Favorite 조회")
 	@Test
-	void test() {
+	void given_favorite_when_member_find_then_has_favorite() {
 		Favorite favorite = new Favorite(member, sadang, gangnam);
 		Favorite createdFavorite = favoriteRepository.save(favorite);
 
@@ -77,6 +77,17 @@ public class FavoriteTest {
 			.orElseThrow(IllegalArgumentException::new);
 
 		assertThat(member.getFavorites()).contains(createdFavorite);
+
+	}
+
+	@DisplayName("즐겨찾기 조회시 사용자 확인")
+	@Test
+	void given_member_when_favorite_find_then_equal_member() {
+
+		Favorite favorite = new Favorite(member, sadang, gangnam);
+		Favorite createdFavorite = favoriteRepository.save(favorite);
+
+		assertThat(createdFavorite.getMember()).isEqualTo(member);
 
 	}
 

@@ -49,6 +49,18 @@ public class Favorite extends BaseEntity {
 		return id;
 	}
 
+	public Member getMember() {
+		return member;
+	}
+
+	public Station getDepartureStation() {
+		return departureStation;
+	}
+
+	public Station getArrivalStation() {
+		return arrivalStation;
+	}
+
 	public void setMember(final Member member) {
 		if (this.member != null) {
 			this.member.getFavorites().remove(this);
