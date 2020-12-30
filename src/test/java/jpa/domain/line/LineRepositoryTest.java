@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import jpa.domain.linestation.LineStation;
+import jpa.domain.linestation.LineStationRepository;
 import jpa.domain.station.Station;
 import jpa.domain.station.StationRepository;
 
@@ -23,6 +25,9 @@ class LineRepositoryTest {
 
 	@Autowired
 	private StationRepository stations;
+
+	@Autowired
+	private LineStationRepository lineStations;
 
 	@DisplayName("Line save 테스트")
 	@Test
@@ -98,33 +103,5 @@ class LineRepositoryTest {
 
 		// then
 		assertThat(lines.findById(lineId).isPresent()).isFalse();
-	}
-
-	@Test
-	public void saveWithStation() {
-		// given
-		int expected = 2;
-		Station stationOne = new Station("강남역");
-		Station stationTwo = new Station("잠실역");
-
-		List<Station> stationList = new ArrayList<>();
-		stationList.add(stationOne);
-		stationList.add(stationTwo);
-
-		Line line = new Line("green", "2호선", stationList);
-
-		// when
-		stations.save(stationOne);
-		stations.save(stationTwo);
-		Long lineId = lines.save(line).getId();
-
-		// then
-		Line findLine = lines
-			.findById(lineId).orElseThrow(() -> new IllegalArgumentException("아이디에 해당하는 데이터가 없습니다."));
-		List<Station> findStation = findLine.getStations();
-		for (Station s : findStation) {
-			System.out.println("station name = " + s.getName());
-		}
-		assertThat(expected).isEqualTo(findStation.size());
 	}
 }
