@@ -1,4 +1,4 @@
-package jpa.repository;
+package jpa.repository.step1;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import jpa.entity.Member;
+import jpa.repository.MemberRepository;
 
 @DisplayName("MemberRepositoryTest : select 쿼리를 다양하게 날려보고 결과값도 다양하게 받아보는 테스트")
 @DataJpaTest

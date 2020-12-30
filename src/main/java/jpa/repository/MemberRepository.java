@@ -1,9 +1,9 @@
 package jpa.repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -28,4 +28,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Modifying(flushAutomatically = true, clearAutomatically = true)
 	@Query("delete from Member m where m.email like %?1%")
 	void deleteInBulkByEmailContaining(String email);
+
+	Member findByEmail(String email);
+
+	@Override
+	@EntityGraph(attributePaths = {"favorites", "favorites.startStation", "favorites.endStation"})
+	List<Member> findAll();
 }

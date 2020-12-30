@@ -1,4 +1,4 @@
-package jpa.repository;
+package jpa.repository.step1;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import jpa.entity.Line;
+import jpa.repository.LineRepository;
 
 @DisplayName("LineRepositoryTest : spring-data-jpa의 Auditing 기능을 통해 자동생성한 날짜 활용 클래스")
 @DataJpaTest

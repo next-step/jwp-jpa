@@ -1,10 +1,14 @@
 package jpa.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Line extends BaseEntity {
@@ -18,7 +22,10 @@ public class Line extends BaseEntity {
 
 	private String color;
 
-	public Line() {
+	@ManyToMany(mappedBy = "lines")
+	Set<Station> stations = new HashSet<>();
+
+	protected Line() {
 	}
 
 	public Line(String name, String color) {
@@ -30,11 +37,27 @@ public class Line extends BaseEntity {
 		return id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public String getColor() {
 		return color;
 	}
 
 	public void changeColor(String color) {
 		this.color = color;
+	}
+
+	public Set<Station> getStations() {
+		return stations;
+	}
+
+	public void addStation(Station station) {
+		if (stations.contains(station)) {
+			return;
+		}
+		stations.add(station);
+		station.addLine(this);
 	}
 }
