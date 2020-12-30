@@ -14,7 +14,7 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private int age;
 
@@ -26,7 +26,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Favorite> favorites;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String email, String password, int age) {
@@ -35,7 +35,7 @@ public class Member extends BaseEntity {
         this.age = age;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

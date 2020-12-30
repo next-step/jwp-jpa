@@ -19,7 +19,7 @@ public class Station extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(unique = true)
     private String name;
@@ -30,7 +30,7 @@ public class Station extends BaseEntity {
     @OneToMany(mappedBy = "end")
     private List<Section> endSections;
 
-    public Station() {
+    protected Station() {
     }
 
     public Station(String name) {

@@ -12,38 +12,22 @@ public class Favorite extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "start")
     private Station start;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "end")
     private Station end;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member")
     private Member member;
 
-    public Station getStart() {
-        return start;
-    }
 
-    public void setStart(Station start) {
-        this.start = start;
-    }
-
-    public Station getEnd() {
-        return end;
-    }
-
-    public void setEnd(Station end) {
-        this.end = end;
-    }
-
-    public Member getMember() {
-        return member;
+    protected Favorite() {
     }
 
     public void setMember(Member member) {

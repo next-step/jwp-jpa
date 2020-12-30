@@ -18,7 +18,7 @@ public class Line extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(unique = true)
     private String name;
@@ -29,7 +29,7 @@ public class Line extends BaseEntity {
     @JoinColumn(name = "line")
     private List<Section> sections;
 
-    public Line() {
+    protected Line() {
     }
 
     public Line(String name) {
