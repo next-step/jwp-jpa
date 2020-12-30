@@ -5,12 +5,10 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import jpa.domain.BaseEntity;
-import jpa.domain.station.Station;
+import jpa.domain.linestation.LineStation;
 
 @Entity
 public class Line extends BaseEntity {
@@ -19,8 +17,8 @@ public class Line extends BaseEntity {
 
 	private String name;
 
-	@ManyToMany
-	private List<Station> stations = new ArrayList<>();
+	@OneToMany(mappedBy = "line")
+	private List<LineStation> lineStations = new ArrayList<>();
 
 	protected Line() {
 	}
@@ -28,12 +26,6 @@ public class Line extends BaseEntity {
 	public Line(String color, String name) {
 		this.color = color;
 		this.name = name;
-	}
-
-	public Line(String color, String name, List<Station> stations) {
-		this.color = color;
-		this.name = name;
-		this.stations = stations;
 	}
 
 	public String getColor() {
@@ -52,7 +44,7 @@ public class Line extends BaseEntity {
 		this.name = name;
 	}
 
-	public List<Station> getStations() {
-		return stations;
+	public List<LineStation> getLineStations() {
+		return lineStations;
 	}
 }
