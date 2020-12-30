@@ -1,4 +1,4 @@
-package jpa.step2.domain;
+package jpa.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,10 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import jpa.step1.domain.BaseEntity;
-import jpa.step1.domain.Line;
-import jpa.step1.domain.Station;
 
 @Table(name = "line_station")
 @Entity

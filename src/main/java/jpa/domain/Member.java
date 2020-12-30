@@ -1,6 +1,4 @@
-package jpa.step1.domain;
-
-import java.time.LocalDateTime;
+package jpa.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 @Table(name = "member")
 @Entity

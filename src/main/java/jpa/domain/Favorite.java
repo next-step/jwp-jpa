@@ -1,4 +1,4 @@
-package jpa.step1.domain;
+package jpa.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,5 +19,5 @@ public class Favorite extends BaseEntity {
 	public Long getId() {
 		return id;
 	}
-	
+
 }

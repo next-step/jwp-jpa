@@ -1,4 +1,4 @@
-package jpa.step1.domain;
+package jpa.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import jpa.step2.domain.LineStation;
 
 @Table(name = "station")
 @Entity

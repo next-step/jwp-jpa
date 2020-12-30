@@ -1,4 +1,4 @@
-package jpa.step1.domain;
+package jpa.domain;
 
 public enum Color {
 
