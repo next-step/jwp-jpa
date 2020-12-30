@@ -54,10 +54,8 @@ public class Station extends BaseEntity {
 	}
 
 	public void addLine(Line line) {
-		if (lines.contains(line)) {
-			return;
+		if (lines.add(line)) {
+			line.addStation(this);
 		}
-		lines.add(line);
-		line.addStation(this);
 	}
 }

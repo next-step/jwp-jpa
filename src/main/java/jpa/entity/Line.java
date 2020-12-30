@@ -23,7 +23,7 @@ public class Line extends BaseEntity {
 	private String color;
 
 	@ManyToMany(mappedBy = "lines")
-	Set<Station> stations = new HashSet<>();
+	private final Set<Station> stations = new HashSet<>();
 
 	protected Line() {
 	}
@@ -54,10 +54,8 @@ public class Line extends BaseEntity {
 	}
 
 	public void addStation(Station station) {
-		if (stations.contains(station)) {
-			return;
+		if (stations.add(station)) {
+			station.addLine(this);
 		}
-		stations.add(station);
-		station.addLine(this);
 	}
 }
