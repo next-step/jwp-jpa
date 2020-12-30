@@ -1,21 +1,23 @@
-package jpa.domain;
+package jpa.domain.station;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.persistence.EntityManager;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.domain.member.Member;
-import jpa.domain.station.Station;
-import jpa.domain.station.StationRepository;
+import jpa.domain.line.LineRepository;
 
 @DataJpaTest
-class StationTest {
+class StationRepositoryTest {
 	@Autowired
 	StationRepository stations;
 
+	@DisplayName("Station save 테스트")
 	@Test
 	public void save() {
 		// given
@@ -31,6 +33,7 @@ class StationTest {
 		);
 	}
 
+	@DisplayName("Station findByName 테스트")
 	@Test
 	public void findByName() {
 		// given
@@ -44,6 +47,7 @@ class StationTest {
 		assertThat(expected).isEqualTo(actual);
 	}
 
+	@DisplayName("Station update 테스트")
 	@Test
 	public void update() {
 		// given
@@ -60,6 +64,7 @@ class StationTest {
 		assertThat(expected).isEqualTo(findStation.getName());
 	}
 
+	@DisplayName("Station delete 테스트")
 	@Test
 	public void delete() {
 		// given

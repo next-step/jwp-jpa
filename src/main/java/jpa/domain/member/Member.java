@@ -1,17 +1,11 @@
 package jpa.domain.member;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 import jpa.domain.BaseEntity;
 
 @Entity
 public class Member extends BaseEntity {
-	@Id
-	@GeneratedValue
-	private Long id;
-
 	private int age;
 
 	private String email;
@@ -25,14 +19,6 @@ public class Member extends BaseEntity {
 		this.age = age;
 		this.email = email;
 		this.password = password;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public int getAge() {

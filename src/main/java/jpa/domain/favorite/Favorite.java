@@ -1,25 +1,42 @@
 package jpa.domain.favorite;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 
 import jpa.domain.BaseEntity;
+import jpa.domain.member.Member;
+import jpa.domain.station.Station;
 
 @Entity
 public class Favorite extends BaseEntity {
-	@Id
-	@GeneratedValue
-	private Long id;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Member member;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Station departureStation;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Station arrivalStation;
 
 	protected Favorite() {
 	}
 
-	public Long getId() {
-		return id;
+	public Favorite(Member member, Station departureStation, Station arrivalStation) {
+		this.member = member;
+		this.departureStation = departureStation;
+		this.arrivalStation = arrivalStation;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Member getMember() {
+		return member;
+	}
+
+	public Station getDepartureStation() {
+		return departureStation;
+	}
+
+	public Station getArrivalStation() {
+		return arrivalStation;
 	}
 }

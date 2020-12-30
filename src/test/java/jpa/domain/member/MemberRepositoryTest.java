@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.domain.member;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,11 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.domain.member.Member;
-import jpa.domain.member.MemberRepository;
-
 @DataJpaTest
-class MemberTest {
+class MemberRepositoryTest {
 	@Autowired
 	MemberRepository members;
 
@@ -48,6 +45,7 @@ class MemberTest {
 		assertThat(expected).isEqualTo(actual);
 	}
 
+	@DisplayName("Member update 테스트")
 	@Test
 	public void update() {
 		// given
@@ -64,6 +62,7 @@ class MemberTest {
 		assertThat(expected).isEqualTo(findMember.getAge());
 	}
 
+	@DisplayName("Member delete 테스트")
 	@Test
 	public void delete() {
 		// given

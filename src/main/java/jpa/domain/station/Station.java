@@ -1,20 +1,24 @@
 package jpa.domain.station;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import jpa.domain.BaseEntity;
+import jpa.domain.line.Line;
 
 @Entity
 public class Station extends BaseEntity {
-	@Id
-	@GeneratedValue
-	private Long id;
-
 	@Column(unique = true)
 	private String name;
+
+	@ManyToMany(mappedBy = "stations")
+	private List<Line> lines = new ArrayList<>();
 
 	protected Station() {
 	}
@@ -23,19 +27,15 @@ public class Station extends BaseEntity {
 		this.name = name;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Line> getLines() {
+		return lines;
 	}
 }
