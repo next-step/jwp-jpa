@@ -91,4 +91,20 @@ public class FavoriteTest {
 
 	}
 
+	@DisplayName("즐겨찾기 조회시 출발역/도착역 확인")
+	@Test
+	void given_favorite_when_favorite_find_then_has_station() {
+
+		Favorite favorite = new Favorite(member, sadang, gangnam);
+		Favorite createdFavorite = favoriteRepository.save(favorite);
+
+		assertAll(
+			() -> assertThat(createdFavorite.getDepartureStation()).isNotNull(),
+			() -> assertThat(createdFavorite.getDepartureStation()).isEqualTo(sadang),
+			() -> assertThat(createdFavorite.getArrivalStation()).isNotNull(),
+			() -> assertThat(createdFavorite.getArrivalStation()).isEqualTo(gangnam)
+		);
+
+	}
+
 }
