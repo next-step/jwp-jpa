@@ -9,8 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.data.jpa.repository.EntityGraph;
-
 @Table(name = "favorite")
 @Entity
 public class Favorite extends BaseEntity {
@@ -34,7 +32,7 @@ public class Favorite extends BaseEntity {
 
 	public Favorite(final Member member, final Station departureStation, final Station arrivalStation) {
 		validate(member, departureStation, arrivalStation);
-		setMember(member);
+		changeMember(member);
 		this.departureStation = departureStation;
 		this.arrivalStation = arrivalStation;
 	}
@@ -61,11 +59,22 @@ public class Favorite extends BaseEntity {
 		return arrivalStation;
 	}
 
-	public void setMember(final Member member) {
+	public void changeMember(final Member member) {
 		if (this.member != null) {
 			this.member.getFavorites().remove(this);
 		}
 		this.member = member;
 		member.getFavorites().add(this);
 	}
+
+	@Override
+	public String toString() {
+		return "Favorite{" +
+			"id=" + id +
+			", member=" + member +
+			", departureStation=" + departureStation +
+			", arrivalStation=" + arrivalStation +
+			'}';
+	}
+
 }
