@@ -13,3 +13,6 @@
 - Line <> Station 양방향 관계 설정
 - Favorite <> Member 다대일 관계 설정
 - Favorite <> Station 다대일 관계 설정
+
+## 3단계 - 다대다 연관관계 리팩토링
+- 다대다를 일대다, 다대일로 리팩토링
