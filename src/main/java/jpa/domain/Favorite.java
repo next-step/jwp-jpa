@@ -67,7 +67,7 @@ public class Favorite extends BaseEntity {
 			this.member.getFavorites().remove(this);
 		}
 		this.member = member;
-		member.getFavorites().add(this);
+		member.addFavorite(this);
 	}
 
 	@Override
