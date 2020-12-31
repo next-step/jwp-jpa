@@ -3,6 +3,9 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.persistence.EntityManager;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +28,9 @@ public class FavoriteTest {
 	@Autowired
 	private FavoriteRepository favoriteRepository;
 
+	@Autowired
+	private EntityManager entityManager;
+
 	private Member member;
 
 	private Station sadang;
@@ -40,6 +46,14 @@ public class FavoriteTest {
 		Station gangnam = new Station("강남역");
 		this.sadang = stationRepository.saveAndFlush(sadang);
 		this.gangnam = stationRepository.saveAndFlush(gangnam);
+	}
+
+	@AfterEach
+	public void cleanup() {
+		this.favoriteRepository.deleteAll();
+		this.entityManager
+			.createNativeQuery("ALTER TABLE favorite ALTER COLUMN `id` RESTART WITH 1")
+			.executeUpdate();
 	}
 
 	@DisplayName("Favorite 생성")
