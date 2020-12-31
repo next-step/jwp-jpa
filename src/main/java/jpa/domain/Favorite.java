@@ -24,11 +24,14 @@ public class Favorite extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "departure_station_id")
-	private final Station departureStation;
+	private Station departureStation;
 
 	@ManyToOne
 	@JoinColumn(name = "arrival_station_id")
-	private final Station arrivalStation;
+	private Station arrivalStation;
+
+	protected Favorite() {
+	}
 
 	public Favorite(final Member member, final Station departureStation, final Station arrivalStation) {
 		validate(member, departureStation, arrivalStation);

@@ -27,6 +27,9 @@ public class Station extends BaseEntity {
 	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<LineStation> lineStations = new ArrayList<>();
 
+	protected Station() {
+	}
+
 	public Station(final String name) {
 		this.name = name;
 	}

@@ -21,11 +21,14 @@ public class LineStation extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "line_id")
-	private final Line line;
+	private Line line;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "station_id")
-	private final Station station;
+	private Station station;
+
+	protected LineStation() {
+	}
 
 	public LineStation(Line line, Station station) {
 		validate(line, station);

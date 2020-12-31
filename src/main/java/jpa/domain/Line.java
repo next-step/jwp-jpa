@@ -33,6 +33,9 @@ public class Line extends BaseEntity {
 	@OneToMany(mappedBy = "line", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<LineStation> lineStations = new ArrayList<>();
 
+	protected Line() {
+	}
+
 	public Line(final Color color, final String name) {
 		this.color = color;
 		this.name = name;

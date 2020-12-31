@@ -22,16 +22,19 @@ public class Member extends BaseEntity {
 	private Long id;
 
 	@Column(name = "age")
-	private final Integer age;
+	private Integer age;
 
 	@Column(name = "email")
-	private final String email;
+	private String email;
 
 	@Column(name = "password")
-	private final String password;
+	private String password;
 
 	@OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.REMOVE)
 	private final Set<Favorite> favorites = new HashSet<>();
+
+	protected Member() {
+	}
 
 	public Member(final String email, final String password, final Integer age) {
 		this.email = email;
