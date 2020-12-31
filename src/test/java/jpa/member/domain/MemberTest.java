@@ -1,8 +1,6 @@
 package jpa.member.domain;
 
 import jpa.favorite.domain.Favorite;
-import jpa.member.domain.Member;
-import jpa.member.domain.MemberRepository;
 import jpa.station.domain.Station;
 import jpa.station.domain.StationRepository;
 import org.junit.jupiter.api.BeforeEach;

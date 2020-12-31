@@ -3,8 +3,8 @@ package jpa.station.domain;
 import jpa.line.domain.Line;
 import jpa.line.domain.LineColor;
 import jpa.line.domain.LineRepository;
-import jpa.station.domain.Station;
-import jpa.station.domain.StationRepository;
+import jpa.line.domain.LineType;
+import jpa.location.domain.Location;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class StationTest {
 
     @BeforeEach
     void beforeEach() {
-        station = new Station("석촌");
+        station = new Station("잠실");
         stations.save(station);
     }
 
@@ -49,7 +49,7 @@ class StationTest {
     @Test
     void findByName() {
         // When
-        Station actual = stations.findByName("석촌");
+        Station actual = stations.findByName("잠실");
         // Then
         assertAll(
                 () -> assertNotNull(actual),
@@ -84,7 +84,7 @@ class StationTest {
     @Test
     void addLine() {
         // Given
-        Line expected = new Line(LineColor.GREEN, "2호선");
+        Line expected = new Line(LineType.SECOND_LINE);
         // When
         station.addLine(expected);
         // Then
@@ -95,7 +95,7 @@ class StationTest {
     @Test
     void removeLine() {
         // Given
-        Line line1 = lines.save(new Line(LineColor.BLUE, "1호선"));
+        Line line1 = lines.save(new Line(LineType.FIRST_LINE));
         station.addLine(line1);
         // When
         station.removeLine(line1);
@@ -107,7 +107,7 @@ class StationTest {
     @Test
     void getLines() {
         // Given
-        List<Line> expected = Arrays.asList(new Line(LineColor.BLUE, "1호선"), new Line(LineColor.GREEN, "2호선"));
+        List<Line> expected = Arrays.asList(new Line(LineType.FIRST_LINE), new Line(LineType.SECOND_LINE));
         expected.forEach(line -> station.addLine(lines.save(line)));
         // When
         List<Line> actual = station.getLines();
@@ -115,5 +115,23 @@ class StationTest {
         assertThat(actual)
                 .containsAll(expected)
                 .hasSize(expected.size());
+    }
+
+    @DisplayName("`Station`에 해당 노선에서 이전 역 정보 추가")
+    @Test
+    void getDistanceWithPreviousStation() {
+        // Given
+        Station previousStation = stations.save(new Station("잠실새내"));
+        Line line = lines.save(new Line(LineType.SECOND_LINE));
+        // When
+        Distance distance = new Distance(previousStation, 2000L);
+        Location expected = new Location(line, station, distance);
+        station.addLocation(expected);
+        // Then
+        Location location = station.getLocations().stream().findAny().get();
+        assertAll(
+                () -> assertThat(station.getLocations()).hasSize(1),
+                () -> assertSame(location, expected)
+        );
     }
 }
