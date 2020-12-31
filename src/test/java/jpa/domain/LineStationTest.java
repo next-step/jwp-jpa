@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
+import javax.persistence.EntityManager;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +30,9 @@ public class LineStationTest {
 	@Autowired
 	private LineStationRepository lineStationRepository;
 
+	@Autowired
+	private EntityManager entityManager;
+
 	@BeforeEach
 	public void setup() {
 		Line line2 = new Line(Color.GREEN, "2호선");
@@ -47,6 +53,24 @@ public class LineStationTest {
 		stationRepository.saveAll(Arrays.asList(ieesoo, sadang, bangbae, seocho));
 
 		lineStationRepository.saveAll(Arrays.asList(line2Sadang, line4Sadang));
+	}
+
+	@AfterEach
+	public void cleanup() {
+		this.lineRepository.deleteAll();
+		this.stationRepository.deleteAll();
+		this.lineStationRepository.deleteAll();
+		this.entityManager
+			.createNativeQuery("ALTER TABLE line ALTER COLUMN `id` RESTART WITH 1")
+			.executeUpdate();
+
+		this.entityManager
+			.createNativeQuery("ALTER TABLE station ALTER COLUMN `id` RESTART WITH 1")
+			.executeUpdate();
+
+		this.entityManager
+			.createNativeQuery("ALTER TABLE line_station ALTER COLUMN `id` RESTART WITH 1")
+			.executeUpdate();
 	}
 
 	@DisplayName("노선 조회 시 속한 지하철역 조회")
