@@ -23,6 +23,9 @@ public class Member extends Date {
     @Column
     private String password;
 
+    @OneToMany(mappedBy = "member")
+    private final List<Favorite> favorites = new ArrayList<>();
+
     public Member() {
     }
 
@@ -34,18 +37,17 @@ public class Member extends Date {
         return this.id;
     }
 
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
 
-    // 일대다 단방향 연관 관계
-    // 일대다 단방향 매핑보다는 다대일 양방향 매핑을 권장한다.
-    @OneToMany
-    @JoinColumn(name = "member_id")
-    private final List<Favorite> favorites = new ArrayList<>();
-
-    public void addFavorite(Favorite save) {
-        favorites.add(save);
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
+        favorite.setMember(this);
     }
 
 }

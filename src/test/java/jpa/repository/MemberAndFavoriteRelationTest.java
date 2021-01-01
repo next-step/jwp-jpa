@@ -18,12 +18,23 @@ class MemberAndFavoriteRelationTest {
     private MemberRepository memberRepository;
 
     @Test
-    void save() {
+    void saveWithFavorite() {
         Member expected = new Member();
         expected.addFavorite(favoriteRepository.save(new Favorite()));
+        expected.addFavorite(favoriteRepository.save(new Favorite()));
         Member actual = memberRepository.save(expected);
-        memberRepository.flush();
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.getFavorites().size()).isEqualTo(2);
+    }
+
+    @Test
+    void saveWithMember() {
+        Favorite favorite1 = favoriteRepository.save(new Favorite());
+        Favorite favorite2 = favoriteRepository.save(new Favorite());
+        Member member = memberRepository.save(new Member());
+        favorite1.setMember(member);
+        favorite2.setMember(member);
+        favoriteRepository.flush();
+        assertThat(favorite1.getMember().getFavorites().size()).isEqualTo(2);
     }
 
 }
