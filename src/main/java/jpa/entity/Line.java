@@ -3,12 +3,13 @@ package jpa.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Line extends BaseEntity {
@@ -22,8 +23,8 @@ public class Line extends BaseEntity {
 
 	private String color;
 
-	@ManyToMany(mappedBy = "lines")
-	private final Set<Station> stations = new HashSet<>();
+	@OneToMany(mappedBy = "line", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final Set<LineStation> lineStations = new HashSet<>();
 
 	protected Line() {
 	}
@@ -49,13 +50,23 @@ public class Line extends BaseEntity {
 		this.color = color;
 	}
 
-	public Set<Station> getStations() {
-		return stations;
+	public Set<LineStation> getLineStations() {
+		return lineStations;
 	}
 
-	public void addStation(Station station) {
-		if (stations.add(station)) {
-			station.addLine(this);
+	public void addLineStation(Station station, Station upStation, Integer upDistance) {
+		addLineStation(new LineStation(this, station, upStation, upDistance));
+	}
+
+	public void addLineStation(LineStation lineStation) {
+		if (lineStations.add(lineStation)) {
+			lineStation.getStation().addLineStation(lineStation);
+		}
+	}
+
+	public void removeLineStation(LineStation lineStation) {
+		if (lineStations.remove(lineStation)) {
+			lineStation.getStation().removeLineStation(lineStation);
 		}
 	}
 }

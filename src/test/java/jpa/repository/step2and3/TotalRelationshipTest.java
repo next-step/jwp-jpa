@@ -1,4 +1,4 @@
-package jpa.repository.step2;
+package jpa.repository.step2and3;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
