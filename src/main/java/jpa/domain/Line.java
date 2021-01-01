@@ -1,28 +1,17 @@
 package jpa.domain;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table
-public class Line {
+public class Line extends Date {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    @CreationTimestamp
-    private LocalDateTime createdDate;
-
-    @Column
-    @UpdateTimestamp
-    private LocalDateTime modifiedDate;
 
     @Column
     private String color;
@@ -31,7 +20,10 @@ public class Line {
     @Column(unique = true)
     private String name;
 
-    public Line() {
+    @OneToMany(mappedBy = "line", cascade = CascadeType.MERGE)
+    private final List<LineStation> lineStations = new ArrayList<>();
+
+    protected Line() {
 
     }
 
@@ -51,17 +43,30 @@ public class Line {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "line")
-    private final List<Station> stations = new ArrayList<>();
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public List<Station> getStations() {
-        return stations;
+        return lineStations.stream()
+                .map(LineStation::getStation)
+                .collect(Collectors.toList());
     }
 
     // 연관 관계 편의 메서드
     public void addStation(Station station) {
-        stations.add(station);
-        station.setLine(this);
+        lineStations.add(new LineStation(this, station));
+        if (!station.getLines().contains(this)) {
+            station.addLine(this);
+        }
+    }
+
+    public void removeStation(Station station) {
+        lineStations.removeIf(s -> s.getStation().getName().equals(station.getName()));
     }
 
 }
