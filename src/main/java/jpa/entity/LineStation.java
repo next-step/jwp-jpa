@@ -11,15 +11,15 @@ import javax.persistence.MapsId;
 public class LineStation extends BaseEntity{
 
 	@EmbeddedId
-	LineStationPk pk;
+	private LineStationPk pk;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("lineId")
-	Line line;
+	private Line line;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("stationId")
-	Station station;
+	private Station station;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "up_station_id")
@@ -27,7 +27,7 @@ public class LineStation extends BaseEntity{
 
 	private Integer upDistance;
 
-	public LineStation() {
+	protected LineStation() {
 	}
 
 	public LineStation(Line line, Station station, Station upStation, Integer upDistance) {
