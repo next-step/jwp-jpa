@@ -1,6 +1,6 @@
 package jpa.repositories;
 
-import jpa.domain.Line;
+import jpa.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,39 +13,39 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
-class LineRepositoryTest {
+class StationRepositoryTest {
 
     @Autowired
-    private LineRepository lineRepository;
+    private StationRepository stationRepository;
 
     @BeforeEach
     void setUp() {
-        lineRepository.save(Line.of("8호선","분홍색"));
+        stationRepository.save(Station.of("몽촌토성역"));
     }
 
     @Test
-    @DisplayName("라인 추가")
+    @DisplayName("정류장 추가")
     void save() {
         // given, when
-        Line actual = lineRepository.save(Line.of("2호선","초록색"));
+         Station actual = stationRepository.save(Station.of("잠실역"));
 
         // then
-        lineAssertAll(actual, "2호선", "초록색");
+        StationAssertAll(actual, "잠실역");
     }
 
     @Test
-    @DisplayName("라인 수정")
+    @DisplayName("정류장 수정")
     void update() {
         // given
-        String changeName = "1호선";
+        String changeName = "의정부역";
 
         // when
-        Line line = lineRepository.findByName("8호선");
-        line.setName(changeName);
-        Line actual = lineRepository.save(line);
+        Station Station = stationRepository.findByName("몽촌토성역");
+        Station.setName(changeName);
+        Station actual = stationRepository.save(Station);
 
         // then
-        assertThat(actual.getName()).isEqualTo("1호선");
+        assertThat(actual.getName()).isEqualTo("의정부역");
     }
 
     @Test
@@ -53,36 +53,35 @@ class LineRepositoryTest {
     void uniqueCheck() {
         // given when then
         assertThrows(DataIntegrityViolationException.class, () ->{
-            lineRepository.save(Line.of("8호선","분홍색"));
+            stationRepository.save(Station.of("몽촌토성역"));
         });
     }
 
     @Test
-    @DisplayName("라인 삭제")
+    @DisplayName("정류장 삭제")
     void delete() {
         // given when
-        lineRepository.delete(lineRepository.findByName("8호선"));
+        stationRepository.delete(stationRepository.findByName("몽촌토성역"));
 
         // then
-        Line actual = lineRepository.findByName("8호선");
+        Station actual = stationRepository.findByName("몽촌토성역");
         assertThat(actual).isNull();
     }
 
     @Test
-    @DisplayName("라인 조회")
+    @DisplayName("정류장 조회")
     void select() {
         // given when
-        Line actual = lineRepository.findByName("8호선");
+        Station actual = stationRepository.findByName("몽촌토성역");
 
         // then
-        lineAssertAll(actual, "8호선", "분홍색");
+        StationAssertAll(actual, "몽촌토성역");
     }
 
-    private void lineAssertAll(Line actual,String expectedName, String expectedColor) {
+    private void StationAssertAll(Station actual,String expectedName) {
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(expectedName),
-                () -> assertThat(actual.getColor()).isEqualTo(expectedColor),
                 () -> assertThat(actual.getCreatedDate()).isNotNull(),
                 () -> assertThat(actual.getModifiedDate()).isNotNull()
         );
