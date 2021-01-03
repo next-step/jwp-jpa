@@ -38,13 +38,29 @@ public class LineStation extends BaseTimeEntity {
 
     public LineStation(Line line, Station station, Station preStation, int distance) {
         this(line, station);
+        validate(distance);
         this.preStation = preStation;
+        this.distance = distance;
+    }
+
+    public void change(Station preStation) {
+        this.preStation = preStation;
+    }
+
+    public void change(int distance) {
+        validate(distance);
         this.distance = distance;
     }
 
     private void validate(Line line, Station station) {
         if (line == null || station == null) {
             throw new IllegalArgumentException("필수값 누락입니다.");
+        }
+    }
+
+    private void validate(int distance) {
+        if (distance < 0) {
+            throw new IllegalArgumentException("거리는 0보다 커야합니다.");
         }
     }
 
