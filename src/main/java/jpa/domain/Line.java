@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table
-public class Line extends Date {
+public class Line extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,6 +67,9 @@ public class Line extends Date {
 
     public void removeStation(Station station) {
         lineStations.removeIf(s -> s.getStation().getName().equals(station.getName()));
+        if (station.getLines().contains(this)) {
+            station.removeLine(this);
+        }
     }
 
 }

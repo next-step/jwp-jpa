@@ -24,14 +24,14 @@ public class LineAndStationRelationTest {
 
     @BeforeEach
     void init() {
-        line = lineRepository.save(new Line("2호선"));            // 2호선에는 잠실역, 교대역
-        station = stationRepository.save(new Station("잠실역"));   // 잠실역은 2호선, 3호선
         // JPA에서 엔티티를 저장할 때 연관된 모든 엔티티는 영속 상태여야 한다.
-        station.addLine(line);
-        station.addLine(lineRepository.save(new Line("3호선")));
-        //line.addStation(station);
+        line = lineRepository.save(new Line("2호선"));                // 2호선에는 잠실역(환승역), 교대역
+        station = stationRepository.save(new Station("잠실역"));
+        // 노선에 지하철역 추가
+        line.addStation(station);
         line.addStation(stationRepository.save(new Station("교대역")));
-
+        lineRepository.save(new Line("3호선")).addStation(station);   // 3호선에는 잠실역(환승역)
+        // DB에 반영
         //lineRepository.save(line);
         //stationRepository.save(station);
         stationRepository.flush();
@@ -41,17 +41,23 @@ public class LineAndStationRelationTest {
     @Test
     @DisplayName("환승역을 고려한다. - 다대다 양방향 연관관계 테스트")
     void save() {
+        // when
         Line actualLine = lineRepository.save(line);
         Station actualStation = stationRepository.save(station);
 
+        // then
         assertThat(actualLine.getStations()).isEqualTo(line.getStations());
         assertThat(actualStation.getLines()).isEqualTo(station.getLines());
+        //actualStation.getLines().forEach(l -> System.out.println(l.getName()));
+        //actualLine.getStations().forEach(l -> System.out.println(l.getName()));
     }
 
     @Test
     void findByNameWithLine() {
+        // when
         Station actual = stationRepository.findByName("잠실역");
 
+        // then
         assertThat(actual.getLines().size()).isEqualTo(2);
         assertThat(actual.getLines()).isEqualTo(station.getLines());
         //actual.getLines().forEach(l -> System.out.println(l.getName()));
@@ -59,8 +65,10 @@ public class LineAndStationRelationTest {
 
     @Test
     void findByNameWithStation() {
+        // when
         Line actual = lineRepository.findByName("2호선");
 
+        // then
         assertThat(actual.getStations().size()).isEqualTo(2);
         assertThat(actual.getStations()).isEqualTo(line.getStations());
         //actual.getStations().forEach(l -> System.out.println(l.getName()));
@@ -68,10 +76,13 @@ public class LineAndStationRelationTest {
 
     @Test
     void updateWithLine() {
+        // when
         Station actual = stationRepository.findByName("교대역");
         actual.setName("신교대역");
-        actual.addLine(lineRepository.save(new Line("4호선")));
+        lineRepository.save(new Line("4호선")).addStation(actual);
         stationRepository.flush();
+
+        // then
         assertThat(actual.getName()).isEqualTo("신교대역");
         assertThat(actual.getLines().size()).isEqualTo(2);
         assertThat(actual.getLines()).contains(
@@ -82,10 +93,13 @@ public class LineAndStationRelationTest {
 
     @Test
     void updateWithStation() {
+        // when
         Line actual = lineRepository.findByName("2호선");
         actual.setColor("녹색");
         actual.addStation(stationRepository.save(new Station("강남역")));
         lineRepository.flush();
+
+        // then
         assertThat(actual.getColor()).isEqualTo("녹색");
         assertThat(actual.getStations().size()).isEqualTo(3);
         assertThat(actual.getStations()).contains(
@@ -97,21 +111,31 @@ public class LineAndStationRelationTest {
 
     @Test
     void deleteWithLine() {
-        Station expected = stationRepository.findByName("교대역");
-        assertThat(expected.getLines().size()).isEqualTo(1);
+        // given
+        Station expected = stationRepository.findByName("잠실역");
+        assertThat(expected.getLines().size()).isEqualTo(2);
 
-        expected.removeLine(lineRepository.findByName("2호선"));
+        // when
+        lineRepository.findByName("3호선").removeStation(expected);
+        //expected.removeLine(lineRepository.findByName("2호선"));
         Station actual = stationRepository.save(expected);
-        assertThat(actual.getLines().size()).isEqualTo(0);
+
+        // then
+        assertThat(actual.getLines().size()).isEqualTo(1);
+        assertThat(actual.getLines().stream().findAny().get()).isEqualTo(lineRepository.findByName("2호선"));
     }
 
     @Test
     void deleteWithStation() {
+        // given
         Line expected = lineRepository.findByName("2호선");
         assertThat(expected.getStations().size()).isEqualTo(2);
 
+        // when
         expected.removeStation(stationRepository.findByName("잠실역"));
         Line actual = lineRepository.save(expected);
+
+        // then
         assertThat(actual.getStations().size()).isEqualTo(1);
         assertThat(actual.getStations().stream().findAny().get()).isEqualTo(stationRepository.findByName("교대역"));
     }

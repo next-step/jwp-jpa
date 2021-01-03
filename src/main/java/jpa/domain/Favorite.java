@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table
-public class Favorite extends Date {
+public class Favorite extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,11 +15,11 @@ public class Favorite extends Date {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     private Station startStation;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     private Station endStation;
 

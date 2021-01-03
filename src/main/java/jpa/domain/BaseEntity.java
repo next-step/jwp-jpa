@@ -8,7 +8,7 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public class Date {
+public class BaseEntity {
 
     @Column
     @CreationTimestamp
