@@ -1,32 +1,25 @@
 package jpa.domain;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table
-public class Station {
+public class Station extends Date {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    @CreationTimestamp
-    private LocalDateTime createdDate;
-
-    @Column
-    @UpdateTimestamp
-    private LocalDateTime modifiedDate;
-
     @Column(unique = true)
     private String name;
 
-    public Station() {
+    @OneToMany(mappedBy = "station", cascade = CascadeType.MERGE)
+    private final List<LineStation> lineStations = new ArrayList<>();
+
+    protected Station() {
 
     }
 
@@ -46,33 +39,22 @@ public class Station {
         return id;
     }
 
-
-    @OneToOne
-    @JoinColumn(name = "line_station_id")
-    private LineStation lineStation;
-
-
-    public Station(String name, LineStation lineStation) {
-        this.name = name;
-        this.lineStation = lineStation;
+    public List<Line> getLines() {
+        return lineStations.stream()
+                .map(LineStation::getLine)
+                .collect(Collectors.toList());
     }
-
-    @ManyToOne
-    @JoinColumn(name = "line_id")
-    private Line line;
 
     // 연관 관계 편의 메서드
-    public void setLine(final Line line) {
-        // 연관 관계 편의 메서드 작성 시 주의 사항
-        if (Objects.nonNull(this.line)) {
-            this.line.getStations().remove(this);
+    public void addLine(Line line) {
+        lineStations.add(new LineStation(line, this));
+        if (!line.getStations().contains(this)) {
+            line.addStation(this);
         }
-        this.line = line;
-        line.getStations().add(this);
     }
 
-    public Line getLine() {
-        return line;
+    public void removeLine(Line line) {
+        lineStations.removeIf(l -> l.getLine().getName().equals(line.getName()));
     }
 
 }

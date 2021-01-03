@@ -2,6 +2,8 @@ package jpa.repository;
 
 import jpa.domain.Line;
 import jpa.domain.Station;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,72 +19,101 @@ public class LineAndStationRelationTest {
     @Autowired
     private LineRepository lineRepository;
 
-    // 다대일 단방향 연관 관계
-    @Test
-    void saveWithLine() {
-        Station expected = new Station("잠실역");
+    private Line line;
+    private Station station;
+
+    @BeforeEach
+    void init() {
+        line = lineRepository.save(new Line("2호선"));            // 2호선에는 잠실역, 교대역
+        station = stationRepository.save(new Station("잠실역"));   // 잠실역은 2호선, 3호선
         // JPA에서 엔티티를 저장할 때 연관된 모든 엔티티는 영속 상태여야 한다.
-        // expected.setLine(new Line("2호선"));   // Not Working!
-        expected.setLine(lineRepository.save(new Line("2호선")));
-        Station actual = stationRepository.save(expected);
+        station.addLine(line);
+        station.addLine(lineRepository.save(new Line("3호선")));
+        //line.addStation(station);
+        line.addStation(stationRepository.save(new Station("교대역")));
+
+        //lineRepository.save(line);
+        //stationRepository.save(station);
         stationRepository.flush();
+        lineRepository.flush();
+    }
+
+    @Test
+    @DisplayName("환승역을 고려한다. - 다대다 양방향 연관관계 테스트")
+    void save() {
+        Line actualLine = lineRepository.save(line);
+        Station actualStation = stationRepository.save(station);
+
+        assertThat(actualLine.getStations()).isEqualTo(line.getStations());
+        assertThat(actualStation.getLines()).isEqualTo(station.getLines());
     }
 
     @Test
     void findByNameWithLine() {
-        Station actual = stationRepository.findByName("교대역");
-        assertThat(actual).isNotNull();
-        assertThat(actual.getLine().getName()).isEqualTo("3호선");
+        Station actual = stationRepository.findByName("잠실역");
+
+        assertThat(actual.getLines().size()).isEqualTo(2);
+        assertThat(actual.getLines()).isEqualTo(station.getLines());
+        //actual.getLines().forEach(l -> System.out.println(l.getName()));
+    }
+
+    @Test
+    void findByNameWithStation() {
+        Line actual = lineRepository.findByName("2호선");
+
+        assertThat(actual.getStations().size()).isEqualTo(2);
+        assertThat(actual.getStations()).isEqualTo(line.getStations());
+        //actual.getStations().forEach(l -> System.out.println(l.getName()));
     }
 
     @Test
     void updateWithLine() {
-        Station expected = stationRepository.findByName("교대역");
-        expected.setLine(lineRepository.save(new Line("2호선")));
-        // flush를 하지 않을 경우 insert, flush를 할 경우 update
+        Station actual = stationRepository.findByName("교대역");
+        actual.setName("신교대역");
+        actual.addLine(lineRepository.save(new Line("4호선")));
         stationRepository.flush();
-        assertThat(expected.getLine().getName()).isEqualTo("2호선");
+        assertThat(actual.getName()).isEqualTo("신교대역");
+        assertThat(actual.getLines().size()).isEqualTo(2);
+        assertThat(actual.getLines()).contains(
+                lineRepository.findByName("2호선"),
+                lineRepository.findByName("4호선")
+        );
     }
 
     @Test
-    void removeLine() {
-        Station expected = stationRepository.findByName("교대역");
-        expected.setLine(null);
-        stationRepository.flush();
-        assertThat(expected.getLine()).isNull();
-    }
-
-    // 양방향 연관관계
-    @Test
-    void findById() {
-        Line line = lineRepository.findByName("3호선");
-        assertThat(line.getStations()).hasSize(1);
-        /*
-        Station expected = new Station("교대역");
-        expected.setLine(line);
-        stationRepository.save(expected);
-        assertThat(line.getStations()).contains(expected);
-         */
-    }
-
-    @Test
-    void save() {
-        Line expected = new Line("2호선");
-        //expected.addStation(new Station("잠실역"));
-        expected.addStation(stationRepository.save(new Station("잠실")));
-        lineRepository.save(expected);
+    void updateWithStation() {
+        Line actual = lineRepository.findByName("2호선");
+        actual.setColor("녹색");
+        actual.addStation(stationRepository.save(new Station("강남역")));
         lineRepository.flush();
+        assertThat(actual.getColor()).isEqualTo("녹색");
+        assertThat(actual.getStations().size()).isEqualTo(3);
+        assertThat(actual.getStations()).contains(
+                stationRepository.findByName("잠실역"),
+                stationRepository.findByName("교대역"),
+                stationRepository.findByName("강남역")
+        );
     }
 
-    // 연관 관계 편의 메서드 작성 시 주의 사항
     @Test
-    void setLine() {
-        Station station = new Station("잠실역");
-        Line line1 = new Line("2호선");
-        Line line2 = new Line("3호선");
-        station.setLine(line1);
-        station.setLine(line2);
-        assertThat(line1.getStations()).doesNotContain(station);
-        assertThat(line2.getStations()).contains(station);
+    void deleteWithLine() {
+        Station expected = stationRepository.findByName("교대역");
+        assertThat(expected.getLines().size()).isEqualTo(1);
+
+        expected.removeLine(lineRepository.findByName("2호선"));
+        Station actual = stationRepository.save(expected);
+        assertThat(actual.getLines().size()).isEqualTo(0);
     }
+
+    @Test
+    void deleteWithStation() {
+        Line expected = lineRepository.findByName("2호선");
+        assertThat(expected.getStations().size()).isEqualTo(2);
+
+        expected.removeStation(stationRepository.findByName("잠실역"));
+        Line actual = lineRepository.save(expected);
+        assertThat(actual.getStations().size()).isEqualTo(1);
+        assertThat(actual.getStations().stream().findAny().get()).isEqualTo(stationRepository.findByName("교대역"));
+    }
+
 }
