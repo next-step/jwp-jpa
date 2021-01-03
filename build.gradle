@@ -17,6 +17,10 @@ dependencies {
     runtimeOnly group: 'com.h2database', name: 'h2', version: '1.4.193'
     runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
+    compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.13.Final'
+    compile group: 'org.glassfish', name: 'javax.el', version: '3.0.0'
+    compile group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
