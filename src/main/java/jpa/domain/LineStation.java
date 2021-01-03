@@ -34,6 +34,11 @@ public class LineStation {
         this.station = station;
     }
 
+    public LineStation(Line line, Station station, Section section) {
+        this(line, station);
+        this.section = section;
+    }
+
     public Line getLine() {
         return line;
     }
@@ -42,4 +47,7 @@ public class LineStation {
         return station;
     }
 
+    public Section getSection() {
+        return section;
+    }
 }

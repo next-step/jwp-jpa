@@ -1,6 +1,7 @@
 package jpa.repository;
 
 import jpa.domain.Line;
+import jpa.domain.Section;
 import jpa.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,8 +30,11 @@ public class LineAndStationRelationTest {
         station = stationRepository.save(new Station("잠실역"));
         // 노선에 지하철역 추가
         line.addStation(station);
-        line.addStation(stationRepository.save(new Station("교대역")));
+        //line.addStation(stationRepository.save(new Station("교대역")));
+        Section section = new Section(station, stationRepository.save(new Station("교대역")), 3);
+        line.addStation(section);
         lineRepository.save(new Line("3호선")).addStation(station);   // 3호선에는 잠실역(환승역)
+
         // DB에 반영
         //lineRepository.save(line);
         //stationRepository.save(station);

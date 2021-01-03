@@ -57,9 +57,27 @@ public class Line extends BaseEntity {
                 .collect(Collectors.toList());
     }
 
+    public double getDistanceByStation(Station station) {
+        return lineStations.stream()
+                .filter(ls -> ls.getStation().equals(station))
+                .findFirst()
+                .map(LineStation::getSection)
+                .orElseThrow(IllegalArgumentException::new)
+                .getDistance();
+    }
+
     // 연관 관계 편의 메서드
     public void addStation(Station station) {
         lineStations.add(new LineStation(this, station));
+        if (!station.getLines().contains(this)) {
+            station.addLine(this);
+        }
+    }
+
+    // 지하철역 추가 시 구간정보 등록
+    public void addStation(Section section) {
+        Station station = section.getEndStation();
+        lineStations.add(new LineStation(this, station, section));
         if (!station.getLines().contains(this)) {
             station.addLine(this);
         }
