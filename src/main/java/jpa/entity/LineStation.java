@@ -30,12 +30,12 @@ public class LineStation extends BaseEntity{
 	protected LineStation() {
 	}
 
-	public LineStation(Line line, Station station, Station upStation, Integer upDistance) {
-		this.pk = LineStationPk.of(line, station);
-		this.line = line;
-		this.station = station;
-		this.upStation = upStation;
-		this.upDistance = upDistance;
+	private LineStation(Builder builder) {
+		this.pk = LineStationPk.of(builder.line, builder.station);
+		this.line = builder.line;
+		this.station = builder.station;
+		this.upStation = builder.upStation;
+		this.upDistance = builder.upDistance;
 	}
 
 	public Line getLine() {
@@ -68,5 +68,39 @@ public class LineStation extends BaseEntity{
 
 	public Integer getUpDistance() {
 		return upDistance;
+	}
+
+	public static class Builder {
+		private Line line;
+		private Station station;
+		private Station upStation;
+		private Integer upDistance;
+
+		public Builder() {
+		}
+
+		public Builder line(Line line) {
+			this.line = line;
+			return this;
+		}
+
+		public Builder station(Station station) {
+			this.station = station;
+			return this;
+		}
+
+		public Builder upStation(Station upStation) {
+			this.upStation = upStation;
+			return this;
+		}
+
+		public Builder upDistance(Integer upDistance) {
+			this.upDistance = upDistance;
+			return this;
+		}
+
+		public LineStation build() {
+			return new LineStation(this);
+		}
 	}
 }

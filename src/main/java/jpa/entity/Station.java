@@ -48,7 +48,12 @@ public class Station extends BaseEntity {
 	}
 
 	public void addLineStation(Line line, Station upStation, Integer upDistance) {
-		addLineStation(new LineStation(line, this, upStation, upDistance));
+		addLineStation(new LineStation.Builder()
+				.line(line)
+				.station(this)
+				.upStation(upStation)
+				.upDistance(upDistance)
+			.build());
 	}
 
 	public void addLineStation(LineStation lineStation) {
