@@ -42,8 +42,24 @@ public class LineStation extends BaseEntity{
 		return line;
 	}
 
+	public void addToLine(LineStation lineStation) {
+		line.addLineStation(lineStation);
+	}
+
+	public void removeFromLine(LineStation lineStation) {
+		line.removeLineStation(lineStation);
+	}
+
 	public Station getStation() {
 		return station;
+	}
+
+	public void addToStation(LineStation lineStation) {
+		station.addLineStation(lineStation);
+	}
+
+	public void removeFromStation(LineStation lineStation) {
+		station.removeLineStation(lineStation);
 	}
 
 	public Station getUpStation() {

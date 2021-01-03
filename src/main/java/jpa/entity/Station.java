@@ -53,13 +53,13 @@ public class Station extends BaseEntity {
 
 	public void addLineStation(LineStation lineStation) {
 		if (lineStations.add(lineStation)) {
-			lineStation.getLine().addLineStation(lineStation);
+			lineStation.addToLine(lineStation);
 		}
 	}
 
 	public void removeLineStation(LineStation lineStation) {
 		if (lineStations.remove(lineStation)) {
-			lineStation.getLine().removeLineStation(lineStation);
+			lineStation.removeFromLine(lineStation);
 		}
 	}
 }
