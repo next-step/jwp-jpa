@@ -62,9 +62,9 @@ class StationRepositoryTest {
     void delete() {
         // given when
         stationRepository.delete(stationRepository.findByName("몽촌토성역"));
+        Station actual = stationRepository.findByName("몽촌토성역");
 
         // then
-        Station actual = stationRepository.findByName("몽촌토성역");
         assertThat(actual).isNull();
     }
 

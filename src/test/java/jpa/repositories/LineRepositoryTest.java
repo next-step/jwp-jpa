@@ -62,9 +62,9 @@ class LineRepositoryTest {
     void delete() {
         // given when
         lineRepository.delete(lineRepository.findByName("8호선"));
+        Line actual = lineRepository.findByName("8호선");
 
         // then
-        Line actual = lineRepository.findByName("8호선");
         assertThat(actual).isNull();
     }
 
