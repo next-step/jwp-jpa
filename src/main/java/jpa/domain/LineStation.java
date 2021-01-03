@@ -22,6 +22,9 @@ public class LineStation {
     @JoinColumn(name = "station_id")
     private Station station;
 
+    @Embedded
+    private Section section;
+
     public LineStation() {
     }
 

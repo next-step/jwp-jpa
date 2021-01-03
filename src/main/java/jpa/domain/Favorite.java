@@ -15,19 +15,15 @@ public class Favorite extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
-    @JoinColumn
-    private Station startStation;
-
-    @ManyToOne
-    @JoinColumn
-    private Station endStation;
+    @Embedded
+    private Section section;
 
     public Favorite() {}
 
     public Favorite(Station startStation, Station endStation) {
-        this.startStation = startStation;
-        this.endStation = endStation;
+        //this.startStation = startStation;
+        //this.endStation = endStation;
+        this.section = new Section(startStation, endStation, 0);
     }
 
     public Long getId() {
@@ -39,11 +35,11 @@ public class Favorite extends BaseEntity {
     }
 
     public Station getStartStation() {
-        return startStation;
+        return section.getStartStation();
     }
 
     public Station getEndStation() {
-        return endStation;
+        return section.getEndStation();
     }
 
     public void setMember(Member member) {

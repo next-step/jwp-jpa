@@ -1,6 +1,5 @@
 package jpa.repository;
 
-import jpa.domain.Line;
 import jpa.domain.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
