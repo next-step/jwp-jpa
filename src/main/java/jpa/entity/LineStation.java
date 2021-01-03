@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 
 @Entity
-public class LineStation extends BaseEntity{
+public class LineStation extends BaseEntity {
 
 	@EmbeddedId
 	private LineStationPk pk;
@@ -31,11 +31,25 @@ public class LineStation extends BaseEntity{
 	}
 
 	private LineStation(Builder builder) {
+		checkValidUpStation(builder.upStation, builder.upDistance);
+
 		this.pk = LineStationPk.of(builder.line, builder.station);
 		this.line = builder.line;
 		this.station = builder.station;
 		this.upStation = builder.upStation;
 		this.upDistance = builder.upDistance;
+	}
+
+	private void checkValidUpStation(Station upStation, Integer upDistance) {
+		if (upStation != null && upDistance == null) {
+			throw new IllegalArgumentException("이전역이 존재하면서 거리가 null일 수 없습니다.");
+		}
+		if (upStation == null && upDistance != null) {
+			throw new IllegalArgumentException("이전역이 null이면 거리가 존재할 수 없습니다.");
+		}
+		if (upDistance != null && upDistance <= 0) {
+			throw new IllegalArgumentException("거리는 0과 같거나 작을 수 없습니다.");
+		}
 	}
 
 	public Line getLine() {
