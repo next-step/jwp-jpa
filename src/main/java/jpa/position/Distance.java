@@ -1,11 +1,19 @@
 package jpa.position;
 
-import lombok.Getter;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Embeddable
 public class Distance {
 
-	@Getter
-	private final long distance;
+	@Column
+	private long distance;
 
 	public Distance(long distance) {
 		if (distance <= 0) {

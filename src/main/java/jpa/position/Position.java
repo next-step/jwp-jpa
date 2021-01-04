@@ -3,7 +3,7 @@ package jpa.position;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Resource;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -39,8 +39,8 @@ public class Position extends BaseTime {
 	@JoinColumn(nullable = false)
 	private Station downStation;
 
-	@Resource
-	private transient Distance distance;
+	@Embedded
+	private Distance distance;
 
 	public Position(Line line, Station upStation, Station downStation, long distance) {
 		this.line = line;
