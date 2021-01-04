@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -34,7 +36,10 @@ public class LineRepositoryTest {
     @Test
     void remove() {
         Line expected = new Line("9호선", "gold");
-        Line actual = lines.save(expected);
-        assertThat(actual).isNotNull();
+        Line actual1 = lines.save(expected);
+        assertThat(actual1).isNotNull();
+        lines.deleteById(actual1.getId());
+        List<Line> actual2 = lines.findAll();
+        assertThat(actual2).isEmpty();
     }
 }

@@ -24,4 +24,41 @@ public class Member {
     public Member() {
 
     }
+
+    public Member(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void changeAge(int age) {
+        this.age = age;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Date getCreate_date() {
+        return create_date;
+    }
+
+    public Date getModified_date() {
+        return modified_date;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

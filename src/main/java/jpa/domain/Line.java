@@ -28,6 +28,10 @@ public class Line {
         this.color = color;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

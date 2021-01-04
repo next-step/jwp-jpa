@@ -18,4 +18,20 @@ public class Favorite {
     public Favorite() {
 
     }
+
+    public void chageDate(Date date) {
+        modified_date = date;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Date getCreated_date() {
+        return created_date;
+    }
+
+    public Date getModified_date() {
+        return modified_date;
+    }
 }
