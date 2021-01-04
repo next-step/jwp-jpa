@@ -1,14 +1,19 @@
 package jpa.station;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import jpa.common.BaseTime;
+import jpa.position.Position;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +28,13 @@ public class Station extends BaseTime {
 	private Long id;
 	@Column(nullable = false)
 	private String name;
-	
+
+	@OneToMany(mappedBy = "upStation")
+	private final List<Position> upPositions = new ArrayList<>();
+
+	@OneToMany(mappedBy = "downStation")
+	private final List<Position> downPositions = new ArrayList<>();
+
 	public Station(String name) {
 		this.name = name;
 	}
