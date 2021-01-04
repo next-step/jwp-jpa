@@ -3,7 +3,6 @@ package jpa.member;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,26 +13,15 @@ import jpa.common.BaseTime;
 import jpa.favorite.Favorite;
 import lombok.Getter;
 
+@Getter
 @Entity
 public class Member extends BaseTime {
-
-	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Getter
-	@Column
 	private int age;
-
-	@Getter
-	@Column
 	private String email;
-
-	@Column
 	private String password;
-
-	@Getter
 	@OneToMany(mappedBy = "member")
 	private final List<Favorite> favorites = new ArrayList<>();
 

@@ -17,39 +17,28 @@ import javax.persistence.Table;
 import jpa.common.BaseTime;
 import jpa.position.Position;
 import jpa.station.Station;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 @Table(indexes = @Index(name = "unique_line_name", columnList = "name", unique = true))
 public class Line extends BaseTime {
-
-	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Getter
 	@Column(nullable = false)
 	private Color color;
-
-	@Getter
 	@Column(nullable = false)
 	private String name;
-
-	@Getter
 	@ManyToMany(mappedBy = "lines")
 	private final List<Station> stations = new ArrayList<>();
-
-	protected Line() {
-	}
 
 	public Line(String name, Color color) {
 		this.color = color;
 		this.name = name;
-	}
-
-	private void changeStation(Station station) {
-		station.addLine(this);
 	}
 
 	public void clearStation(Station station) {
@@ -65,5 +54,9 @@ public class Line extends BaseTime {
 	public void addStation(Station station, Position position) {
 		station.addPosition(position);
 		changeStation(station);
+	}
+
+	private void changeStation(Station station) {
+		station.addLine(this);
 	}
 }

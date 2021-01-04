@@ -11,33 +11,24 @@ import javax.persistence.ManyToOne;
 
 import jpa.common.BaseTime;
 import jpa.station.Station;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
-@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Position extends BaseTime {
-
-	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Getter
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private Station station;
-
-	@Getter
 	@Column(nullable = false)
 	private long lineId;
-
-	@Getter
 	@Column(nullable = false)
 	private long distance;
-
-	protected Position() {
-	}
 
 	public Position(Station station, long id, long distance) {
 		this.station = station;

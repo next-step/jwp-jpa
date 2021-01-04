@@ -11,43 +11,29 @@ import javax.persistence.ManyToOne;
 import jpa.common.BaseTime;
 import jpa.member.Member;
 import jpa.station.Station;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Favorite extends BaseTime {
-
-	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	private Member member;
-
-	@Getter
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private Station startStation;
-
-	@Getter
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
 	private Station endStation;
 
-	protected Favorite() {
-	}
-
 	public Favorite(Station start, Station end) {
 		this.startStation = start;
 		this.endStation = end;
-	}
-
-	public String startName() {
-		return startStation.getName();
-	}
-
-	public String endName() {
-		return endStation.getName();
 	}
 }

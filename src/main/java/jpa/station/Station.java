@@ -18,32 +18,25 @@ import javax.persistence.Table;
 import jpa.common.BaseTime;
 import jpa.line.Line;
 import jpa.position.Position;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 @Table(indexes = @Index(name = "unique_station_name", columnList = "name", unique = true))
 public class Station extends BaseTime {
-
-	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Getter
 	@Column(nullable = false)
 	private String name;
-
-	@Getter
 	@ManyToMany
 	@JoinColumn
 	private final List<Line> lines = new ArrayList<>();
-
-	@Getter
 	@OneToMany(mappedBy = "station")
 	private final List<Position> positions = new ArrayList<>();
-
-	protected Station() {
-	}
 
 	public Station(String name) {
 		this.name = name;
