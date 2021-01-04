@@ -1,21 +1,21 @@
 package jpa.line;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.*;
+import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.position.Position;
 import jpa.position.PositionRepository;
 import jpa.station.Station;
 import jpa.station.StationRepository;
 
+@DisplayName("지하철 노선 엔티티 테스트")
 @DataJpaTest
 class LineTest {
 
@@ -28,35 +28,49 @@ class LineTest {
 	@Autowired
 	private PositionRepository positionRepository;
 
-	private Station 시청;
-
-	@BeforeEach
-	void init() {
-		시청 = stationRepository.save(new Station("시청"));
-		stationRepository.flush();
-	}
-
+	@DisplayName("지하철 노선: 라인 구간위치 추가(전철역 거리 추가 테스트)")
 	@Test
-	@DisplayName("노선 라인 생성 테스트")
-	void initLineTest() {
-		Line actual = lineRepository.save(new Line("2호선", Color.GREEN));
+	void initLineWithPositionTest() {
+		// given // when
+		Line actual = 전철_노선_구간_생성("2호선", Color.GREEN, "시청", "서울", 100L);
 
+		// then
 		assertAll(
 			() -> assertThat(actual).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo("2호선"),
-			() -> assertThat(actual.getColor()).isEqualTo(Color.GREEN)
+			() -> assertThat(actual.getPositions()).hasSize(1),
+			() -> assertThat(actual.getPositions().get(0).getId()).isNotNull(),
+			() -> assertThat(actual.getPositions().get(0).getDistance()).isEqualTo(100L)
 		);
 	}
 
+	@DisplayName("지하철 노선: 라인 구간 지하철 조회")
 	@Test
-	@DisplayName("라인 전철 및 거리 추가 테스트")
-	void getStationsNameTest() {
-		Line lineNumber2 = lineRepository.save(new Line("2호선", Color.GREEN));
+	void getStationsTest() {
+		// given
+		Line actual = 전철_노선_구간_생성("2호선", Color.GREEN, "시청", "서울", 100L);
 
-		Position 시청Position = positionRepository.save(new Position(시청, lineNumber2.getId(), 10L));
-		lineNumber2.addStation(시청, 시청Position);
+		// when
+		List<Station> stations = actual.getStations();
 
-		Station actual = stationRepository.findByName("시청");
-		assertThat(actual.getPosition(lineNumber2.getId())).isEqualTo(10L);
+		// then
+		assertAll(
+			() -> assertThat(stations).isNotNull(),
+			() -> assertThat(stations).hasSize(2),
+			() -> assertThat(stations.get(0).getName()).isEqualTo("시청"),
+			() -> assertThat(stations.get(1).getName()).isEqualTo("서울")
+		);
+	}
+
+	private Line 전철_노선_구간_생성(String lineName, Color color, String upStation, String downStation, long distance) {
+		// given
+		Station 시청 = 전철_역_생성(upStation);
+		Station 서울 = 전철_역_생성(downStation);
+
+		// when
+		return lineRepository.save(new Line(lineName, color, 시청, 서울, 100L));
+	}
+
+	private Station 전철_역_생성(String name) {
+		return stationRepository.save(new Station(name));
 	}
 }
