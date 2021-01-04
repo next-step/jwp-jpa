@@ -15,11 +15,24 @@ public class Line {
     @Temporal(TemporalType.TIMESTAMP)
     private Date modified_date;
 
-    private String color;
-
     private String name;
+
+    private String color;
 
     public Line() {
 
+    }
+
+    public Line(String name, String color) {
+        this.name = name;
+        this.color = color;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getColor() {
+        return color;
     }
 }

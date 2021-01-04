@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "station")
 public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +18,14 @@ public class Station {
 
     private String name;
 
+    public Station() {
+    }
+
     public Station(String name) {
+        this.name = name;
+    }
+
+    public void changeName(String name) {
         this.name = name;
     }
 
