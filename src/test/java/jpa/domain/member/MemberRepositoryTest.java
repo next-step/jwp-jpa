@@ -4,9 +4,12 @@ import jpa.domain.favorite.Favorite;
 import jpa.domain.favorite.FavoriteRepository;
 import jpa.domain.station.Station;
 import jpa.domain.station.StationRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 public class MemberRepositoryTest {
@@ -31,19 +34,19 @@ public class MemberRepositoryTest {
         Member member = members.save(new Member("jason"));
 
         // when
-        member.changeName("mkkim");
-        member.changeAge(32);
-        Favorite favorite = saveFavorite();
+        member.change("mkkim");
+        member.change(32);
         members.flush();
 
     }
 
-    private Favorite saveFavorite() {
-        Station departureStation = stations.save(new Station("강남역"));
-        Station arrivalStation = stations.save(new Station("잠실역"));
-        Member member = members.save(new Member("김민균"));
-        Favorite favorite = favorites.save(new Favorite(departureStation, arrivalStation, member));
-        return favorite;
+    @DisplayName("나이 유효성 검증")
+    @Test
+    void validateAge() {
+        Member member = members.save(new Member("mkkim"));
+        assertThatThrownBy(() -> {
+            member.change(-1);
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -54,4 +57,5 @@ public class MemberRepositoryTest {
         members.delete(member);
         members.flush();
     }
+
 }

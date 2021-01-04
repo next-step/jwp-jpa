@@ -34,6 +34,11 @@ public class Line extends BaseTimeEntity {
         this.name = name;
     }
 
+    public void change(String name) {
+        validate(name);
+        this.name = name;
+    }
+
     private void validate(String name) {
         if (name == null) {
             throw new IllegalArgumentException("필수값 누락입니다.");

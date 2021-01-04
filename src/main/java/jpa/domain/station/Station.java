@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "station")
 public class Station extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +23,18 @@ public class Station extends BaseTimeEntity {
     }
 
     public Station(final String name) {
+        validate(name);
         this.name = name;
     }
 
-    public Station(final Long id, final String name) {
-        this.id = id;
-        this.name = name;
+    private void validate(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("필수값 누락입니다.");
+        }
     }
 
-    public void changeName(String name) {
+    public void change(String name) {
+        validate(name);
         this.name = name;
     }
 

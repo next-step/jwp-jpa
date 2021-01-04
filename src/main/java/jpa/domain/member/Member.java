@@ -19,25 +19,39 @@ public class Member extends BaseTimeEntity {
     private String password;
 
     public Member(String name) {
+        validate(name);
         this.name = name;
     }
 
     protected Member() {
     }
 
-    public Member(String name, int age, String email, String password) {
+    public Member(String name, String email, String password) {
         this(name);
-        this.age = age;
         this.email = email;
         this.password = password;
     }
 
-    public void changeName(String name) {
+    private void validate(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("필수값 누락입니다.");
+        }
+    }
+
+    public void change(String name) {
+        validate(name);
         this.name = name;
     }
 
-    public void changeAge(int age) {
+    public void change(int age) {
+        validate(age);
         this.age = age;
+    }
+
+    private void validate(int age) {
+        if (age < 0) {
+            throw new IllegalArgumentException("정확한 나이를 입력해주세요.");
+        }
     }
 
     @Override
