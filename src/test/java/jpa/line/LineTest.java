@@ -32,14 +32,14 @@ class LineTest {
 	@Test
 	void initLineWithPositionTest() {
 		// given // when
-		Line actual = 전철_노선_구간_생성("2호선", Color.GREEN, "시청", "서울", 100L);
+		Line actual = 전철_노선_구간_생성("1호선", Color.BLUE, "인천", "소요산", 500L);
 
 		// then
 		assertAll(
 			() -> assertThat(actual).isNotNull(),
 			() -> assertThat(actual.getPositions()).hasSize(1),
 			() -> assertThat(actual.getPositions().get(0).getId()).isNotNull(),
-			() -> assertThat(actual.getPositions().get(0).getDistance()).isEqualTo(100L)
+			() -> assertThat(actual.getPositions().get(0).getDistance()).isEqualTo(500L)
 		);
 	}
 
@@ -61,13 +61,13 @@ class LineTest {
 		);
 	}
 
-	private Line 전철_노선_구간_생성(String lineName, Color color, String upStation, String downStation, long distance) {
+	private Line 전철_노선_구간_생성(String lineName, Color color, String upName, String downName, long distance) {
 		// given
-		Station 시청 = 전철_역_생성(upStation);
-		Station 서울 = 전철_역_생성(downStation);
+		Station upStation = 전철_역_생성(upName);
+		Station downStation = 전철_역_생성(downName);
 
 		// when
-		return lineRepository.save(new Line(lineName, color, 시청, 서울, 100L));
+		return lineRepository.save(new Line(lineName, color, upStation, downStation, distance));
 	}
 
 	private Station 전철_역_생성(String name) {
