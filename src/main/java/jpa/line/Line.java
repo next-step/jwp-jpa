@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import jpa.common.BaseTime;
+import jpa.position.Distance;
 import jpa.position.Position;
 import jpa.station.Station;
 import lombok.AccessLevel;
@@ -60,5 +62,17 @@ public class Line extends BaseTime {
 			result.addAll(position.getStations());
 		}
 		return new ArrayList<>(result);
+	}
+
+	public List<Long> positionsId() {
+		return this.positions.stream()
+			.map(Position::getId)
+			.collect(Collectors.toList());
+	}
+
+	public List<Distance> positionsDistance() {
+		return this.positions.stream()
+			.map(Position::getDistance)
+			.collect(Collectors.toList());
 	}
 }

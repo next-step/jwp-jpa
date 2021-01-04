@@ -38,8 +38,8 @@ class LineTest {
 		assertAll(
 			() -> assertThat(actual).isNotNull(),
 			() -> assertThat(actual.getPositions()).hasSize(1),
-			() -> assertThat(actual.getPositions().get(0).getId()).isNotNull(),
-			() -> assertThat(actual.getPositions().get(0).getDistance()).isEqualTo(500L)
+			() -> assertThat(actual.positionsId().get(0)).isNotNull(),
+			() -> assertThat(actual.positionsDistance().get(0).getDistance()).isEqualTo(500L)
 		);
 	}
 
