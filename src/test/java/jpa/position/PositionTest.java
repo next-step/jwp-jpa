@@ -43,9 +43,9 @@ class PositionTest {
 		assertAll(
 			() -> assertThat(actual).isNotNull(),
 			() -> assertThat(actual.getLine()).isNotNull(),
-			() -> assertThat(actual.getUpStation().getName()).isEqualTo("강남"),
-			() -> assertThat(actual.getDownStation().getName()).isEqualTo("서초"),
-			() -> assertThat(actual.getDistance()).isEqualTo(10L)
+			() -> assertThat(actual.upStationName()).isEqualTo("강남"),
+			() -> assertThat(actual.downStationName()).isEqualTo("서초"),
+			() -> assertThat(actual.distance()).isEqualTo(10L)
 		);
 	}
 
