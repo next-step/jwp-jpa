@@ -17,7 +17,15 @@ public class Station {
 
     private String name;
 
-    public Station() {
+    public Station(String name) {
+        this.name = name;
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }
