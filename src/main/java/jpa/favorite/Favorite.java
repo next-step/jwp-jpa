@@ -36,4 +36,12 @@ public class Favorite extends BaseTime {
 		this.startStation = start;
 		this.endStation = end;
 	}
+
+	public String startStationName() {
+		return this.startStation.getName();
+	}
+
+	public String ensStationName() {
+		return this.endStation.getName();
+	}
 }

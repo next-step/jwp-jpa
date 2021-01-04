@@ -32,8 +32,8 @@ class FavoriteTest {
 		// then
 		assertAll(
 			() -> assertThat(actual).isNotNull(),
-			() -> assertThat(actual.getStartStation().getName()).isEqualTo("주안"),
-			() -> assertThat(actual.getEndStation().getName()).isEqualTo("시청")
+			() -> assertThat(actual.startStationName()).isEqualTo("주안"),
+			() -> assertThat(actual.ensStationName()).isEqualTo("시청")
 		);
 
 	}
