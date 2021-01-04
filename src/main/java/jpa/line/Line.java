@@ -2,16 +2,18 @@ package jpa.line;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import jpa.common.BaseTime;
@@ -20,7 +22,9 @@ import jpa.station.Station;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -33,30 +37,28 @@ public class Line extends BaseTime {
 	private Color color;
 	@Column(nullable = false)
 	private String name;
-	@ManyToMany(mappedBy = "lines")
-	private final List<Station> stations = new ArrayList<>();
+	@OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
+	private final List<Position> positions = new ArrayList<>();
 
 	public Line(String name, Color color) {
 		this.color = color;
 		this.name = name;
 	}
 
-	public void clearStation(Station station) {
-		station.clearLine(this);
+	public Line(String name, Color color, Station upStation, Station downStation, long distance) {
+		this(name, color);
+		this.addPosition(upStation, downStation, distance);
 	}
 
-	public List<String> getStationsName() {
-		return this.stations.stream()
-			.map(Station::getName)
-			.collect(Collectors.toList());
+	private void addPosition(Station upStation, Station downStation, long distance) {
+		this.positions.add(new Position(this, upStation, downStation, distance));
 	}
 
-	public void addStation(Station station, Position position) {
-		station.addPosition(position);
-		changeStation(station);
-	}
-
-	private void changeStation(Station station) {
-		station.addLine(this);
+	public List<Station> getStations() {
+		Set<Station> result = new LinkedHashSet<>();
+		for (Position position : this.positions) {
+			result.addAll(position.getStations());
+		}
+		return new ArrayList<>(result);
 	}
 }
