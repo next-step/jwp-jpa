@@ -1,4 +1,4 @@
-package jpa.repository.step2;
+package jpa.repository.step2and3;
 
 import java.util.Arrays;
 
@@ -39,7 +39,7 @@ abstract class BeforeEachTest {
 	void saveBeforeEach() {
 		saveStation();
 		saveLine();
-		saveLineStation();
+		saveLineStations();
 		saveMember();
 		saveFavorite();
 
@@ -53,16 +53,15 @@ abstract class BeforeEachTest {
 		stationRepository.saveAll(Arrays.asList(
 
 			// 2, 5호선 환승역
-			stationRepository.save(new Station("왕십리")),
-			stationRepository.save(new Station("동대문역사문화공원")),
-			stationRepository.save(new Station("을지로4가")),
-			stationRepository.save(new Station("충정로")),
 			stationRepository.save(new Station("영등포구청")),
-			stationRepository.save(new Station("까치산")),
+			stationRepository.save(new Station("충정로")),
+			stationRepository.save(new Station("을지로4가")),
+			stationRepository.save(new Station("동대문역사문화공원")),
+			stationRepository.save(new Station("왕십리")),
 
 			// 2호선만
-			stationRepository.save(new Station("잠실나루")),
 			stationRepository.save(new Station("신촌")),
+			stationRepository.save(new Station("잠실나루")),
 
 			// 5호선만
 			stationRepository.save(new Station("광화문")),
@@ -75,28 +74,37 @@ abstract class BeforeEachTest {
 		lineRepository.save(new Line("5호선", "보라색"));
 	}
 
-	private void saveLineStation() {
-		// 노선과 지하철을 각각 save
-		Station 왕십리 = stationRepository.findByName("왕십리");
-		Station 충정로 = stationRepository.findByName("충정로");
-		Line 이호선 = lineRepository.findByName("2호선").orElseGet(() -> new Line("2호선", "초록색"));
-		Line 오호선 = lineRepository.findByName("5호선").orElseGet(() -> new Line("5호선", "보라색"));
+	// lineStationRepository를 사용하지 않고, line과 station의 cascade=CascadeType.ALL 옵션을 통한 save
+	private void saveLineStations() {
+		saveLineStation("2호선", null, "영등포구청", null);
+		saveLineStation("2호선", "영등포구청", "신촌", 9);
+		saveLineStation("2호선", "신촌", "충정로", 5);
+		saveLineStation("2호선", "충정로", "을지로4가", 7);
+		saveStationLine("2호선", "을지로4가", "동대문역사문화공원", 1);
+		saveStationLine("2호선", "동대문역사문화공원", "왕십리", 5);
+		saveStationLine("2호선", "왕십리", "잠실나루", 16);
 
-		// test : 다양한 경우의 수로 서로를 매핑
-		이호선.addStation(왕십리);
-		충정로.addLine(이호선);
-		왕십리.addLine(오호선);
-		오호선.addStation(충정로);
+		saveLineStation("5호선", null, "영등포구청", null);
+		saveLineStation("5호선", "영등포구청", "충정로", 14);
+		saveLineStation("5호선", "충정로", "광화문", 3);
+		saveStationLine("5호선", "광화문", "을지로4가", 4);
+		saveStationLine("5호선", "을지로4가", "동대문역사문화공원", 1);
+		saveStationLine("5호선", "동대문역사문화공원", "왕십리", 7);
+		saveStationLine("5호선", "왕십리", "강동", 15);
+	}
 
-		// 남은 역을 매핑
-		stationRepository
-			.findAllByNameIn("동대문역사문화공원", "을지로4가", "영등포구청", "까치산", "잠실나루", "신촌")
-			.stream()
-			.forEach(이호선::addStation);
-		stationRepository
-			.findAllByNameIn("동대문역사문화공원", "을지로4가", "영등포구청", "까치산", "광화문", "강동")
-			.stream()
-			.forEach(오호선::addStation);
+	private void saveLineStation(String 노선이름, String 이전역이름, String 역이름, Integer 이전역거리) {
+		Line 노선 = lineRepository.findByName(노선이름).get();
+		Station 이전역 = stationRepository.findByName(이전역이름);
+		Station 역 = stationRepository.findByName(역이름);
+		노선.addLineStation(역, 이전역, 이전역거리);
+	}
+
+	private void saveStationLine(String 노선이름, String 이전역이름, String 역이름, Integer 이전역거리) {
+		Line 노선 = lineRepository.findByName(노선이름).get();
+		Station 이전역 = stationRepository.findByName(이전역이름);
+		Station 역 = stationRepository.findByName(역이름);
+		역.addLineStation(노선, 이전역, 이전역거리);
 	}
 
 	private void saveMember() {

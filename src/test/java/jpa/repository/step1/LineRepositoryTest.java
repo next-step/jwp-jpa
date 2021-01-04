@@ -57,7 +57,7 @@ class LineRepositoryTest {
 	 */
 	@DisplayName("update : updatable false인 컬럼 수정 테스트. 수정이 되면 안된다.")
 	@Test
-	void update() {
+	void update() throws InterruptedException {
 		Line line = lineRepository.save(new Line("2호선", "초록색"));
 		line.changeColor("green");
 
@@ -65,6 +65,8 @@ class LineRepositoryTest {
 		LocalDateTime beforeChangedTime = line.getCreatedDate();
 		LocalDateTime afterChangedTime = LocalDateTime.now().minusHours(1);
 		line.changeCreatedDate(afterChangedTime);
+
+		Thread.sleep(50);
 
 		// 이 시점에 update쿼리가 날라가게 되며 modifiedDate가 업데이트 된다
 		Line beforeClearLine = lineRepository.findByColor("green");

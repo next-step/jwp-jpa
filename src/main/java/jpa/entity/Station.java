@@ -3,14 +3,13 @@ package jpa.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Station extends BaseEntity {
@@ -22,13 +21,8 @@ public class Station extends BaseEntity {
 	@Column(unique = true)
 	private String name;
 
-	@ManyToMany
-	@JoinTable(
-		name = "line_station",
-		joinColumns = @JoinColumn(name = "station_id"),
-		inverseJoinColumns = @JoinColumn(name = "line_id")
-	)
-	private final Set<Line> lines = new HashSet<>();
+	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final Set<LineStation> lineStations = new HashSet<>();
 
 	protected Station() {
 	}
@@ -49,15 +43,28 @@ public class Station extends BaseEntity {
 		return name;
 	}
 
-	public Set<Line> getLines() {
-		return lines;
+	public Set<LineStation> getLineStations() {
+		return lineStations;
 	}
 
-	public void addLine(Line line) {
-		if (lines.contains(line)) {
-			return;
+	public void addLineStation(Line line, Station upStation, Integer upDistance) {
+		addLineStation(new LineStation.Builder()
+				.line(line)
+				.station(this)
+				.upStation(upStation)
+				.upDistance(upDistance)
+			.build());
+	}
+
+	public void addLineStation(LineStation lineStation) {
+		if (lineStations.add(lineStation)) {
+			lineStation.addToLine(lineStation);
 		}
-		lines.add(line);
-		line.addStation(this);
+	}
+
+	public void removeLineStation(LineStation lineStation) {
+		if (lineStations.remove(lineStation)) {
+			lineStation.removeFromLine(lineStation);
+		}
 	}
 }

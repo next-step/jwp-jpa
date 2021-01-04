@@ -1,9 +1,10 @@
 package jpa.repository.step1;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,20 +20,28 @@ import jpa.repository.StationRepository;
 class StationRepositoryTest {
 
 	@Autowired
+	EntityManager em;
+
+	@Autowired
 	private StationRepository stationRepository;
 
 	/**
 	 * 저장 테스트 겸 매 Test 전마다 기본적인 rows를 insert
 	 */
 	@BeforeEach
-	void saveBefaoreEach() {
-		Station expected = new Station("잠실역");
-		Station actual = stationRepository.save(expected);
-		assertAll(
-			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getName()).isEqualTo(expected.getName())
-		);
+	void saveBeforeEach() {
+		stationRepository.save(new Station("잠실역"));
 		stationRepository.save(new Station("몽촌토성역"));
+		System.out.println("\n>> saveBeforeEach 종료\n");
+	}
+
+	@DisplayName("insert : insert 테스트")
+	@Test
+	void insert() {
+		Station 삼성역 = stationRepository.save(new Station("삼성역"));
+		em.flush();
+		em.clear();
+		assertThat(stationRepository.findById(삼성역.getId())).isPresent();
 	}
 
 	/**
