@@ -1,10 +1,11 @@
 package jpa.line;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.*;
+import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import jpa.position.PositionRepository;
 import jpa.station.Station;
 import jpa.station.StationRepository;
 
+@DisplayName("지하철 노선 엔티티 테스트")
 @DataJpaTest
 class LineTest {
 
@@ -26,33 +28,51 @@ class LineTest {
 	@Autowired
 	private PositionRepository positionRepository;
 
-	private Station 시청;
-	private Station 서울;
-	private Station 용산;
+	@DisplayName("지하철 노선: 라인 구간위치 추가(전철역 거리 추가 테스트)")
+	@Test
+	void initLineWithPositionTest() {
+		// given // when
+		Line actual = 전철_노선_구간_생성("1호선", Color.BLUE, "인천", "소요산", 500L);
 
-	private Line lineNumber1;
-
-	@BeforeEach
-	void init() {
-		시청 = stationRepository.save(new Station("시청"));
-		서울 = stationRepository.save(new Station("서울"));
-		용산 = stationRepository.save(new Station("용산"));
-
-		lineNumber1 = lineRepository.save(new Line("1호선", Color.BLUE));
-
-		lineNumber1.addStation(시청);
-		lineNumber1.addStation(서울);
-		lineNumber1.addStation(용산);
-
-		stationRepository.flush();
+		// then
+		assertAll(
+			() -> assertThat(actual).isNotNull(),
+			() -> assertThat(actual.getPositions()).hasSize(1),
+			() -> assertThat(actual.positionsId().get(0)).isNotNull(),
+			() -> assertThat(actual.positionsDistance().get(0).getDistance()).isEqualTo(500L),
+			() -> assertThat(actual.getStations().get(0).getUpPositions()).isNotNull(),
+			() -> assertThat(actual.getStations().get(0).getDownPositions()).isNotNull()
+		);
 	}
 
+	@DisplayName("지하철 노선: 라인 구간 지하철 조회")
 	@Test
-	@DisplayName("노선 조회 시, 속한 지하철역을 볼 수 있다.")
-	void getStationsNameTest() {
-		Line line1 = lineRepository.findByName("1호선");
+	void getStationsTest() {
+		// given
+		Line actual = 전철_노선_구간_생성("2호선", Color.GREEN, "시청", "서울", 100L);
 
-		assertThat(line1.getStationsName()).hasSize(3);
-		System.out.println(line1.getStationsName());
+		// when
+		List<Station> stations = actual.getStations();
+
+		// then
+		assertAll(
+			() -> assertThat(stations).isNotNull(),
+			() -> assertThat(stations).hasSize(2),
+			() -> assertThat(stations.get(0).getName()).isEqualTo("시청"),
+			() -> assertThat(stations.get(1).getName()).isEqualTo("서울")
+		);
+	}
+
+	private Line 전철_노선_구간_생성(String lineName, Color color, String upName, String downName, long distance) {
+		// given
+		Station upStation = 전철_역_생성(upName);
+		Station downStation = 전철_역_생성(downName);
+
+		// when
+		return lineRepository.save(new Line(lineName, color, upStation, downStation, distance));
+	}
+
+	private Station 전철_역_생성(String name) {
+		return stationRepository.save(new Station(name));
 	}
 }

@@ -2,71 +2,77 @@ package jpa.line;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import jpa.common.BaseTime;
+import jpa.position.Distance;
 import jpa.position.Position;
 import jpa.station.Station;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 @Table(indexes = @Index(name = "unique_line_name", columnList = "name", unique = true))
 public class Line extends BaseTime {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Getter
 	@Column(nullable = false)
 	private Color color;
-
-	@Getter
 	@Column(nullable = false)
 	private String name;
-
-	@Getter
-	@ManyToMany(mappedBy = "lines")
-	private final List<Station> stations = new ArrayList<>();
-
-	@Getter
-	@OneToMany(mappedBy = "line")
+	@OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
 	private final List<Position> positions = new ArrayList<>();
-
-	protected Line() {
-	}
 
 	public Line(String name, Color color) {
 		this.color = color;
 		this.name = name;
 	}
 
-	public void addStation(Station station) {
-		station.addLine(this);
+	public Line(String name, Color color, Station upStation, Station downStation, long distance) {
+		this(name, color);
+		this.addPosition(upStation, downStation, distance);
 	}
 
-	public void clearStation(Station station) {
-		station.clearLine(this);
+	private void addPosition(Station upStation, Station downStation, long distance) {
+		this.positions.add(new Position(this, upStation, downStation, distance));
 	}
 
-	public int getLocation(Station station) {
-		return station.getLocation(this);
+	public List<Station> getStations() {
+		Set<Station> result = new LinkedHashSet<>();
+		for (Position position : this.positions) {
+			result.addAll(position.getStations());
+		}
+		return new ArrayList<>(result);
 	}
 
-	public List<String> getStationsName() {
-		return this.stations.stream()
-			.map(Station::getName)
+	public List<Long> positionsId() {
+		return this.positions.stream()
+			.map(Position::getId)
+			.collect(Collectors.toList());
+	}
+
+	public List<Distance> positionsDistance() {
+		return this.positions.stream()
+			.map(Position::getDistance)
 			.collect(Collectors.toList());
 	}
 }
