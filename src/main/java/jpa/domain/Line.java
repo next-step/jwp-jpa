@@ -77,7 +77,7 @@ public class Line extends BaseEntity {
     // 지하철역 추가 시 구간정보 등록
     public void addStation(Section section) {
         Station station = section.getEndStation();
-        lineStations.add(new LineStation(this, station, section));
+        lineStations.add(new LineStation(this, section));
         if (!station.getLines().contains(this)) {
             station.addLine(this);
         }

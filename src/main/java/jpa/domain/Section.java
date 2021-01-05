@@ -1,10 +1,7 @@
 package jpa.domain;
 
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Embeddable
 public class Section {
@@ -14,7 +11,7 @@ public class Section {
     private Station startStation;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "station_id", insertable = false, updatable = false)
     private Station endStation;
 
     @Column(nullable = true)
@@ -30,10 +27,6 @@ public class Section {
         this.startStation = startStation;
         this.endStation = endStation;
         this.distance = distance;
-    }
-
-    public Station getStartStation() {
-        return startStation;
     }
 
     public Station getEndStation() {
