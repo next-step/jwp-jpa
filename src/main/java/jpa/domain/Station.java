@@ -1,19 +1,20 @@
-package jpa.step1.domain;
+package jpa.domain;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 @Table(name = "station")
 @Entity
-public class Station {
+public class Station extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +24,11 @@ public class Station {
 	@Column(name = "name", unique = true)
 	private String name;
 
-	@Column(name = "created_date")
-	@CreationTimestamp
-	private LocalDateTime createdDate;
+	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<LineStation> lineStations = new ArrayList<>();
 
-	@Column(name = "modified_date")
-	private LocalDateTime modifiedDate;
+	protected Station() {
+	}
 
 	public Station(final String name) {
 		this.name = name;
@@ -42,13 +42,12 @@ public class Station {
 		return name;
 	}
 
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
+	public List<LineStation> getLineStations() {
+		return lineStations;
 	}
 
-	public LocalDateTime getModifiedDate() {
-		return modifiedDate;
+	public void addLineStation(LineStation lineStation) {
+		this.lineStations.add(lineStation);
 	}
-
 
 }

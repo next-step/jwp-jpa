@@ -1,10 +1,10 @@
-package jpa.step1.repository;
+package jpa.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import jpa.step1.domain.Station;
+import jpa.domain.Station;
 
 public interface StationRepository extends JpaRepository<Station, Long> {
 	Optional<Station> findByName(String stationName);

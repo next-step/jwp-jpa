@@ -1,4 +1,4 @@
-package jpa.step1;
+package jpa.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.step1.domain.Color;
-import jpa.step1.domain.Line;
-import jpa.step1.repository.LineRepository;
+import jpa.repository.LineRepository;
 
 @DataJpaTest
 public class LineTest {

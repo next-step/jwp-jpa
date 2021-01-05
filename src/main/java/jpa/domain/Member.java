@@ -1,19 +1,20 @@
-package jpa.step1.domain;
+package jpa.domain;
 
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 @Table(name = "member")
 @Entity
-public class Member {
+public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +30,11 @@ public class Member {
 	@Column(name = "password")
 	private String password;
 
-	@CreationTimestamp
-	@Column(name = "created_date")
-	private LocalDateTime createdDate;
+	@OneToMany(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.REMOVE)
+	private final Set<Favorite> favorites = new HashSet<>();
 
-	@Column(name = "modified_date")
-	private LocalDateTime modifiedDate;
+	protected Member() {
+	}
 
 	public Member(final String email, final String password, final Integer age) {
 		this.email = email;
@@ -58,11 +58,11 @@ public class Member {
 		return password;
 	}
 
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
+	public Set<Favorite> getFavorites() {
+		return favorites;
 	}
 
-	public LocalDateTime getModifiedDate() {
-		return modifiedDate;
+	public void addFavorite(final Favorite favorite) {
+		this.getFavorites().add(favorite);
 	}
 }
