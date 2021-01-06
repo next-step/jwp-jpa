@@ -49,7 +49,7 @@ public class LineRepositoryTest {
     }
 
     @Test
-    @DisplayName("해당 지하철역의 노선 검색(저장/조회)")
+    @DisplayName("노선이 어느 지하철역에 속한지 확인(저장/조회)")
     void searchStationName() {
        Station sataion = station.save(new Station("공덕역"));
        Line line = new Line("5호선", "purple");

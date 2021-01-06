@@ -6,6 +6,14 @@ import java.time.ZoneId;
 
 @Entity
 public class Favorite extends Common{
+    @OneToOne
+    private Station startingStation;
+    @OneToOne
+    private Station arrivalStation;
+
+    @ManyToOne
+    private Member member;
+
     public Favorite() {
 
     }
@@ -24,5 +32,21 @@ public class Favorite extends Common{
 
     public LocalDateTime getModified_date() {
         return modified_date;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setStarting(Station startingStation) {
+        this.startingStation = startingStation;
+    }
+
+    public void setArrival(Station arrivalStation) {
+        this.arrivalStation = arrivalStation;
+    }
+
+    public Member getMemeber() {
+        return member;
     }
 }
