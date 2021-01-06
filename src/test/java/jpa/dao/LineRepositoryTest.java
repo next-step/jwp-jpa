@@ -49,18 +49,57 @@ public class LineRepositoryTest {
     }
 
     @Test
-    @DisplayName("해당 지하철역의 노선 검색")
-    void name() {
-        final Line line1 = new Line("5호선", "purple");
-        final Line line2 = new Line("6호선", "brown");
-        final Line line3 = new Line("공항철도", "blue");
-        Station station1 = station.save(new Station("공덕역"));
-        line1.setStation(station1);
-        line2.setStation(station1);
-        line3.setStation(station1);
+    @DisplayName("해당 지하철역의 노선 검색(저장/조회)")
+    void searchStationName() {
+       Station sataion = station.save(new Station("공덕역"));
+       Line line = new Line("5호선", "purple");
+       line.setStation(sataion);
+       lines.save(line);
+       Line actual = lines.findByName("5호선");
+       assertThat(actual.getStation().getName()).isEqualTo("공덕역");
+    }
+
+    @Test
+    @DisplayName("지하철역 수정")
+    void updateWithStation() {
+        Station sataion = station.save(new Station("공덕역"));
+        Line line1 = new Line("5호선", "purple");
+        line1.setStation(sataion);
         lines.save(line1);
+        Line line2 = lines.findByName("5호선");
+        assertThat(line2.getStation()).isNotNull();
+        line2.setStation(station.save(new Station("여의도역")));
+        lines.flush();
+        assertThat(line2.getStation().getName()).isEqualTo("여의도역");
+    }
+
+    @Test
+    @DisplayName("지하철역 제거")
+    void removeWithStation() {
+        Station sataion = station.save(new Station("공덕역"));
+        Line line1 = new Line("5호선", "purple");
+        line1.setStation(sataion);
+        lines.save(line1);
+        Line line2 = lines.findByName("5호선");
+        assertThat(line2.getStation()).isNotNull();
+        line2.setStation(null);
+        lines.flush();
+    }
+
+    @Test
+    @DisplayName("지하철 역의 노선조회")
+    void findByStationName() {
+        Station station1 = station.save(new Station("공덕역"));
+        Line line1 = new Line("5호선", "purple");
+        line1.setStation(station1);
+        lines.save(line1);
+        station1.getLines().add(line1);
+        Line line2 = new Line("6호선", "brown");
+        line2.setStation(station1);
         lines.save(line2);
-        lines.save(line3);
-        //assertThat(station1.getLines()).hasSize(3);
+        station1.getLines().add(line2);
+        Station station2 = station.findByName("공덕역");
+        assertThat(station2.getLines()).hasSize(2);
+
     }
 }

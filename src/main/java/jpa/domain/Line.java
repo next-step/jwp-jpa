@@ -1,13 +1,7 @@
 package jpa.domain;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Line extends Common {
     private String name;
@@ -28,18 +22,11 @@ public class Line extends Common {
 
     public void setStation(Station station) {
         this.station = station;
+        //station.getLines().add(this);
     }
 
     public Long getId() {
         return id;
-    }
-
-    public LocalDateTime getCreated_date() {
-        return created_date;
-    }
-
-    public LocalDateTime getModified_date() {
-        return modified_date;
     }
 
     public String getName() {
@@ -50,4 +37,7 @@ public class Line extends Common {
         return color;
     }
 
+    public Station getStation() {
+        return station;
+    }
 }

@@ -1,7 +1,6 @@
 package jpa.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class Member extends Common {
@@ -30,14 +29,6 @@ public class Member extends Common {
 
     public Long getId() {
         return id;
-    }
-
-    public LocalDateTime getCreated_date() {
-        return created_date;
-    }
-
-    public LocalDateTime getModified_date() {
-        return modified_date;
     }
 
     public int getAge() {

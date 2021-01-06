@@ -12,11 +12,12 @@ import java.time.LocalDateTime;
 public abstract class Common {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    private Long id;
 
     @CreatedDate
-    protected LocalDateTime created_date;
+    private LocalDateTime created_date;
 
     @LastModifiedDate
-    protected LocalDateTime modified_date;
+    private LocalDateTime modified_date;
+
 }

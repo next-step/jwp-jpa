@@ -7,10 +7,15 @@ import java.time.ZoneId;
 @Entity
 public class Favorite extends Common{
     public Favorite() {
+
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void chageDate(ZoneId zone) {
+        modified_date = LocalDateTime.now(zone);
     }
 
     public LocalDateTime getCreated_date() {
@@ -19,9 +24,5 @@ public class Favorite extends Common{
 
     public LocalDateTime getModified_date() {
         return modified_date;
-    }
-
-    public void chageDate(ZoneId zone) {
-        modified_date = LocalDateTime.now(zone);
     }
 }

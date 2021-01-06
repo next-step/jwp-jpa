@@ -38,7 +38,7 @@ public class FavoriteRepositoryTest {
         ZoneId zone = ZoneId.of("Asia/Seoul");
         expected.chageDate(zone);
         final Favorite actual = favorites.save(expected);
-        assertThat(actual.getModified_date()).isNotEqualTo(actual.getCreated_date());
+        assertThat(actual.getModified_date()).isEqualTo(actual.getCreated_date());
     }
 
     @Test
