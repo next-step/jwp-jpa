@@ -2,18 +2,9 @@ package jpa.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
-public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
-
-    protected LocalDateTime created_date;
-
-    protected LocalDateTime modified_date;
-
+public class Member extends Common {
     private int age;
 
     private String email;

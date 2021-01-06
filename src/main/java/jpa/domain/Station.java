@@ -2,20 +2,16 @@ package jpa.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "station")
-public class Station {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
-
-    protected LocalDateTime created_date;
-
-    protected LocalDateTime modified_date;
-
+public class Station extends Common {
     private String name;
+
+    @OneToMany(mappedBy = "station")
+    private List<Line> lines = new ArrayList<>();
 
     public Station() {
     }
@@ -42,5 +38,9 @@ public class Station {
 
     public String getName() {
         return name;
+    }
+
+    public List<Line> getLines() {
+        return lines;
     }
 }

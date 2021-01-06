@@ -5,15 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Entity
-public class Favorite {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
-
-    protected LocalDateTime created_date;
-
-    protected LocalDateTime modified_date;
-
+public class Favorite extends Common{
     public Favorite() {
     }
 
