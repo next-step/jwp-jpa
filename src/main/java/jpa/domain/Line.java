@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table
-public class Line extends Date {
+public class Line extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +57,15 @@ public class Line extends Date {
                 .collect(Collectors.toList());
     }
 
+    public double getDistanceByStation(Station station) {
+        return lineStations.stream()
+                .filter(ls -> ls.getStation().equals(station))
+                .findFirst()
+                .map(LineStation::getSection)
+                .orElseThrow(IllegalArgumentException::new)
+                .getDistance();
+    }
+
     // 연관 관계 편의 메서드
     public void addStation(Station station) {
         lineStations.add(new LineStation(this, station));
@@ -65,8 +74,20 @@ public class Line extends Date {
         }
     }
 
+    // 지하철역 추가 시 구간정보 등록
+    public void addStation(Section section) {
+        Station station = section.getEndStation();
+        lineStations.add(new LineStation(this, section));
+        if (!station.getLines().contains(this)) {
+            station.addLine(this);
+        }
+    }
+
     public void removeStation(Station station) {
         lineStations.removeIf(s -> s.getStation().getName().equals(station.getName()));
+        if (station.getLines().contains(this)) {
+            station.removeLine(this);
+        }
     }
 
 }

@@ -6,21 +6,21 @@ import javax.persistence.*;
 @Table
 public class LineStation {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
     @EmbeddedId
     private LineStationId id;
 
     @ManyToOne
     @MapsId("lineId")
-    @JoinColumn(name = "line_id")
+    @JoinColumn
     private Line line;
 
     @ManyToOne
     @MapsId("stationId")
     @JoinColumn(name = "station_id")
     private Station station;
+
+    @Embedded
+    private Section section;
 
     public LineStation() {
     }
@@ -29,6 +29,12 @@ public class LineStation {
         this.id = new LineStationId(line.getId(), station.getId());
         this.line = line;
         this.station = station;
+        this.section = new Section(station, station, 0);
+    }
+
+    public LineStation(Line line, Section section) {
+        this(line, section.getEndStation());
+        this.section = section;
     }
 
     public Line getLine() {
@@ -39,4 +45,7 @@ public class LineStation {
         return station;
     }
 
+    public Section getSection() {
+        return section;
+    }
 }

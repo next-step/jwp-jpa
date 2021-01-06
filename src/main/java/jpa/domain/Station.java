@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table
-public class Station extends Date {
+public class Station extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,9 +48,9 @@ public class Station extends Date {
     // 연관 관계 편의 메서드
     public void addLine(Line line) {
         lineStations.add(new LineStation(line, this));
-        if (!line.getStations().contains(this)) {
-            line.addStation(this);
-        }
+//        if (!line.getStations().contains(this)) {
+//            line.addStation(this);
+//        }
     }
 
     public void removeLine(Line line) {

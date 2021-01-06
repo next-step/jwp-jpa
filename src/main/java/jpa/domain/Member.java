@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table
-public class Member extends Date {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
