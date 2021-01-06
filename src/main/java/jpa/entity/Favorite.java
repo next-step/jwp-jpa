@@ -4,9 +4,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -24,15 +26,35 @@ public class Favorite extends BaseTimeEntity {
     @JoinColumn(name = "destination_station")
     private Station destinationStation;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "favorites")
+    private final List<Member> members = new ArrayList<>();
 
     @Builder
-    public Favorite(Station sourceStation, Station destinationStation, Member member) {
+    public Favorite(Station sourceStation, Station destinationStation) {
         this.sourceStation = sourceStation;
         this.destinationStation = destinationStation;
-        this.member = member;
-        member.addFavorite(this);
+    }
+
+    public void addMember(Member member) {
+        member.getFavorites().add(this);
+        this.members.add(member);
+    }
+
+    public void deleteMember(Member member) {
+        member.getFavorites().remove(this);
+        this.members.remove(member);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Favorite favorite = (Favorite) o;
+        return Objects.equals(id, favorite.id) && Objects.equals(sourceStation, favorite.sourceStation) && Objects.equals(destinationStation, favorite.destinationStation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, sourceStation, destinationStation);
     }
 }

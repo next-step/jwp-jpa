@@ -3,15 +3,11 @@ package jpa.repository;
 import jpa.entity.Favorite;
 import jpa.entity.Member;
 import jpa.entity.Station;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 public class MemberRepositoryTest {
@@ -19,38 +15,10 @@ public class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private StationRepository stationRepository;
-
-    @Autowired
-    private FavoriteRepository favoriteRepository;
-
-    @BeforeEach
-    void setup() {
-        Member member1 = memberRepository.save(Member.builder().age(20).email("chh9975").password("1234").build());
-        Member member2 = memberRepository.save(Member.builder().age(30).email("chh0157").password("1234").build());
-
-        Station 강남역 = stationRepository.save(Station.builder().name("강남역").build());
-        Station 당산역 = stationRepository.save(Station.builder().name("당산역").build());
-        Station 잠실역 = stationRepository.save(Station.builder().name("잠실역").build());
-
-        favoriteRepository.save(Favorite.builder()
-                .sourceStation(강남역)
-                .destinationStation(당산역)
-                .member(member1)
-                .build());
-
-        favoriteRepository.save(Favorite.builder()
-                .sourceStation(강남역)
-                .destinationStation(잠실역)
-                .member(member2)
-                .build());
-    }
-
     @Test
-    void save() {
+    void create() {
         // given
-        Member expected = Member.builder().age(25).email("nextstep.com").password("1234").build();
+        Member expected = Member.builder().age(20).email("chh9975").password("1234").build();
 
         // when
         Member actual = memberRepository.save(expected);
@@ -60,44 +28,83 @@ public class MemberRepositoryTest {
     }
 
     @Test
+    void add() {
+        // given
+        Member member = memberRepository.save(Member.builder().age(20).email("chh9975").password("1234").build());
+
+        // when
+        Station 당산역 = Station.builder().name("당산역").build();
+        Station 강남역 = Station.builder().name("강남역").build();
+
+        member.addFavorite(강남역, 당산역);
+
+        Station 잠실역 = Station.builder().name("잠실역").build();
+        member.addFavorite(강남역, 잠실역);
+
+        // then
+        assertThat(member.getFavorites().size()).isEqualTo(2);
+    }
+
+    @Test
     void delete() {
         // given
-        Member expected = memberRepository.findByEmail("chh9975");
+        Member expected = memberRepository.save(Member.builder()
+                            .age(30)
+                            .email("hyehwanchoi")
+                            .password("1234")
+                            .build());
 
         // when
         memberRepository.delete(expected);
 
         // then
-        Member deletedMember = memberRepository.findByEmail("chh9975");
+        Member deletedMember = memberRepository.findByEmail("hyehwanchoi");
         assertThat(deletedMember).isNull();
     }
 
     @Test
     void update() {
         // given
-        Member member = memberRepository.findByEmail("chh9975");
+        Member member = memberRepository.save(Member.builder().age(20).email("chh9975").password("1234").build());
 
         // when
         member.changeEmail("nextstep.com");
 
-        Member deleteMember = memberRepository.findByEmail("chh9975");
+        Member actual = memberRepository.findByEmail("nextstep.com");
 
         // then
-        assertThat(deleteMember).isNull();
+        assertThat(actual.getEmail()).isEqualTo("nextstep.com");
+    }
+
+    @Test
+    void deleteFavorite() {
+        // given
+        Member member = memberRepository.save(Member.builder().age(20).email("chh9975").password("1234").build());
+
+        // when
+        Station 당산역 = Station.builder().name("당산역").build();
+        Station 강남역 = Station.builder().name("강남역").build();
+
+        member.addFavorite(강남역, 당산역);
+
+        Station 잠실역 = Station.builder().name("잠실역").build();
+        member.addFavorite(강남역, 잠실역);
+
+        assertThat(member.getFavorites().size()).isEqualTo(2);
+
+        member.deleteFavorite(Favorite.builder().sourceStation(강남역).destinationStation(당산역).build());
+        assertThat(member.getFavorites().size()).isEqualTo(1);
     }
 
     @Test
     void read() {
         // given
-        Member expected = memberRepository.findByEmail("chh9975");
+        Member expected = memberRepository.save(Member.builder().age(20).email("chh9975").password("1234").build());
 
         // when
-        List<Favorite> actual = expected.getFavorites();
+        Member actual = memberRepository.findByEmail("chh9975");
 
         // then
-        assertAll(
-                () -> assertThat(actual.get(0).getDestinationStation().getName()).isEqualTo("당산역"),
-                () -> assertThat(actual).isEqualTo(expected.getFavorites())
-        );
+        assertThat(actual).isEqualTo(expected);
     }
 }
