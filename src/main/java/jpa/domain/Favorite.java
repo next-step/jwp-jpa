@@ -1,37 +1,52 @@
 package jpa.domain;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
-public class Favorite {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Favorite extends Common{
+    @OneToOne
+    private Station startingStation;
+    @OneToOne
+    private Station arrivalStation;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date created_date;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modified_date;
+    @ManyToOne
+    private Member member;
 
     public Favorite() {
 
-    }
-
-    public void chageDate(Date date) {
-        modified_date = date;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Date getCreated_date() {
+    public void chageDate(ZoneId zone) {
+        modified_date = LocalDateTime.now(zone);
+    }
+
+    public LocalDateTime getCreated_date() {
         return created_date;
     }
 
-    public Date getModified_date() {
+    public LocalDateTime getModified_date() {
         return modified_date;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setStarting(Station startingStation) {
+        this.startingStation = startingStation;
+    }
+
+    public void setArrival(Station arrivalStation) {
+        this.arrivalStation = arrivalStation;
+    }
+
+    public Member getMemeber() {
+        return member;
     }
 }

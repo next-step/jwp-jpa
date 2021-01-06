@@ -1,20 +1,11 @@
 package jpa.domain;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date create_date;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modified_date;
-
+public class Member extends Common {
     private int age;
 
     private String email;
@@ -40,14 +31,6 @@ public class Member {
 
     public Long getId() {
         return id;
-    }
-
-    public Date getCreate_date() {
-        return create_date;
-    }
-
-    public Date getModified_date() {
-        return modified_date;
     }
 
     public int getAge() {

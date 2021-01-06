@@ -1,23 +1,15 @@
 package jpa.domain;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-public class Line {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date create_date;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modified_date;
-
+public class Line extends Common {
     private String name;
 
     private String color;
+
+    @ManyToOne
+    private Station station;
 
     public Line() {
 
@@ -26,6 +18,11 @@ public class Line {
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
+        //station.getLines().add(this);
     }
 
     public Long getId() {
@@ -38,5 +35,9 @@ public class Line {
 
     public String getColor() {
         return color;
+    }
+
+    public Station getStation() {
+        return station;
     }
 }
