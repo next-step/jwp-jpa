@@ -1,19 +1,18 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-public class Line {
+public class Line extends Common {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date create_date;
+    protected LocalDateTime created_date;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modified_date;
+    protected LocalDateTime modified_date;
 
     private String name;
 
@@ -30,6 +29,14 @@ public class Line {
 
     public Long getId() {
         return id;
+    }
+
+    public LocalDateTime getCreated_date() {
+        return created_date;
+    }
+
+    public LocalDateTime getModified_date() {
+        return modified_date;
     }
 
     public String getName() {

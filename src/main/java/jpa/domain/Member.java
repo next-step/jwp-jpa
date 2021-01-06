@@ -1,19 +1,18 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date create_date;
+    protected LocalDateTime created_date;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modified_date;
+    protected LocalDateTime modified_date;
 
     private int age;
 
@@ -42,11 +41,11 @@ public class Member {
         return id;
     }
 
-    public Date getCreate_date() {
-        return create_date;
+    public LocalDateTime getCreated_date() {
+        return created_date;
     }
 
-    public Date getModified_date() {
+    public LocalDateTime getModified_date() {
         return modified_date;
     }
 

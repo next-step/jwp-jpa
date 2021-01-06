@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,8 @@ public class FavoriteRepositoryTest {
     @Test
     void update() {
         final Favorite expected = new Favorite();
-        expected.chageDate(new Date());
+        ZoneId zone = ZoneId.of("Asia/Seoul");
+        expected.chageDate(zone);
         final Favorite actual = favorites.save(expected);
         assertThat(actual.getModified_date()).isNotEqualTo(actual.getCreated_date());
     }

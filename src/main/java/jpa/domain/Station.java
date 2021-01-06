@@ -1,6 +1,7 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -8,13 +9,11 @@ import java.util.Date;
 public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date created_date;
+    protected LocalDateTime created_date;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modified_date;
+    protected LocalDateTime modified_date;
 
     private String name;
 
@@ -31,6 +30,14 @@ public class Station {
 
     public Long getId() {
         return id;
+    }
+
+    public LocalDateTime getCreated_date() {
+        return created_date;
+    }
+
+    public LocalDateTime getModified_date() {
+        return modified_date;
     }
 
     public String getName() {
