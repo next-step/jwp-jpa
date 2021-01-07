@@ -70,4 +70,8 @@ public class Member {
     public void addFavorite(Favorite favorite){
         this.favorites.add(favorite);
     }
+
+    public Favorite getFirstFavorite() {
+        return this.favorites.get(0);
+    }
 }

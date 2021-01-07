@@ -58,46 +58,26 @@ class MemberRepositoryTest {
 
 
     @Test
-    void favorite() {
+    void member_onetomany_favorite_test() {
         //Given
-        Member actual = members.save(new Member("truly-sparkle@gmail.com", "1q2w3e!@#", 29));
+        Member createdMember = members.save(new Member("truly-sparkle@gmail.com", "1q2w3e!@#", 29));
 
         Line blue = lines.save(new Line("1호선", "Blue"));
-        Line green = lines.save(new Line("2호선", "Green"));
-
-        Station cityHall = new Station("시청");
-        cityHall.addLines(blue);
-        cityHall.addLines(green);
-        stations.save(cityHall);
 
         Station jonggak = createStation(blue, "종각");
         Station jongno3ga = createStation(blue, "종로3가");
-        Station soyosan = createStation(blue, "소요산");
 
         //When
         Favorite favorite = new Favorite(jonggak, jongno3ga);
-        actual.addFavorite(favorite);
-
-        Favorite favorite2 = new Favorite(jongno3ga, soyosan);
-        actual.addFavorite(favorite2);
+        createdMember.addFavorite(favorite);
 
         //Then
         Member expectedMember = members.findByEmail("truly-sparkle@gmail.com");
-        List<Favorite> expectedFavorites = expectedMember.getFavorites();
+        Favorite expectedFavorite = expectedMember.getFirstFavorite();
 
-        Favorite expectedFavorite = expectedFavorites.get(0);
-        Station expectedSource = expectedFavorite.getSource();
-        Station expectedDestination = expectedFavorite.getDestination();
+        Assertions.assertThat(expectedFavorite.getSource()).isEqualTo(jonggak);
+        Assertions.assertThat(expectedFavorite.getDestination()).isEqualTo(jongno3ga);
 
-        Assertions.assertThat(expectedSource).isEqualTo(jonggak);
-        Assertions.assertThat(expectedDestination).isEqualTo(jongno3ga);
-
-        Favorite expectedFavorite2 = expectedFavorites.get(1);
-        Station expectedSource2 = expectedFavorite2.getSource();
-        Station expectedDestination2 = expectedFavorite2.getDestination();
-
-        Assertions.assertThat(expectedSource2).isEqualTo(jongno3ga);
-        Assertions.assertThat(expectedDestination2).isEqualTo(soyosan);
     }
 
     private Station createStation(Line line, String stationName) {
