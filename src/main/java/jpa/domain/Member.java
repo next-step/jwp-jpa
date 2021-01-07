@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Member extends Common {
+public class Member extends BaseEntity {
     private int age;
 
     private String email;

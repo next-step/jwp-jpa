@@ -3,7 +3,7 @@ package jpa.domain;
 import javax.persistence.*;
 
 @Entity
-public class Line extends Common {
+public class Line extends BaseEntity {
     private String name;
 
     private String color;

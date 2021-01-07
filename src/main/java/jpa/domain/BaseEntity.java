@@ -9,15 +9,15 @@ import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public abstract class Common {
+public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
     @CreatedDate
-    protected LocalDateTime created_date;
+    protected LocalDateTime createdDate;
 
     @LastModifiedDate
-    protected LocalDateTime modified_date;
+    protected LocalDateTime modifiedDate;
 
 }

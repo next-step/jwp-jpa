@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "station")
-public class Station extends Common {
+public class Station extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "station")

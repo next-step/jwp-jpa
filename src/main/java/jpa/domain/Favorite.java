@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Entity
-public class Favorite extends Common{
+public class Favorite extends BaseEntity{
     @OneToOne
     private Station startingStation;
     @OneToOne
@@ -23,15 +23,15 @@ public class Favorite extends Common{
     }
 
     public void chageDate(ZoneId zone) {
-        modified_date = LocalDateTime.now(zone);
+        modifiedDate = LocalDateTime.now(zone);
     }
 
     public LocalDateTime getCreated_date() {
-        return created_date;
+        return createdDate;
     }
 
     public LocalDateTime getModified_date() {
-        return modified_date;
+        return modifiedDate;
     }
 
     public void setMember(Member member) {
