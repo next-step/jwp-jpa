@@ -47,6 +47,7 @@ class StationRepositoryTest {
 	}
 
 	@Test
+	@DisplayName("Station의 이름을 변경한다.")
 	void changeName_test(){
 		Station expected = stations.save(new Station("잠실역"));
 		expected.changeName("역삼역");
@@ -54,5 +55,15 @@ class StationRepositoryTest {
 
 		assertThat(actual).isNotNull();
 		assertThat(actual.getId()).isEqualTo(expected.getId());
+	}
+
+	@Test
+	@DisplayName("date 필드가 자동으로 입력되는지 확인한다.")
+	void date_test(){
+		Station station = stations.save(new Station("잠실역"));
+		Station actual = stations.findById(station.getId()).orElse(new Station());
+
+		assertThat(actual.getCreatedDate()).isNotNull();
+		assertThat(actual.getModifiedDate()).isNotNull();
 	}
 }

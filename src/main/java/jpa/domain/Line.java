@@ -1,7 +1,5 @@
 package jpa.domain;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,20 +7,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Line {
+public class Line extends BaseDateEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private LocalDateTime createdDate;
-	private LocalDateTime modifiedDate;
 	private String color;
 	@Column(unique = true)
 	private String name;
 
-	public Line() {
+	protected Line() {
 	}
 
-	public Line(String name) {
+	public Line(String name, String color) {
 		this.name = name;
+		this.color = color;
 	}
 }
