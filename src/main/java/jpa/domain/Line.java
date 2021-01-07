@@ -10,11 +10,11 @@ public class Line extends BaseEntity {
 
     private String color;
 
-    @ManyToOne
-    private Station station;
-
     @OneToMany(mappedBy = "line")
-    private List<Station> stations = new ArrayList<>();
+    private List<LineStation> lineStations = new ArrayList<>();
+
+    @ManyToOne
+    private LineStation lineStation;
 
     public Line() {
 
@@ -26,7 +26,7 @@ public class Line extends BaseEntity {
     }
 
     public void setStation(Station station) {
-        this.station = station;
+        this.lineStation.setStation(station);
         //station.getLines().add(this);
     }
 
@@ -43,6 +43,6 @@ public class Line extends BaseEntity {
     }
 
     public Station getStation() {
-        return station;
+        return lineStation.getStation();
     }
 }

@@ -7,14 +7,11 @@ import java.util.List;
 @Entity
 @Table(name = "station")
 public class Station extends BaseEntity {
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "station")
-    private List<Line> lines = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "line_id")
-    private Line line;
+    @OneToOne(mappedBy = "station")
+    private LineStation lineStation;
 
     public Station() {
     }
@@ -28,14 +25,10 @@ public class Station extends BaseEntity {
     }
 
     public Long getId() {
-        return id;
+        return super.id;
     }
 
     public String getName() {
         return name;
-    }
-
-    public List<Line> getLines() {
-        return lines;
     }
 }
