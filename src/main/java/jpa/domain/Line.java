@@ -1,6 +1,8 @@
 package jpa.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Line extends BaseEntity {
@@ -10,6 +12,9 @@ public class Line extends BaseEntity {
 
     @ManyToOne
     private Station station;
+
+    @OneToMany(mappedBy = "line")
+    private List<Station> stations = new ArrayList<>();
 
     public Line() {
 

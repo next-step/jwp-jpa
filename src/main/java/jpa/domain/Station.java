@@ -12,6 +12,10 @@ public class Station extends BaseEntity {
     @OneToMany(mappedBy = "station")
     private List<Line> lines = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "line_id")
+    private Line line;
+
     public Station() {
     }
 

@@ -12,6 +12,9 @@ public class Member extends BaseEntity {
 
     private String password;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favorites = new ArrayList<>();
+
     public Member() {
 
     }
