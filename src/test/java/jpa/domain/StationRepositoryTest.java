@@ -8,11 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
 class StationRepositoryTest {
 	@Autowired
 	private StationRepository stations;
+	@Autowired
+	private LineRepository lines;
 
 	@Test
 	@DisplayName("Station을 저장한다.")
@@ -48,7 +51,7 @@ class StationRepositoryTest {
 
 	@Test
 	@DisplayName("Station의 이름을 변경한다.")
-	void changeName_test(){
+	void changeName_test() {
 		Station expected = stations.save(new Station("잠실역"));
 		expected.changeName("역삼역");
 		Station actual = stations.findByName("역삼역").orElse(null);
@@ -59,11 +62,23 @@ class StationRepositoryTest {
 
 	@Test
 	@DisplayName("date 필드가 자동으로 입력되는지 확인한다.")
-	void date_test(){
+	void date_test() {
 		Station station = stations.save(new Station("잠실역"));
 		Station actual = stations.findById(station.getId()).orElse(new Station());
 
 		assertThat(actual.getCreatedDate()).isNotNull();
 		assertThat(actual.getModifiedDate()).isNotNull();
+	}
+
+	@Test
+	@DisplayName("지하철역 조회 시 어느 노선에 속한지 볼 수 있다.")
+	void getLine_test() {
+		Station station = stations.findByName("당산역").orElse(new Station());
+		Line lineTow = lines.findByName("2호선").orElse(new Line());
+		Line lineNine = lines.findByName("9호선").orElse(new Line());
+
+		assertThat(station.getLines())
+			.hasSize(2)
+			.contains(lineTow, lineNine);
 	}
 }
