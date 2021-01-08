@@ -1,4 +1,4 @@
-package jpa.dao;
+package jpa.repository;
 
 import jpa.domain.Line;
 import org.springframework.data.jpa.repository.JpaRepository;

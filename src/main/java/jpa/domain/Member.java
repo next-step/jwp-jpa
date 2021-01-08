@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Member extends Common {
+public class Member extends BaseEntity {
     private int age;
 
     private String email;
 
     private String password;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favorites = new ArrayList<>();
 
     public Member() {
 
