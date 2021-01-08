@@ -1,4 +1,4 @@
-package jpa.dao;
+package jpa.repository;
 
 import jpa.domain.Member;
 import org.junit.jupiter.api.Test;

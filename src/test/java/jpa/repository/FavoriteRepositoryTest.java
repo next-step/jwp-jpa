@@ -1,4 +1,4 @@
-package jpa.dao;
+package jpa.repository;
 
 import jpa.domain.Favorite;
 import jpa.domain.Member;
