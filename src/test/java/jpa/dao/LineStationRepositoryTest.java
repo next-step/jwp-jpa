@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import java.util.Optional;
 
 @DataJpaTest
 public class LineStationRepositoryTest {
@@ -37,16 +36,16 @@ public class LineStationRepositoryTest {
         stationRepository.save(station);
         line = new Line("2호선", "green");
         lineRepository.save(line);
+        final LineStation lineStation1 = new LineStation();
+        lineStation1.setStation(station);
+        lineStation1.setLine(line);
+        lineStationRepository.save(lineStation1);
     }
 
     @Test
     @DisplayName("저장과 조회")
     void saveAndFindById() {
         Station station1 = stationRepository.save(new Station("역삼역"));
-        final LineStation lineStation1 = new LineStation();
-        lineStation1.setStation(station);
-        lineStation1.setLine(line);
-        lineStationRepository.save(lineStation1);
         final LineStation lineStation2 = new LineStation();
         lineStation2.setStation(station1);
         lineStation2.setLine(line);
@@ -61,12 +60,33 @@ public class LineStationRepositoryTest {
     }
 
     @Test
-    @DisplayName("수정")
-    void modify() {
+    @DisplayName("노선 수정")
+    void modifyLine() {
+        final LineStation lineStation = lineStationRepository.findByStation(station);
         Line line1 = lineRepository.save(new Line("신분당선", "pink"));
-/*
-        line1.getLineStations().get(0).changeLine(line1);
-        assertThat(line1.getLineStations().size()).isEqualTo(1);
-*/
+        lineStation.setLine(line1);
+        LineStation actual = lineStationRepository.save(lineStation);
+        lineStationRepository.flush();
+        assertThat(actual.getLine().getName()).isEqualTo("신분당선");
+    }
+
+    @Test
+    @DisplayName("지하철역 수정")
+    void modifySubway() {
+        final LineStation lineStation = lineStationRepository.findByLine(line);
+        Station station1 = stationRepository.save(new Station("선릉역"));
+        lineStation.setStation(station1);
+        LineStation actual = lineStationRepository.save(lineStation);
+        lineStationRepository.flush();
+        assertThat(actual.getStation().getName()).isEqualTo("선릉역");
+    }
+
+    @Test
+    @DisplayName("노선 삭제")
+    void removeLine() {
+        final LineStation lineStation = lineStationRepository.findByStation(station);
+        lineStation.setLine(null);
+        lineStationRepository.flush();
+        assertThat(lineStation.getLine()).isNull();
     }
 }
