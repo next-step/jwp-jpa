@@ -13,9 +13,6 @@ public class Line extends BaseEntity {
     @OneToMany(mappedBy = "line")
     private List<LineStation> lineStations = new ArrayList<>();
 
-    @ManyToOne
-    private LineStation lineStation;
-
     public Line() {
 
     }
@@ -23,11 +20,6 @@ public class Line extends BaseEntity {
     public Line(String name, String color) {
         this.name = name;
         this.color = color;
-    }
-
-    public void setStation(Station station) {
-        this.lineStation.setStation(station);
-        //station.getLines().add(this);
     }
 
     public Long getId() {
@@ -42,7 +34,7 @@ public class Line extends BaseEntity {
         return color;
     }
 
-    public Station getStation() {
-        return lineStation.getStation();
+    public List<LineStation> getLineStations() {
+        return lineStations;
     }
 }

@@ -10,8 +10,8 @@ public class Station extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToOne(mappedBy = "station")
-    private LineStation lineStation;
+    @OneToMany(mappedBy = "station")
+    private List<LineStation> lineStation = new ArrayList<>();
 
     public Station() {
     }

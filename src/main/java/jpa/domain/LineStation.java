@@ -11,7 +11,7 @@ public class LineStation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "station_id")
     private Station station;
 
@@ -19,26 +19,23 @@ public class LineStation {
     @JoinColumn(name = "line_id")
     private Line line;
 
-    @OneToMany(mappedBy = "lineStation")
-    private List<Line> lines = new ArrayList<>();
-
-    public LineStation(Station station) {
-        this.station = station;
-    }
-
     public void setStation(Station station) {
         this.station = station;
     }
 
-    public void setLines(Line line) {
-        this.lines.add(line);
+    public void changeLine(Line line) {
+        this.line = line;
+    }
+
+    public void setLine(Line line) {
+        this.line = line;
     }
 
     public Station getStation() {
-        return this.station;
+        return station;
     }
 
-    public List<Line> getLines() {
-        return lines;
+    public Line getLine() {
+        return line;
     }
 }
