@@ -80,4 +80,13 @@ public class Station extends BaseEntity {
 		return result;
 	}
 
+	@Override
+	public String toString() {
+		return "Station{" +
+			"id=" + id +
+			", name='" + name + '\'' +
+			", lineStations=" + lineStations +
+			'}';
+	}
+
 }
