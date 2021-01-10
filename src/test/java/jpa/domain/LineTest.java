@@ -23,7 +23,7 @@ public class LineTest {
 
 		Line createdLine = lineRepository.save(line);
 
-		assertThat(createdLine.getId()).isEqualTo(1L);
+		assertThat(createdLine.getId()).isNotNull();
 	}
 
 	@DisplayName("Line 조회")
@@ -33,9 +33,10 @@ public class LineTest {
 		Line line = new Line(Color.GREEN, lineName);
 		lineRepository.save(line);
 
-		Line createdLine = lineRepository.getOne(1L);
+		Line createdLine = lineRepository.findByName("2호선")
+			.orElseThrow(IllegalArgumentException::new);
 
-		assertThat(createdLine.getId()).isEqualTo(1L);
+		assertThat(createdLine.getName()).isEqualTo(lineName);
 	}
 
 	@DisplayName("Line 등록시 유니크 키 제약조건 위반시 익셉션")
