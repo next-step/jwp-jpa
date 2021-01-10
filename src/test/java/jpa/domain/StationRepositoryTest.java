@@ -3,6 +3,10 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,11 +15,23 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 class StationRepositoryTest {
 
     @Autowired
+    private LineRepository lines;
+    @Autowired
     private StationRepository stations;
+
+    @BeforeEach
+    void setUp() {
+        Line blue = lines.save(new Line("1호선", "Blue"));
+        Line green = lines.save(new Line("2호선", "Green"));
+        Station cityHall = new Station("시청");
+        cityHall.addLines(blue);
+        cityHall.addLines(green);
+        stations.save(cityHall);
+    }
 
     @Test
     void save() {
-        Station expected = new Station("잠실역");
+        Station expected = new Station("옥수역");
         Station actual = stations.save(expected);
         assertAll(
             () -> assertThat(actual.getId()).isNotNull(),
@@ -25,7 +41,7 @@ class StationRepositoryTest {
 
     @Test
     void findByName() {
-        String expected = "잠실역";
+        String expected = "옥수역";
         stations.save(new Station(expected));
         String actual = stations.findByName(expected).getName();
         assertThat(actual).isEqualTo(expected);
@@ -33,17 +49,34 @@ class StationRepositoryTest {
 
     @Test
     void update() {
-        Station actual = stations.save(new Station("잠실역"));
-        actual.changeName("몽촌토성역");
-        Station station2 = stations.findByName("몽촌토성역");
+        Station actual = stations.save(new Station("옥수역"));
+        actual.changeName("금호역");
+        Station station2 = stations.findByName("금호역");
         assertThat(station2).isNotNull();
     }
 
     @Test
     void delete() {
-        Station actual = stations.save(new Station("잠실역"));
+        Station actual = stations.save(new Station("옥수역"));
         stations.delete(actual);
-        Station station2 = stations.findByName("잠실역");
+        Station station2 = stations.findByName("옥수역");
         assertThat(station2).isNull();
+    }
+
+    @Test
+    @DisplayName("지하철역 조회 시 어느 노선에 속한지 볼 수 있다.")
+    void findAndGetLines() {
+        Station cityHall = stations.findByName("시청");
+
+        List<Line> cityHallLines = cityHall.getLines();
+
+        List<String> collect = cityHallLines.stream()
+            .map(Line::getName)
+            .collect(Collectors.toList());
+
+        System.out.println(collect);
+
+        assertThat(collect).contains("2호선");
+        assertThat(collect).contains("1호선");
     }
 }

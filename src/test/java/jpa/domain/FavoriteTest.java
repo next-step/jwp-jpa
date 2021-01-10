@@ -16,14 +16,18 @@ class FavoriteTest {
 
     @Test
     void save() {
-        Favorite expected = new Favorite();
+        Station jongno3ga = new Station("종로3가");
+        Station jonggak = new Station("종각");
+        Favorite expected = new Favorite(jonggak, jongno3ga);
         Favorite actual = favorites.save(expected);
         assertThat(actual.getId()).isNotNull();
     }
 
     @Test
     void read() {
-        Favorite actual = favorites.save(new Favorite());
+        Station jongno3ga = new Station("종로3가");
+        Station jonggak = new Station("종각");
+        Favorite actual = favorites.save(new Favorite(jonggak, jongno3ga));
         Long id = actual.getId();
         Favorite favorite = favorites.findById(id).get();
         assertThat(actual).isEqualTo(favorite);
@@ -31,7 +35,9 @@ class FavoriteTest {
 
     @Test
     void update() {
-        Favorite actual = favorites.save(new Favorite());
+        Station jongno3ga = new Station("종로3가");
+        Station jonggak = new Station("종각");
+        Favorite actual = favorites.save(new Favorite(jonggak, jongno3ga));
         LocalDateTime now = LocalDateTime.now();
         actual.update();
         Long id = actual.getId();
@@ -41,7 +47,9 @@ class FavoriteTest {
 
     @Test
     void delete() {
-        Favorite actual = favorites.save(new Favorite());
+        Station jongno3ga = new Station("종로3가");
+        Station jonggak = new Station("종각");
+        Favorite actual = favorites.save(new Favorite(jonggak, jongno3ga));
         Long id = actual.getId();
         favorites.delete(actual);
         Optional<Favorite> byId = favorites.findById(id);

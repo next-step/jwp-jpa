@@ -1,10 +1,13 @@
 package jpa.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +22,9 @@ public class Member {
     private String email;
     private String password;
     private Integer age;
+
+    @OneToMany
+    private List<Favorite> favorites = new ArrayList<>();
 
     protected Member() {
     }
@@ -53,7 +59,19 @@ public class Member {
         return password;
     }
 
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
     public void changePassword(String password) {
         this.password = password;
+    }
+
+    public void addFavorite(Favorite favorite){
+        this.favorites.add(favorite);
+    }
+
+    public Favorite getFirstFavorite() {
+        return this.favorites.get(0);
     }
 }
