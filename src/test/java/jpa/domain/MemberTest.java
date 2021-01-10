@@ -25,4 +25,16 @@ public class MemberTest {
 		);
 	}
 
+	@DisplayName("멤버 Favorite 조회")
+	@Test
+	void given_member_when_get_favorites_then_contains_favorite() {
+		Member member = new Member("test@test.com", "1q2w3e4r", 24);
+		Station sadang = new Station("사당역");
+		Station gangnam = new Station("강남역");
+
+		Favorite favorite = new Favorite(member, sadang, gangnam);
+
+		assertThat(member.getFavorites()).contains(favorite);
+	}
+
 }
