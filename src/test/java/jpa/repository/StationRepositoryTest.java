@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.repository;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,15 +8,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.repository.StationRepository;
+import jpa.domain.Station;
 
 @DataJpaTest
-public class StationTest {
+public class StationRepositoryTest {
 
 	@Autowired
 	private StationRepository stationRepository;
 
-	@DisplayName("Station 생성")
+	@DisplayName("Station 등록")
 	@Test
 	void given_station_when_save_then_return_created_station_with_primary_key() {
 		final String stationName = "사당역";

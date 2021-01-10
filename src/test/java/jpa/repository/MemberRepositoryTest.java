@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.repository;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,15 +8,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.repository.MemberRepository;
+import jpa.domain.Member;
 
 @DataJpaTest
-public class MemberTest {
+public class MemberRepositoryTest {
 
 	@Autowired
 	private MemberRepository memberRepository;
 
-	@DisplayName("Member 생성")
+	@DisplayName("Member 등록")
 	@Test
 	void given_member_when_save_then_return_created_member() {
 		Member member = new Member("leemingyu05@gmail.com", "1q2w3e4r", 33);

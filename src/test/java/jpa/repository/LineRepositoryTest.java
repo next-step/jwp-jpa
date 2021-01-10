@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import jpa.domain.Color;
+import jpa.domain.Line;
 import jpa.repository.LineRepository;
 
 @DataJpaTest
-public class LineTest {
+public class LineRepositoryTest {
 
 	@Autowired
 	private LineRepository lineRepository;
