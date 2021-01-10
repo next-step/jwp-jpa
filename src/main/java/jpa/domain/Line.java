@@ -2,6 +2,7 @@ package jpa.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,5 +62,11 @@ public class Line extends BaseEntity {
 		this.lineStations.add(lineStation);
 	}
 
+	public Optional<Station> findStationByName(final String name) {
+		return this.getLineStations().stream()
+			.filter(lineStation -> lineStation.matchStationByName(name))
+			.findFirst()
+			.map(LineStation::getStation);
+	}
 }
 

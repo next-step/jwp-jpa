@@ -53,4 +53,7 @@ public class LineStation extends BaseEntity {
 		return line;
 	}
 
+	public boolean matchStationByName(final String name) {
+		return this.station.getName().equals(name);
+	}
 }
