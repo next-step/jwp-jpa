@@ -9,3 +9,6 @@ INSERT INTO line_stations (lines_id, stations_id) VALUES (1, 1);
 INSERT INTO line_stations (lines_id, stations_id) VALUES (2, 1);
 INSERT INTO line_stations (lines_id, stations_id) VALUES (1, 2);
 INSERT INTO line_stations (lines_id, stations_id) VALUES (2, 3);
+
+INSERT INTO member (id, email, password, age, created_date, modified_date) VALUES (1, 'qwer@google.com', '1234', 20, NOW(), NOW());
+INSERT INTO favorite (id, member_id, departure_id, destination_id, created_date, modified_date) VALUES (1, 1, 1, 2, NOW(), NOW());
