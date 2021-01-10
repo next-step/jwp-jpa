@@ -29,9 +29,11 @@ public class LineTest {
 	void given_line_stations_when_find_station_by_name_then_station_equals() {
 		final Line line2 = new Line(Color.GREEN, "2호선");
 		final Station sadang = new Station("사당역");
+		final Station bangbae = new Station("방배역");
 		final Station gangnam = new Station("강남역");
-		final LineStation line2Sadng = new LineStation(line2, sadang);
-		final LineStation lineSGangnam = new LineStation(line2, gangnam);
+		final Station seocho = new Station("서초역");
+		final LineStation line2Sadng = new LineStation(line2, sadang, bangbae, 10);
+		final LineStation lineSGangnam = new LineStation(line2, gangnam, seocho, 8);
 
 		Station foundSadang = line2.findStationByName("사당역")
 			.orElseThrow(IllegalArgumentException::new);
@@ -42,5 +44,21 @@ public class LineTest {
 		);
 
 	}
+
+	@DisplayName("노선에 역을 추가할 때는 이전 역과 얼마나 차이가 나는지 길이(distance)를 알고 있어야 한다.")
+	@Test
+	void distance() {
+		final Line line2 = new Line(Color.GREEN, "2호선");
+		final Station sadang = new Station("사당역");
+		final Station bangbae = new Station("방배역");
+		final int expectedDistacne = 10;
+		final LineStation line2Sadang = new LineStation(line2, sadang, bangbae, expectedDistacne);
+
+		final Station foundSadang = line2.findStationByName("사당역")
+			.orElseThrow(IllegalArgumentException::new);
+
+		assertThat(foundSadang.getDistance(line2)).isEqualTo(expectedDistacne);
+	}
+
 
 }
