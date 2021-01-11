@@ -1,5 +1,6 @@
 package jpa.repository;
 
+import jpa.entity.Distance;
 import jpa.entity.Line;
 import jpa.entity.Location;
 import jpa.entity.Station;
@@ -49,6 +50,7 @@ class LocationRepositoryTest {
         // then
         assertAll(
                 () -> assertThat(actual).isNotNull(),
+                () -> assertThat(actual.getDistance()).isEqualTo(new Distance(10)),
                 () -> assertThat(actual.getDistance().getDistance()).isEqualTo(10)
         );
     }
