@@ -3,9 +3,6 @@ package jpa.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
