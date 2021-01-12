@@ -1,4 +1,4 @@
-package jpa.domain;
+package jpa.repository;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,12 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.repository.LineRepository;
-import jpa.repository.LineStationRepository;
-import jpa.repository.StationRepository;
+import jpa.domain.Color;
+import jpa.domain.Line;
+import jpa.domain.LineStation;
+import jpa.domain.Station;
 
 @DataJpaTest
-public class LineStationTest {
+public class LineStationRepositoryTest {
 
 	@Autowired
 	private LineRepository lineRepository;
@@ -43,11 +44,11 @@ public class LineStationTest {
 		Station seocho = new Station("서초역");
 		Station ieesoo = new Station("이수역");
 
-		LineStation line2Sadang = new LineStation(line2, sadang);
-		LineStation line2Bangbae = new LineStation(line2, bangbae);
-		LineStation line2Seocho = new LineStation(line2, seocho);
-		LineStation line4Sadang = new LineStation(line4, sadang);
-		LineStation line4Ieesoo = new LineStation(line4, ieesoo);
+		LineStation line2Sadang = new LineStation(line2, sadang, bangbae, 10);
+		LineStation line2Bangbae = new LineStation(line2, bangbae, sadang, 11);
+		LineStation line2Seocho = new LineStation(line2, seocho, bangbae, 11);
+		LineStation line4Sadang = new LineStation(line4, sadang, ieesoo, 8);
+		LineStation line4Ieesoo = new LineStation(line4, ieesoo, sadang, 8);
 
 		lineRepository.saveAll(Arrays.asList(line2, line4));
 		stationRepository.saveAll(Arrays.asList(ieesoo, sadang, bangbae, seocho));
@@ -112,7 +113,8 @@ public class LineStationTest {
 		Station bangbae = stationRepository.findByName("방배역")
 			.orElseThrow(IllegalArgumentException::new);
 
-		assertThat(line2.getLineStations()).contains(new LineStation(line2, sadang), new LineStation(line2, bangbae));
+		assertThat(line2.getLineStations()).contains(new LineStation(line2, sadang, bangbae, 10),
+			new LineStation(line2, bangbae, sadang, 10));
 	}
 
 }

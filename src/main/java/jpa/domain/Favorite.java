@@ -80,4 +80,33 @@ public class Favorite extends BaseEntity {
 			'}';
 	}
 
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		final Favorite favorite = (Favorite)o;
+
+		if (id != null ? !id.equals(favorite.id) : favorite.id != null)
+			return false;
+		if (member != null ? !member.equals(favorite.member) : favorite.member != null)
+			return false;
+		if (departureStation != null ? !departureStation.equals(favorite.departureStation) :
+			favorite.departureStation != null)
+			return false;
+		return arrivalStation != null ? arrivalStation.equals(favorite.arrivalStation) :
+			favorite.arrivalStation == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (member != null ? member.hashCode() : 0);
+		result = 31 * result + (departureStation != null ? departureStation.hashCode() : 0);
+		result = 31 * result + (arrivalStation != null ? arrivalStation.hashCode() : 0);
+		return result;
+	}
+
 }

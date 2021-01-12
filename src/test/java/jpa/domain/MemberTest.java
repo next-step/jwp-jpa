@@ -5,43 +5,36 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import jpa.repository.MemberRepository;
-
-@DataJpaTest
 public class MemberTest {
 
-	@Autowired
-	private MemberRepository memberRepository;
-
-	@DisplayName("Member 생성")
+	@DisplayName("멤버 생성")
 	@Test
-	void given_member_when_save_then_return_created_member() {
-		Member member = new Member("leemingyu05@gmail.com", "1q2w3e4r", 33);
+	void given_parameters_when_new_member_then_return_member() {
+		final String email = "test@test.com";
+		final String password = "1q2w3e4r";
+		final int age = 24;
 
-		Member actual = memberRepository.save(member);
+		Member member = new Member(email, password, age);
 
 		assertAll(
-			() -> assertThat(actual.getId()).isNotNull(),
-			() -> assertThat(actual.getEmail()).isEqualTo(member.getEmail())
+			() -> assertThat(member).isNotNull(),
+			() -> assertThat(member.getEmail()).isEqualTo(email),
+			() -> assertThat(member.getPassword()).isEqualTo(password),
+			() -> assertThat(member.getAge()).isEqualTo(age)
 		);
 	}
 
-	@DisplayName("Member 조회")
+	@DisplayName("멤버 Favorite 조회")
 	@Test
-	void given_member_when_save_and_findByEmail_then_return_created_member() {
-		Member member = new Member("leemingyu05@gmail.com", "1q2w3e4r", 33);
-		memberRepository.save(member);
+	void given_member_when_get_favorites_then_contains_favorite() {
+		Member member = new Member("test@test.com", "1q2w3e4r", 24);
+		Station sadang = new Station("사당역");
+		Station gangnam = new Station("강남역");
 
-		Member actual = memberRepository.findByEmail(member.getEmail())
-			.orElseThrow(IllegalArgumentException::new);
+		Favorite favorite = new Favorite(member, sadang, gangnam);
 
-		assertAll(
-			() -> assertThat(actual.getEmail()).isEqualTo(member.getEmail()),
-			() -> assertThat(actual == member).isTrue()
-		);
+		assertThat(member.getFavorites()).contains(favorite);
 	}
 
 }

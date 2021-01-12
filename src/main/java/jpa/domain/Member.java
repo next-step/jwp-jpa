@@ -65,4 +65,37 @@ public class Member extends BaseEntity {
 	public void addFavorite(final Favorite favorite) {
 		this.getFavorites().add(favorite);
 	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		final Member member = (Member)o;
+
+		if (id != null ? !id.equals(member.id) : member.id != null)
+			return false;
+		return email != null ? email.equals(member.email) : member.email == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (email != null ? email.hashCode() : 0);
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Member{" +
+			"id=" + id +
+			", age=" + age +
+			", email='" + email + '\'' +
+			", password='" + password + '\'' +
+			", favorites=" + favorites +
+			'}';
+	}
+
 }
