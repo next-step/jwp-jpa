@@ -1,8 +1,11 @@
 package jpa.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 
 @Embeddable
+@Access(AccessType.FIELD)
 public class Distance {
 
 	private int distance;
