@@ -1,9 +1,6 @@
 package jpa.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,7 +23,12 @@ public class Member extends BaseTimeEntity {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "member_favorite",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "favorite_id")
+    )
     private List<Favorite> favorites = new ArrayList<>();
 
     @Builder
@@ -36,11 +38,18 @@ public class Member extends BaseTimeEntity {
         this.password = password;
     }
 
+    public void addFavorite(Station sourceStation, Station destinationStation) {
+        Favorite favorite = Favorite.builder().sourceStation(sourceStation).destinationStation(destinationStation).build();
+        favorite.getMembers().add(this);
+        this.favorites.add(favorite);
+    }
+
     public void changeEmail(String email) {
         this.email = email;
     }
 
-    public void addFavorite(Favorite favorite) {
-        favorites.add(favorite);
+    public void deleteFavorite(Favorite favorite) {
+        favorite.getMembers().remove(this);
+        this.favorites.remove(favorite);
     }
 }

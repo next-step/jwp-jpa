@@ -1,16 +1,15 @@
 package jpa.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(callSuper = false)
 public class Favorite extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +23,20 @@ public class Favorite extends BaseTimeEntity {
     @JoinColumn(name = "destination_station")
     private Station destinationStation;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "favorites")
+    private final List<Member> members = new ArrayList<>();
 
     @Builder
-    public Favorite(Station sourceStation, Station destinationStation, Member member) {
+    public Favorite(Station sourceStation, Station destinationStation) {
         this.sourceStation = sourceStation;
         this.destinationStation = destinationStation;
-        this.member = member;
-        member.addFavorite(this);
+    }
+
+    public void updateSourceStation(Station station) {
+        this.sourceStation = station;
+    }
+
+    public void updateDestinationStation(Station station) {
+        this.destinationStation = station;
     }
 }
