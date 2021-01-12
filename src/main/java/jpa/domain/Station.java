@@ -59,6 +59,10 @@ public class Station extends BaseEntity {
 			.orElseThrow(IllegalArgumentException::new);
 	}
 
+	public boolean matchName(final String name) {
+		return this.name.equals(name);
+	}
+
 	@Override
 	public boolean equals(final Object o) {
 		if (this == o)
