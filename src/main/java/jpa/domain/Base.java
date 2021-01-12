@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class Base {
+public abstract class Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
