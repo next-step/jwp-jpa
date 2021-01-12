@@ -42,9 +42,11 @@ class LineRepositoryTest {
         // when
         Line line = lineRepository.findByName("8호선");
         line.setName(changeName);
-        Line actual = lineRepository.save(line);
+        // 수정 확인에서는 사실상 불필요한 코드 테스트 목적 (해당 findByName 전에 flush 진행 후 조회)
+        Line actual = lineRepository.findByName("1호선");
 
         // then
+        assertThat(line == actual).isTrue();
         assertThat(actual.getName()).isEqualTo("1호선");
     }
 
