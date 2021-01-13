@@ -1,22 +1,35 @@
 package jpa.repositories;
 
 import jpa.domain.Line;
+import jpa.domain.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.DirtiesContext;
+
+import javax.persistence.EntityManager;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
 @DataJpaTest
 class LineRepositoryTest {
 
     @Autowired
     private LineRepository lineRepository;
+
+    @Autowired
+    private StationRepository stationRepository;
+
+    @Autowired
+    EntityManager entityManager;
 
     @BeforeEach
     void setUp() {
@@ -88,5 +101,27 @@ class LineRepositoryTest {
                 () -> assertThat(actual.getCreatedDate()).isNotNull(),
                 () -> assertThat(actual.getModifiedDate()).isNotNull()
         );
+    }
+
+    @Test
+    @DisplayName("라인 다대다 조회")
+    void selectRelationMappingLineAndStation() {
+        saves();
+
+        Line lines = lineRepository.findByName("7호선");
+        assertThat(lines.getStations()).hasSize(2);
+        assertThat(lines.getStations().get(0).getName()).isEqualTo("고속터미널");
+    }
+
+    private void saves() {
+        Line line = lineRepository.save(new Line("7호선","올리브색"));
+
+        Station station1 = new Station("고속터미널");
+        Station station2 = new Station("반포");
+
+       line.addStation(station1);
+       line.addStation(station2);
+       lineRepository.flush();
+       entityManager.clear();
     }
 }
