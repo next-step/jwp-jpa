@@ -12,13 +12,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
     private String email;
     private String password;
     private Integer age;
@@ -33,18 +28,6 @@ public class Member {
         this.email = email;
         this.password = password;
         this.age = age;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
     }
 
     public Integer getAge() {
