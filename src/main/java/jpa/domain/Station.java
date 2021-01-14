@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -20,7 +18,7 @@ public class Station extends Base {
     private String name;
 
     @ManyToMany(mappedBy = "stations")
-    private List<Line> lines = new ArrayList<>();
+    private Set<Line> lines = new HashSet<>();
 
     public void addLine(Line line) {
         lines.add(line);

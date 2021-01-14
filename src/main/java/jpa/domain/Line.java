@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,7 +24,7 @@ public class Line extends Base {
     @JoinTable(name = "line_station",
             joinColumns = @JoinColumn(name = "line_id"),
             inverseJoinColumns = @JoinColumn(name = "station_id"))
-    private List<Station> stations = new ArrayList<>();
+    private Set<Station> stations = new HashSet<>();
 
     public void addStation(Station station) {
         stations.add(station);
