@@ -1,6 +1,7 @@
 package jpa.repositories;
 
 import jpa.domain.Favorite;
+import jpa.domain.Station;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.persistence.EntityManager;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,5 +76,29 @@ class FavoriteRepositoryTest {
                 () -> assertThat(actual.getCreatedDate()).isNotNull(),
                 () -> assertThat(actual.getModifiedDate()).isNotNull()
         );
+    }
+
+    @Test
+    @DisplayName("즐겨찾기에 출발역과 도착역이 포함되어 있는지 확인")
+    void selectRelationMappingFavoriteAndStation() {
+        // given
+        saves();
+        // when
+        List<Favorite> favorites = favoriteRepository.findAll();
+        // then
+        assertThat(favorites).isNotEmpty();
+        assertThat(favorites).hasSize(4);
+        assertThat(favorites.get(3).getDepartureStation()).isNull();
+        assertThat(favorites.get(3).getArrivalStation()).isNull();
+        assertThat(favorites.get(1).getDepartureStation().getName()).isEqualTo("고속터미널");
+        assertThat(favorites.get(1).getArrivalStation().getName()).isEqualTo("반포");
+    }
+
+    private void saves() {
+        favoriteRepository.saveAll(Arrays.asList(Favorite.of(Station.of("고속터미널"),Station.of("반포")),
+                Favorite.of(Station.of("수락산"),Station.of("도봉산")),
+                Favorite.of(null, null)));
+        favoriteRepository.flush();
+        entityManager.clear();
     }
 }
