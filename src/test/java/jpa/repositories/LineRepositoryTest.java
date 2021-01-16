@@ -25,9 +25,6 @@ class LineRepositoryTest {
     private LineRepository lineRepository;
 
     @Autowired
-    private StationRepository stationRepository;
-
-    @Autowired
     EntityManager entityManager;
 
     @BeforeEach
@@ -106,30 +103,30 @@ class LineRepositoryTest {
     @DisplayName("노선 조회 시 속한 지하철역 개수 및 이름 확인")
     void selectRelationMappingLineAndStation() {
         saves();
-        Line lines = lineRepository.findByName("7호선");
-        assertThat(lines).isNotNull();
-        assertThat(lines.getStations()).hasSize(2);
-        lines.getStations().forEach(station -> {
+        Line line7 = lineRepository.findByName("7호선");
+        assertThat(line7).isNotNull();
+        assertThat(line7.getStations()).hasSize(2);
+        line7.getStations().forEach(station -> {
             MatcherAssert.assertThat(station.getName(),
                     either(containsString("고속터미널")).or(containsString("반포")));
         });
     }
 
     private void saves() {
-        Line line = lineRepository.save(new Line("7호선","올리브색"));
+        Line line7 = lineRepository.save(new Line("7호선","올리브색"));
         Line line1 = lineRepository.save(new Line("1호선","파란색"));
 
-        Station station3 = new Station("의정부");
-        Station station4 = new Station("서울");
+        Station station_uijeongbu = new Station("의정부");
+        Station station_seoul = new Station("서울");
 
-        line1.addStation(station3);
-        line1.addStation(station4);
+        line1.addStation(station_uijeongbu);
+        line1.addStation(station_seoul);
 
-        Station station1 = new Station("고속터미널");
-        Station station2 = new Station("반포");
+        Station station_expressBusTerminal = new Station("고속터미널");
+        Station station_banpo = new Station("반포");
 
-       line.addStation(station1);
-       line.addStation(station2);
+       line7.addStation(station_expressBusTerminal);
+       line7.addStation(station_banpo);
        lineRepository.flush();
        entityManager.clear();
     }

@@ -17,7 +17,7 @@ public class Station extends Base {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "stations")
+    @ManyToMany(mappedBy = "stations", cascade = CascadeType.PERSIST)
     private Set<Line> lines = new HashSet<>();
 
     public void addLine(Line line) {
