@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Station extends BaseDateEntity {
@@ -20,8 +22,8 @@ public class Station extends BaseDateEntity {
 	@Column(unique = true)
 	private String name;
 
-	@ManyToMany(mappedBy = "stations")
-	private List<Line> lines = new ArrayList<>();
+	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<LineStation> lines = new ArrayList<>();
 
 	protected Station() {
 	}
@@ -42,12 +44,18 @@ public class Station extends BaseDateEntity {
 		this.name = name;
 	}
 
-	public void addLine(Line line) {
-		lines.add(line);
+	public void addLine(LineStation lineStation) {
+		lines.add(lineStation);
+	}
+
+	private List<Line> mapLines() {
+		return lines.stream()
+			.map(LineStation::getLine)
+			.collect(Collectors.toList());
 	}
 
 	public List<Line> getLines() {
-		return Collections.unmodifiableList(lines);
+		return Collections.unmodifiableList(mapLines());
 	}
 
 	@Override
