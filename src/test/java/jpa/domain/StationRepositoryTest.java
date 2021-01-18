@@ -24,9 +24,13 @@ class StationRepositoryTest {
         Line blue = lines.save(new Line("1호선", "Blue"));
         Line green = lines.save(new Line("2호선", "Green"));
         Station cityHall = new Station("시청");
-        cityHall.addLines(blue);
-        cityHall.addLines(green);
+        Station seoul = new Station("서울");
+        Station chungjungno = new Station("충정로");
+        cityHall.addLineStation(blue, seoul,10);
+        cityHall.addLineStation(green,chungjungno, 10);
         stations.save(cityHall);
+        stations.save(seoul);
+        stations.save(chungjungno);
     }
 
     @Test
@@ -66,15 +70,14 @@ class StationRepositoryTest {
     @Test
     @DisplayName("지하철역 조회 시 어느 노선에 속한지 볼 수 있다.")
     void findAndGetLines() {
+        //given
         Station cityHall = stations.findByName("시청");
 
+        //when
         List<Line> cityHallLines = cityHall.getLines();
-
         List<String> collect = cityHallLines.stream()
             .map(Line::getName)
             .collect(Collectors.toList());
-
-        System.out.println(collect);
 
         assertThat(collect).contains("2호선");
         assertThat(collect).contains("1호선");

@@ -3,7 +3,6 @@ package jpa.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +63,15 @@ class MemberRepositoryTest {
 
         Line blue = lines.save(new Line("1호선", "Blue"));
 
-        Station jonggak = createStation(blue, "종각");
-        Station jongno3ga = createStation(blue, "종로3가");
+        Station jonggak = new Station("종각");
+        Station cityHall = new Station("시청");
+        jonggak.addLineStation(blue,cityHall,10);
+        stations.save(jonggak);
+
+        Station jongno3ga = new Station("종로3가");
+        jongno3ga.addLineStation(blue,jonggak,10);
+        stations.save(jonggak);
+
 
         //When
         Favorite favorite = new Favorite(jonggak, jongno3ga);
@@ -80,9 +86,5 @@ class MemberRepositoryTest {
 
     }
 
-    private Station createStation(Line line, String stationName) {
-        Station station3 = new Station(stationName);
-        station3.addLines(line);
-        return stations.save(station3);
-    }
+
 }
