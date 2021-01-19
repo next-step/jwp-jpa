@@ -11,7 +11,6 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@AttributeOverride(name = "id", column = @Column(name = "station_id"))
 public class Station extends Base {
 
     @Column(unique = true)
