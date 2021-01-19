@@ -22,7 +22,7 @@ public class Line extends Base {
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "line_station",
             joinColumns = @JoinColumn(name = "line_id"),
-            inverseJoinColumns = @JoinColumn(name = "station_id"),
+            inverseJoinColumns = @JoinColumn(name = "station_id")
             )
     private Set<Station> stations = new HashSet<>();
 
