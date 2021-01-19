@@ -1,5 +1,10 @@
 # jpa
 
+## Step 3
+- [x] BaseEntity 추가하기
+- [x] 노선, 역, 이전 역, 길이(distance)를 저장하는 Entity 추가
+- [x] 노선에 역을 추가하는 로직 추가
+
 ## Step2
 
 - [x] 지하철역과 노선이 있다.

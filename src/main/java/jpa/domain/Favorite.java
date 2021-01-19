@@ -1,44 +1,28 @@
 package jpa.domain;
 
-import java.time.LocalDateTime;
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.EntityListeners;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "favorite")
-public class Favorite {
+public class Favorite extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
     @ManyToOne
     private Station destination;
     @ManyToOne
     private Station source;
 
+    protected Favorite() {
+    }
+
     protected Favorite(Station source, Station destination) {
-        this.createdDate = LocalDateTime.now();
-        this.modifiedDate = LocalDateTime.now();
         this.source = source;
         this.destination = destination;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
     }
 
     public Station getDestination() {
@@ -49,15 +33,7 @@ public class Favorite {
         return source;
     }
 
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
-
+    public void updateDestination(Station station) {
+        this.destination = station;
     }
-
-
-    public void update() {
-        this.modifiedDate = LocalDateTime.now();
-    }
-
-
 }

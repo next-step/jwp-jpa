@@ -13,6 +13,8 @@ class FavoriteTest {
 
     @Autowired
     private FavoriteRepository favorites;
+    @Autowired
+    private StationRepository stations;
 
     @Test
     void save() {
@@ -35,14 +37,21 @@ class FavoriteTest {
 
     @Test
     void update() {
-        Station jongno3ga = new Station("종로3가");
-        Station jonggak = new Station("종각");
+        //given
+        Station jongno3ga = stations.save( new Station("종로3가"));
+        Station jonggak = stations.save(new Station("종각"));
+        Station jongno5ga = stations.save(new Station("종로5가"));
         Favorite actual = favorites.save(new Favorite(jonggak, jongno3ga));
-        LocalDateTime now = LocalDateTime.now();
-        actual.update();
-        Long id = actual.getId();
-        Favorite favorite = favorites.findById(id).get();
-        assertThat(favorite.getModifiedDate()).isAfter(now);
+        LocalDateTime modifiedDate = actual.getModifiedDate();
+        favorites.flush();
+
+        //when
+        actual.updateDestination(jongno5ga);
+        Favorite favorite = favorites.save(actual);
+        favorites.flush();
+
+        //then
+        assertThat(favorite.getModifiedDate()).isAfter(modifiedDate);
     }
 
     @Test

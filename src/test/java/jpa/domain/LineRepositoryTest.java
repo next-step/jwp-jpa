@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,10 +25,16 @@ class LineRepositoryTest {
     void setUp() {
         Line blue = lines.save(new Line("1호선", "Blue"));
         Line green = lines.save(new Line("2호선", "Green"));
-        Station cityHall = new Station("시청");
-        cityHall.addLines(blue);
-        cityHall.addLines(green);
-        stations.save(cityHall);
+
+        Station cityHall = stations.save(new Station("시청"));
+        Station seoul = stations.save(new Station("서울"));
+        Station chungjungno = stations.save(new Station("충정로"));
+
+        blue.addLineStation(cityHall, seoul, 10);
+        green.addLineStation(cityHall, chungjungno, 10);
+        cityHall.addLineStation(blue, seoul, 10);
+        cityHall.addLineStation(green, chungjungno, 10);
+
     }
 
     @Test
@@ -72,5 +80,28 @@ class LineRepositoryTest {
 
         List<String> collect = line2Stations.stream().map(Station::getName).collect(Collectors.toList());
         assertThat(collect).contains("시청");
+    }
+
+    @Test
+    @DisplayName("노선에 새로운 역을 추가하는 기능")
+    void addNewStation() {
+        //given
+        Station cityHall = stations.findByName("시청");
+        Station newStation = stations.save(new Station("종로3가"));
+        Line line1 = lines.findByName("1호선");
+
+        //when
+        line1.addLineStation(newStation, cityHall, 10);
+        lines.save(line1);
+
+        //then
+        Line savedLine1 = lines.findByName("1호선");
+        Optional<LineStation> first = savedLine1.getLineStations().stream()
+            .filter(lineStation -> lineStation.getStation().equals(newStation))
+            .findFirst();
+
+        Assertions.assertThat(first.get().getDistance()).isEqualTo(10);
+
+
     }
 }

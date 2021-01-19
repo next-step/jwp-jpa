@@ -1,30 +1,24 @@
 package jpa.domain;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "station")
-public class Station {
+public class Station extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
     @Column(unique = true)
     private String name;
 
-    @ManyToMany
-    private List<Line> lines = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<LineStation> lineStations = new ArrayList<>();
 
     protected Station() {
     }
@@ -33,32 +27,26 @@ public class Station {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
-    }
-
     public String getName() {
         return name;
     }
 
-    public List<Line> getLines() {
-        return lines;
-    }
 
     public void changeName(String name) {
         this.name = name;
     }
 
-    public void addLines(Line line) {
-        this.lines.add(line);
-        line.addStation(this);
+    public void addLineStation(Line line, Station previousStation, int distance) {
+        this.lineStations.add(new LineStation(line, this, previousStation, distance));
     }
+
+    public void remove(LineStation lineStation) {
+        this.lineStations.remove(lineStation);
+    }
+
+    public List<Line> getLines() {
+        return this.lineStations.stream().map(LineStation::getLine).collect(Collectors.toList());
+    }
+
+
 }
