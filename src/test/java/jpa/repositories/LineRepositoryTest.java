@@ -1,6 +1,7 @@
 package jpa.repositories;
 
 import jpa.domain.Line;
+import jpa.domain.LineStation;
 import jpa.domain.Station;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.EntityManager;
+
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -25,7 +28,7 @@ class LineRepositoryTest {
     private LineRepository lineRepository;
 
     @Autowired
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @BeforeEach
     void setUp() {
@@ -105,30 +108,32 @@ class LineRepositoryTest {
         saves();
         Line line7 = lineRepository.findByName("7호선");
         assertThat(line7).isNotNull();
-        assertThat(line7.getStations()).hasSize(2);
-        line7.getStations().forEach(station -> {
-            MatcherAssert.assertThat(station.getName(),
+        line7.getLineStations().forEach(lineStation -> {
+            MatcherAssert.assertThat(lineStation.getStation().getName(),
                     either(containsString("고속터미널")).or(containsString("반포")));
         });
     }
 
     private void saves() {
-        Line line7 = lineRepository.save(new Line("7호선","올리브색"));
-        Line line1 = lineRepository.save(new Line("1호선","파란색"));
+        Line line1 = Line.of("1호선","파란색");
+        Line line7 = Line.of("7호선","올리브색");
 
-        Station station_uijeongbu = new Station("의정부");
-        Station station_seoul = new Station("서울");
+        Station station_uijeongbu = Station.of("의정부");
+        Station station_seoul = Station.of("서울");
+        Station station_changdong = Station.of("창동");
 
-        line1.addStation(station_uijeongbu);
-        line1.addStation(station_seoul);
+        line1.addLineStation(LineStation.of(line1, station_uijeongbu, 10, station_changdong));
+        line1.addLineStation(LineStation.of(line1, station_seoul, 15, station_changdong));
 
         Station station_expressBusTerminal = new Station("고속터미널");
         Station station_banpo = new Station("반포");
+        Station station_nowon = new Station("노원");
 
-       line7.addStation(station_expressBusTerminal);
-       line7.addStation(station_banpo);
-       lineRepository.flush();
-       entityManager.clear();
+        line7.addLineStation(LineStation.of(line1, station_expressBusTerminal, 10, station_nowon));
+        line7.addLineStation(LineStation.of(line1, station_banpo, 15, station_nowon));
+
+        lineRepository.saveAll(Arrays.asList(line1, line7));
+        entityManager.clear();
     }
 
     @Test

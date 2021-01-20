@@ -1,6 +1,7 @@
 package jpa.repositories;
 
 import jpa.domain.Line;
+import jpa.domain.LineStation;
 import jpa.domain.Station;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.EntityManager;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.either;
@@ -103,9 +105,8 @@ class StationRepositoryTest {
         Station station_expressBusTerminal = stationRepository.findByName("고속터미널");
 
         assertThat(stationRepository).isNotNull();
-        assertThat(station_expressBusTerminal.getLines()).hasSize(3);
-        station_expressBusTerminal.getLines().forEach(line -> {
-            MatcherAssert.assertThat(line.getName(),
+        station_expressBusTerminal.getLineStations().forEach(lineStation -> {
+            MatcherAssert.assertThat(lineStation.getLine().getName(),
                     either(containsString("7호선"))
                             .or(containsString("9호선"))
                             .or(containsString("3호선")));
@@ -113,13 +114,19 @@ class StationRepositoryTest {
     }
 
     private void saves() {
-        Station station_expressBusTerminal = stationRepository.save(new Station("고속터미널"));
+        Station station_expressBusTerminal = Station.of("고속터미널");
 
-        station_expressBusTerminal.addLine(new Line("7호선", "올리브색"));
-        station_expressBusTerminal.addLine(new Line("9호선", "골드색"));
-        station_expressBusTerminal.addLine(new Line("3호선", "주황색"));
+        Station station_seoul = Station.of("서울");
 
-        stationRepository.flush();
+        Line line7 = Line.of("7호선", "올리브색");
+        Line line9 = Line.of("9호선", "골드색");
+        Line line3 = Line.of("3호선", "주황색");
+
+        station_expressBusTerminal.addLineStation(LineStation.of(line7, station_expressBusTerminal, 10, station_seoul));
+        station_expressBusTerminal.addLineStation(LineStation.of(line9, station_expressBusTerminal, 15, station_seoul));
+        station_expressBusTerminal.addLineStation(LineStation.of(line3, station_expressBusTerminal, 20, station_seoul));
+
+        stationRepository.save(station_expressBusTerminal);
         entityManager.clear();
     }
 

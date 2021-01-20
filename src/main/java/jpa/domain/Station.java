@@ -16,12 +16,11 @@ public class Station extends Base {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "stations", cascade = CascadeType.PERSIST)
-    private Set<Line> lines = new HashSet<>();
+    @OneToMany(mappedBy = "station", cascade = CascadeType.PERSIST)
+    private List<LineStation> lineStations = new ArrayList<>();
 
-    public void addLine(Line line) {
-        lines.add(line);
-        line.getStations().add(this);
+    public void addLineStation(LineStation lineStation) {
+        lineStations.add(lineStation);
     }
 
     public Station(String name) {
