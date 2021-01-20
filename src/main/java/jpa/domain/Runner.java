@@ -16,10 +16,10 @@ public class Runner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Station station_expressBusTerminal = stationRepository.save(new Station("고속터미널"));
-
-        station_expressBusTerminal.addLine(new Line("7호선", "올리브색"));
-        station_expressBusTerminal.addLine(new Line("9호선", "골드색"));
-        station_expressBusTerminal.addLine(new Line("3호선", "주황색"));
+//        Station station_expressBusTerminal = stationRepository.save(new Station("고속터미널"));
+//
+//        station_expressBusTerminal.addLine(new Line("7호선", "올리브색"));
+//        station_expressBusTerminal.addLine(new Line("9호선", "골드색"));
+//        station_expressBusTerminal.addLine(new Line("3호선", "주황색"));
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.EntityManager;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.either;
