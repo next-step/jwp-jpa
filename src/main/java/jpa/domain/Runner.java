@@ -1,11 +1,13 @@
 package jpa.domain;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import jpa.repositories.StationRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
+@Ignore
 public class Runner implements ApplicationRunner {
 
     private final StationRepository stationRepository;

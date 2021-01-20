@@ -27,11 +27,10 @@ public class Member extends Base {
     private String password;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<Favorite> favorites = new ArrayList<>();
+    private List<MemberFavorite> memberFavorites = new ArrayList<>();
 
-    public void setFavorite(Favorite favorite) {
-        favorites.add(favorite);
-        favorite.setMember(this);
+    public void addMemberFavorite(MemberFavorite memberFavorite) {
+        memberFavorites.add(memberFavorite);
     }
 
     public Member(int age, String email, String password) {

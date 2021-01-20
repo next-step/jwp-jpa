@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -18,8 +20,8 @@ public class Favorite extends Base {
     @JoinColumn(name = "arrival_station_id")
     private Station arrivalStation;
 
-    @ManyToOne
-    private Member member;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<MemberFavorite> memberFavorites = new ArrayList<>();
 
     public Favorite(Station departureStation, Station arrivalStation) {
         this.departureStation = departureStation;
@@ -28,9 +30,5 @@ public class Favorite extends Base {
 
     public static Favorite of(Station departureStation, Station arrivalStation) {
         return new Favorite(departureStation, arrivalStation);
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
     }
 }
