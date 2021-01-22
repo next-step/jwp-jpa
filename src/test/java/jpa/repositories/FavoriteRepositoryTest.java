@@ -98,7 +98,6 @@ class FavoriteRepositoryTest {
         favoriteRepository.saveAll(Arrays.asList(Favorite.of(Station.of("고속터미널"),Station.of("반포")),
                 Favorite.of(Station.of("수락산"),Station.of("도봉산")),
                 Favorite.of(null, null)));
-        favoriteRepository.flush();
         entityManager.clear();
     }
 }
